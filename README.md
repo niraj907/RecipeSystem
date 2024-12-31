@@ -53,7 +53,4 @@ A user-friendly recipe system designed to make cooking easy and enjoyable. The s
 - MongoDB setup (local or Atlas)  
 - Git installed  
 
-### Steps  
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/your-username/recipe-system.git
+
