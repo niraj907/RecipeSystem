@@ -1,41 +1,134 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { Button } from "./ui/button";
+import { FiMenu } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
+import { NavLink } from "react-router-dom";
+
 const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
-    <div className="fixed bg-white top-0 left-0 w-full z-10 ">
-      <div className="max-w-[1200px] mx-auto flex justify-between items-center py-4 px-6">
+    <div className="fixed top-0  bg-white w-full z-50 shadow-md">
+      <div className="max-w-[1200px] mx-auto flex justify-between items-center py-4 px-8 lg:px-10">
+        {/* Logo */}
+        <NavLink to="/">
         <img src={logo} className="w-40" alt="logo" />
+        </NavLink>
+
+        {/* Desktop Menu */}
         <ul className="hidden lg:flex gap-7 font-sans text-[18px] px-4">
-          <a href="Home" className="cursor-pointer  hover:text-orange-600">
+          <li 
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => scrollToSection("home")}
+          >
             Home
-          </a>
-          <a href="Recipes" className="cursor-pointer  hover:text-orange-600">
+          </li>
+          <li
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => scrollToSection("recipes")}
+          >
             Recipes
-          </a>
-          <a href="About" className="cursor-pointer  hover:text-orange-600">
+          </li>
+          <li
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => scrollToSection("about")}
+          >
             About
-          </a>
-          <a
-            href="Testimonial"
-            className="cursor-pointer  hover:text-orange-600"
+          </li>
+          <li
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => scrollToSection("testimonial")}
           >
             Testimonial
-          </a>
+          </li>
         </ul>
 
-        <div className="flex justify-center">
-          <Button className="hidden lg:block px-8 bg-orange-600 hover:bg-orange-500">
-            Log in
-          </Button>
-          <Button className="hidden lg:block px-8 mx-4  bg-white text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">
-            Sign up
-          </Button>
+        {/* Sign-In Button */}
+        <Button
+          className="hidden lg:block bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
+          ring-2 ring-[#F67A24] ring-inset hover:ring-[#F67A24] hover:ring-4 px-8 rounded-md transition-all ease-in-out duration-300 text-[16px]"
+        >
+          Sign in
+        </Button>
+
+        {/* Mobile Menu Icon */}
+        <div className="lg:hidden">
+          {isMobileMenuOpen ? (
+            <IoClose
+              className="text-3xl text-orange-600 cursor-pointer"
+              onClick={toggleMobileMenu}
+            />
+          ) : (
+            <FiMenu
+              className="text-3xl text-orange-600 cursor-pointer"
+              onClick={toggleMobileMenu}
+            />
+          )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="bg-white w-full lg:hidden shadow-md">
+          <ul className="flex flex-col gap-4 font-sans text-[18px] py-4 px-9">
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("home")}
+            >
+              Home
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("recipes")}
+            >
+              Recipes
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("about")}
+            >
+              About
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("testimonial")}
+            >
+              Testimonial
+            </li>
+            <Button
+              className="w-24 px-6 bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
+              ring-2 ring-[#F67A24] ring-inset hover:ring-[#F67A24] hover:ring-4 rounded-md 
+              transition-all ease-in-out duration-300 text-[16px]"
+            >
+              Sign in
+            </Button>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Navbar;
+
+
+
+
+
+
+
+
+
 

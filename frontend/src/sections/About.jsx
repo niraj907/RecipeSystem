@@ -3,9 +3,10 @@ import kitechen from "../assets/Kitechen.png";
 
 const About = () => {
   return (
-    <div className="w-full py-[55px] md:py-[100px]">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+    <section id="about" className="w-full py-10 md:py-16 xl:py-20">
+      <div className="max-w-[1200px] mx-auto px-6 sm:px-8 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          {/* Image Section */}
           <div className="relative">
             <img
               src={kitechen}
@@ -14,11 +15,12 @@ const About = () => {
             />
           </div>
 
-          <div className="md:my-20">
-            <h1 className="text-3xl md:text-4xl font-bold text-[#333]">
+          {/* Text Section */}
+          <div className="text-center md:text-left">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#333]">
               About Us
             </h1>
-            <p className="text-[#666666] md:mb-2 leading-relaxed py-4 text-sm md:text-base">
+            <p className="text-[#666666] leading-relaxed py-4 text-sm sm:text-base md:text-lg">
               Food systems comprise all the people, institutions, places, and
               activities that play a part in growing, processing, transporting,
               selling, marketing, and, ultimately, eating food. Food systems
@@ -29,7 +31,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

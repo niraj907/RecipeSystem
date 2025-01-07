@@ -10,9 +10,9 @@ const CategoryItem = ({ image, title }) => {
       <img
         src={image}
         alt={title}
-        className="w-44 h-44 rounded-full shadow-lg mb-4 object-cover"
+        className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full shadow-lg mb-4 object-cover"
       />
-      <h3 className="text-lg font-semibold text-[#666]">{title}</h3>
+      <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#666]">{title}</h3>
     </div>
   );
 };
@@ -26,10 +26,12 @@ const Category = () => {
   ];
 
   return (
-    <div className="w-full py-[60px] md:py-[100px]">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 text-center">
-        <h1 className="text-2xl md:text-3xl xl:text-4xl font-bold text-[#333] mb-12">Popular Categories</h1>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div className="w-full py-10 md:py-16 xl:py-20">
+      <div className="max-w-[1200px] mx-auto px-6 sm:px-8 md:px-12 text-center">
+        <h1 className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold text-[#333] mb-8 sm:mb-10 md:mb-12">
+          Popular Categories
+        </h1>
+        <div className="grid grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:grid-cols-4">
           {categories.map((category) => (
             <CategoryItem
               key={category.title}

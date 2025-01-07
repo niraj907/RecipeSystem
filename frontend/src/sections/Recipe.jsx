@@ -31,8 +31,8 @@ const Recipe = () => {
   );
 
   return (
-    <div className="w-full py-[60px] md:py-[100px] bg-[#FEF5EC]">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12">
+    <section id="recipes" className="w-full py-[60px] xl:py-[85px] bg-[#FEF5EC]">
+      <div className="max-w-[1200px] mx-auto px-8 md:px-12">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-xl xl:text-2xl font-bold text-[#333]">Popular Recipe</h1>
@@ -60,7 +60,7 @@ const Recipe = () => {
 
                 {/* Heart Icon */}
                 <div className="absolute top-4 right-4 bg-orange-500 rounded-full w-10 h-10 flex items-center justify-center">
-                  <FaRegHeart className="text-white text-[18px]" />
+                  <FaRegHeart className="text-white  text-[18px]" />
                 </div>
 
                 <div className="p-4">
@@ -90,7 +90,7 @@ const Recipe = () => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

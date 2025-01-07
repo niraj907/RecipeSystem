@@ -32,23 +32,20 @@ const Testimonial = () => {
         "Amazing platform! The tutorials are easy to follow, and the results are always delicious.",
     },
   ];
-
   const [activeIndex, setActiveIndex] = useState(0);
-
   return (
-    <div className="w-full pt-20 pb-96 bg-gray-50">
-      <div className="max-w-[1200px]  mx-auto px-4 text-center">
+    <section id="testimonial" className="w-full pt-20 pb-96 bg-gray-50">
+      <div className="max-w-[1200px]  mx-auto px-8 text-center">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
           Our App User <span className="text-orange-500">Testimonials</span>
         </h2>
-
         {/* Thumbnail Navigation */}
         <div className="flex justify-center space-x-4 mb-8">
   {testimonials.map((testimonial, index) => (
     <div
       key={index}
       onClick={() => setActiveIndex(index)}
-      className={`w-16 h-16 p-1 rounded-full overflow-hidden border-4 cursor-pointer z-10 transition-transform duration-300 ${
+      className={`w-16 h-16 p-1 rounded-full overflow-hidden border-4 cursor-pointer z-20 transition-transform duration-300 ${
         index === activeIndex ? "border-orange-500 scale-110" : "border-gray-300"
       }`}
       style={{
@@ -98,10 +95,10 @@ const Testimonial = () => {
               </p>
               </div> 
             </motion.div>
-          </AnimatePresence>
+          </AnimatePresence> 
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
