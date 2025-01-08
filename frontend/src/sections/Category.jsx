@@ -3,8 +3,9 @@ import breakfastImg from "../assets/Breakfast.jpg";
 import lunchImg from "../assets/Lunch.jpg";
 import dinnerImg from "../assets/Dinner.jpg";
 import snacksImg from "../assets/Snacks.jpg";
+import { Link } from "react-router";
 
-const CategoryItem = ({ image, title }) => {
+const CategoryItem = ({ image, title , href }) => {
   return (
     <div className="flex flex-col items-center">
       <img
@@ -12,17 +13,20 @@ const CategoryItem = ({ image, title }) => {
         alt={title}
         className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full shadow-lg mb-4 object-cover"
       />
+      <Link to={href}>
       <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#666]">{title}</h3>
+      
+      </Link>
     </div>
   );
 };
 
 const Category = () => {
   const categories = [
-    { title: "Breakfast", image: breakfastImg },
-    { title: "Lunch", image: lunchImg },
-    { title: "Dinner", image: dinnerImg },
-    { title: "Snacks", image: snacksImg },
+    { title: "Breakfast", image: breakfastImg , href:"/categories/breakfast" },
+    { title: "Lunch", image: lunchImg , href:"/categories/lunch"},
+    { title: "Dinner", image: dinnerImg , href:"/categories/dinner" },
+    { title: "Snacks", image: snacksImg , href:"/categories/snacks" },
   ];
 
   return (
@@ -37,6 +41,7 @@ const Category = () => {
               key={category.title}
               image={category.image}
               title={category.title}
+              href={category.href}
             />
           ))}
         </div>

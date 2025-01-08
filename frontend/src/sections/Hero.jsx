@@ -7,7 +7,7 @@ import { Link } from "react-router";
 
 const Hero = () => {
   return (
-    <section id='home' className="w-full py-[2.7rem] md:py-[5.4rem]  bg-[#FEF5EC]">
+    <section id='home' className="w-full py-[2.7rem] md:py-[5.4rem] mt-[75px] bg-[#FEF5EC]">
       <div className="max-w-[1200px] mx-auto px-8 md:px-12 py-4 ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Text Section */}
