@@ -5,18 +5,18 @@ import itemRoute from './routes/itemRoute.js';
 import { connectDB } from './config/db.js';
 import fileUpload from 'express-fileupload';
 
+import authRoutes from './routes/auth.route.js'
 dotenv.config();
 
 const app = express();
 const PORT = 4000;
 
 // Middleware
-
 app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/'
 }));
-app.use(express.json());
+app.use(express.json()); // allow us to parse incoming requests: req.body
 app.use(express.urlencoded({ extended: true ,limit: '50mb' })); 
 app.use(cors());
 
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', itemRoute);
-
+app.use('/api/auth',authRoutes)
 
 // Start server
 app.listen(PORT, () => {
