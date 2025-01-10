@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import itemRoute from './routes/item.route.js'
 import { connectDB } from './config/db.js';
 import fileUpload from 'express-fileupload';
@@ -18,6 +19,7 @@ app.use(fileUpload({
 }));
 
 app.use(express.json()); // allow us to parse incoming requests: req.body
+app.use(cookieParser()); // allows us to parse incoming cookies
 app.use(express.urlencoded({ extended: true ,limit: '50mb' })); 
 app.use(cors());
 
