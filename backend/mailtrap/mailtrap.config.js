@@ -5,10 +5,12 @@ dotenv.config();
 
 export const mailtrapClient = new MailtrapClient({
   endpoint: "https://send.api.mailtrap.io/",
-  token: "ee3a0251de3e83b9fc8507fe4c4741ac",
+  token: "e201c3a41f83cf7a8900e40012117a34",
 });
 
 export const sender = {
   email: "hello@demomailtrap.com",
-  name: "Niraj",
+  name: "niraj",
 };
+
+

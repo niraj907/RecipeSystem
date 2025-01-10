@@ -30,19 +30,15 @@ try {
  const response =  await mailtrapClient.send({
     from: sender,
     to: recipient,
-    template_uuid: "797d1d98-6693-48e5-9faa-ee306b0ecb89",
+    template_uuid: "fc9dcaa0-b6a9-429f-9df2-083bd8d8272d",
     template_variables: {
-      "company_info_name": "Auth Company",
-      "company_info_address": "Kupondole, Lalitpur",
-      "company_info_city": "Kathmandu",
-      "company_info_zip_code": "12345",
-      "company_info_country": "Nepali"
-    }
-  })
+      company_info_name: "Recipe System",
+      username: username,
+    },
+  });
   console.log('Welcome email sent sucessfully',response);
 } catch (error) {
-  console.error('Error sending welcome email',error);
-
+  console.error(`Error sending welcome email`, error);
   throw new Error(`Error sending welcome email: ${error}`);
 }
 };  
