@@ -1,4 +1,4 @@
-import itemModel from "../models/itemModel.js";
+import itemModel from "../models/item.model.js";
 import cloudinary from "cloudinary";
 
 export const addItem = async (req, res) => {
@@ -14,7 +14,8 @@ export const addItem = async (req, res) => {
     // Validate 'images' field
     if (!req.files || !req.files.images) {
       console.log('Image is required');
-      console.log('File: ',req.files);
+      console.log("Request files: ", req.files);
+
       return res.status(400).json({ success: false, msg: "Image is required" });
     }
 

@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import itemRoute from './routes/itemRoute.js';
+import itemRoute from './routes/item.route.js'
 import { connectDB } from './config/db.js';
 import fileUpload from 'express-fileupload';
 
@@ -16,6 +16,7 @@ app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/'
 }));
+
 app.use(express.json()); // allow us to parse incoming requests: req.body
 app.use(express.urlencoded({ extended: true ,limit: '50mb' })); 
 app.use(cors());

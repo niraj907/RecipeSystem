@@ -1,5 +1,5 @@
 import express from "express";
-import { addItem } from "../controllers/itemController.js";
+import { addItem } from '../controllers/item.controller.js'
 
 const itemRouter = express.Router();
 itemRouter.post("/add", addItem);
