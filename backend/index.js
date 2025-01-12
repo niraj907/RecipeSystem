@@ -33,9 +33,10 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use(express.static('public'));
 app.use('/api', itemRoute);
-app.use('/api/auth',authRoutes)
-app.use("/api/count",countRoutes)
+app.use('/api/auth',authRoutes);
+app.use("/api/count",countRoutes);
 
 // Start server
 app.listen(PORT, () => {

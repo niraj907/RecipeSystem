@@ -7,6 +7,10 @@ import {
   forgotPassword,
   resetPassword,
   checkAuth,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById
 } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
@@ -23,13 +27,9 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 
-
-
-
-
-// router.get('/', getAllUsers); // get all user
-// router.get('/:id', getUserById); //get user by id
-// router.put('/:id', updateUserById); // update 
-// router.delete('/:id', deleteUserById); // delete
+router.get('/allUser', getAllUsers); // get all user
+router.get('/:id', getUserById); //get user by id
+router.put('/:id', updateUserById); // update 
+router.delete('/:id', deleteUserById); // delete
 
 export default router;
