@@ -4,9 +4,12 @@ import { Button } from "./ui/button";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -56,12 +59,21 @@ const Navbar = () => {
         </ul>
 
         {/* Sign-In Button */}
-        <Button
+        <div className="flex gap-4 items-center">
+        <Button  onClick={() => navigate("/login")} 
           className="hidden lg:block bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
           ring-2 ring-[#F67A24] ring-inset hover:ring-[#F67A24] hover:ring-4 px-8 rounded-md transition-all ease-in-out duration-300 text-[16px]"
         >
-          Sign in
+        Log in
         </Button>
+
+        <Button  onClick={() => navigate("/signup")} 
+          className="hidden lg:block  bg-[#F67A24] hover:bg-[#f67b24e8] text-white px-8 py-2 rounded-md transition duration-300 ease-in-out"
+        >
+       Sign up
+       </Button>
+
+        </div>
 
         {/* Mobile Menu Icon */}
         <div className="lg:hidden">
@@ -107,13 +119,19 @@ const Navbar = () => {
             >
               Testimonial
             </li>
-            <Button
+            <Button onClick={() => navigate("/login")} 
               className="w-24 px-6 bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
               ring-2 ring-[#F67A24] ring-inset hover:ring-[#F67A24] hover:ring-4 rounded-md 
               transition-all ease-in-out duration-300 text-[16px]"
             >
-              Sign in
+              Log in
             </Button>
+
+              <Button onClick={() => navigate("/signup")} 
+          className="w-24 px-6 bg-[#F67A24] hover:bg-[#f67b24e8] text-white rounded-md transition duration-300 ease-in-out"
+        >
+       Sign up
+        </Button>
           </ul>
         </div>
       )}
