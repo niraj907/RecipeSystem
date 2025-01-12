@@ -3,9 +3,21 @@ import { User } from '../models/user.model.js';
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
+import cloudinary from "cloudinary";
+import dotenv from "dotenv";
 
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/emails.js';
+
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 
 export const signup = async (req, res) => {
   const { email, password, username, country, gender } = req.body;
@@ -25,10 +37,45 @@ export const signup = async (req, res) => {
     const hashedPassword = await bcryptjs.hash(password, 10);
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // Validate if files are uploaded
+    if (!req.files || !req.files.images) {
+      console.log("Validation Error: Image is required");
+      console.log("Request files:", req.files); // Log for debugging
+      return res.status(400).json({ success: false, msg: "Image is required" });
+    }
+
+    const imageFile = req.files.images;
+
+    // Validate file type
+    const allowedExtensions = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    if (!allowedExtensions.includes(imageFile.mimetype)) {
+      console.log("Validation Error: Invalid file type");
+      return res.status(400).json({ success: false, msg: "Invalid file type" });
+    }
+
+        // Upload the file to Cloudinary
+        console.log("Uploading image to Cloudinary...");
+        const cloudinaryResponse = await cloudinary.uploader.upload(imageFile.tempFilePath);
+    
+        if (!cloudinaryResponse || cloudinaryResponse.error) {
+          console.error("Cloudinary Error:", cloudinaryResponse.error || "Unknown error");
+          return res.status(500).json({ success: false, msg: "Error uploading image" });
+        }
+
+
+ // Save the item to the database
+    console.log("Saving item to the database...");
+
     const user = new User({
       email,
       password: hashedPassword,
-      username,
+      username, 
+      images: [
+        {
+          public_id: cloudinaryResponse.public_id,
+          url: cloudinaryResponse.secure_url,
+        },
+      ],
       country,
       gender,
       verificationToken,
@@ -206,7 +253,8 @@ export const checkAuth = async(req,res) =>{
 
     res.status(200).json({success:true,user});
   } catch (error) {
-    
+    console.log("Error in checkAuth",error);
+    res.status(400).json({success: false, message: error.message});
   }
 }
 

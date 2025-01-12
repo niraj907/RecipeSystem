@@ -2,11 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import itemRoute from './routes/item.route.js'
 import { connectDB } from './config/db.js';
 import fileUpload from 'express-fileupload';
 
-import authRoutes from './routes/auth.route.js'
+import itemRoute from './routes/item.route.js'
+import authRoutes from './routes/auth.route.js';
+import countRoutes from './routes/count.route.js'
+
 dotenv.config();
 
 const app = express();
@@ -33,6 +35,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', itemRoute);
 app.use('/api/auth',authRoutes)
+app.use("/api/count",countRoutes)
 
 // Start server
 app.listen(PORT, () => {
