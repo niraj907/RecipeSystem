@@ -40,7 +40,7 @@ const Recipe = () => {
             value={searchItem}
             onChange={handleInputChange}
             placeholder="Search"
-            className="w-[15rem] md:w-80 xl:w-96 xl-text-[16px] xl:text-xl font-semibold"
+            className="w-[15rem] md:w-80 xl:w-96 xl-text-[16px] xl:text-xl font-semibold  rounded overflow-hidden"
           />
         </div>
 

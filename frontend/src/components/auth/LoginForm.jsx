@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { RiLoader2Fill } from "react-icons/ri";
 
 const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isLoading = false;
   const [input, setInput] = useState({
     email: "",
     password: ""
   });
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -29,6 +36,7 @@ const LoginForm = () => {
       alert("Please enter a valid email.");
       return;
     }
+
     // Log the form data to the console
     console.log("Form Data Submitted: ", input);
     setInput({ email: "", password: "" });
@@ -51,27 +59,39 @@ const LoginForm = () => {
               className="focus-visible:ring-transparent my-2"
             />
           </div>
-          <div>
+          <div className="relative">
             <span className="font-medium">Password</span>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={input.password}
               onChange={changeEventHandler}
               placeholder="Enter password"
               className="focus-visible:ring-transparent my-2"
             />
+            <span
+              className="absolute right-4 top-[65%] translate-y-[-50%] cursor-pointer text-gray-600"
+              onClick={handleTogglePasswordVisibility}
+            >
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </span>
           </div>
+
+<div>
+  <Link to={'/forgot-password'} className='text-[#f67b24de]'>
+  Forgot Password ?
+  </Link>
+</div>
 
           <Button
             className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit"
+            type="submit" disabled = {isLoading}
           >
-            Login
+            {isLoading ? <RiLoader2Fill className='w-6 h-6 animate-spin' /> : "Login"}
           </Button>
 
           <span className="text-center">
-            Don't have an account? <Link to={'/Signup'} className="text-[#f67b24]">Signup</Link>
+            Don't have an account? <Link to={'/Signup'} className="text-[#f67b24de]">Signup</Link>
           </span>
         </form>
       </div>
