@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { RiLoader2Fill } from "react-icons/ri";
+import { toast } from "sonner";
+import { useAuthStore } from "../store/authStore";
+import { Loader } from "lucide-react";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const isLoading = false;
   const [input, setInput] = useState({
     email: "",
     password: ""
   });
+
+const {login , isLoading , error} = useAuthStore();
+const navigate = useNavigate();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
@@ -26,26 +30,33 @@ const LoginForm = () => {
 
     // Basic form validation
     if (!input.email || !input.password) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
 
     // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(input.email)) {
-      alert("Please enter a valid email.");
+      toast.error("Please enter a valid email.");
       return;
     }
 
     // Log the form data to the console
     console.log("Form Data Submitted: ", input);
-    setInput({ email: "", password: "" });
+    try {
+      await login(input.email, input.password);
+      toast.success("Login successful!");
+      navigate("/user-dashboard");
+    } catch (err) {
+      toast.error(error || "Login failed!");
+    }
   };
+
 
   return (
     <div className="py-[3rem] px-[3rem] mt-[75px]">
       <div className="flex items-center justify-center">
-        <form onSubmit={signupHandler} className="w-[30rem] shadow-lg p-8 flex flex-col gap-5">
+        <form onSubmit={signupHandler} className="w-[30rem] shadow-lg p-8 flex flex-col gap-4">
           <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">Login</h1>
 
           <div>
@@ -87,7 +98,7 @@ const LoginForm = () => {
             className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
             type="submit" disabled = {isLoading}
           >
-            {isLoading ? <RiLoader2Fill className='w-6 h-6 animate-spin' /> : "Login"}
+            {isLoading ? <Loader className='w-6 h-6 animate-spin' /> : "Login"}
           </Button>
 
           <span className="text-center">

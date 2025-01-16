@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Uploader from "../Uploader/Uploader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "sonner";
+import { useAuthStore } from "../store/authStore";
+import { Loader } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -22,6 +25,10 @@ const SignUpForm = () => {
     images: [], // Array to store selected image files
   });
 
+  const navigate = useNavigate();
+
+  const {signup,error, isLoading } = useAuthStore();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePasswordVisibility = () => {
@@ -38,7 +45,7 @@ const SignUpForm = () => {
 
   const signupHandler = async (e) => {
     e.preventDefault();
-
+  
     // Validation checks
     if (
       !input.email ||
@@ -48,29 +55,34 @@ const SignUpForm = () => {
       !input.gender ||
       input.images.length === 0
     ) {
-      alert("All fields are required!");
+      toast.error("All fields are required!");
       return;
     }
-
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(input.email)) {
-      alert("Please enter a valid email.");
+      toast.error("Please enter a valid email.");
       return;
     }
-
-    // Log the form data for testing
-    console.log("Form Data Submitted: ", input);
-
-    // Reset form
-    setInput({
-      email: "",
-      password: "",
-      username: "",
-      country: "",
-      gender: "",
-      images: [],
-    });
+  
+    try {
+      // Call the Zustand store function
+      await signup(
+        input.email,
+        input.password,
+        input.username,
+        input.images,
+        input.country,
+        input.gender
+      );
+      toast.success("Signup successful!");
+      navigate("/verify-email");
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response ? error.response.data.message : "Something went wrong!");
+    }
   };
+  
 
   return (
     <div className="w-full py-10 px-4 mt-12">
@@ -165,12 +177,12 @@ const SignUpForm = () => {
               </SelectContent>
             </Select>
           </div>
-
+          {/* {error && <p className='text-red-500 font-semibold mt-2'>{error}</p>} */}
           <Button
             className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit"
+            type="submit" disabled ={isLoading}
           >
-            Signup
+        {isLoading ? <Loader className="animate-spin mx-auto" size={24}/> :"Sign up" }
           </Button>
           <span className="text-center text-sm">
             Already have an account?{" "}

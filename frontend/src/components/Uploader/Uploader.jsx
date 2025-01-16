@@ -31,7 +31,7 @@ const Uploader = ({ onFilesSelected , images}) => {
   return (
     <main className="flex flex-col items-center justify-center">
    <div
-  className="border-2 border-dashed border-[#F67A24] rounded-lg p-4 w-full sm:w-[20rem] md:w-[26rem] h-auto flex flex-col items-center justify-center relative bg-white"
+  className="border-2 border-dashed border-[#F67A24] rounded-lg p-4 w-full sm:w-[20rem] md:w-[22rem] lg:w-[26rem] h-auto flex flex-col items-center justify-center relative bg-white"
   onDrop={handleDrop}
   onDragOver={handleDragOver}
 >

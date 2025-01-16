@@ -1,95 +1,97 @@
-import React, { useState } from 'react';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import * as React from "react"
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
-const LoginForm = () => {
-  const [input, setInput] = useState({
-    email: "",
-    password: ""
-  });
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 
-  const [showPassword, setShowPassword] = useState(false);
+const AlertDialog = AlertDialogPrimitive.Root
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword((prevState) => !prevState);
-  };
+const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
-  const changeEventHandler = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
+const AlertDialogPortal = AlertDialogPrimitive.Portal
 
-  const signupHandler = async (e) => {
-    e.preventDefault();
+const AlertDialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Overlay
+    className={cn(
+      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
+    {...props}
+    ref={ref} />
+))
+AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
-    // Basic form validation
-    if (!input.email || !input.password) {
-      alert("All fields are required!");
-      return;
-    }
+const AlertDialogContent = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPortal>
+    <AlertDialogOverlay />
+    <AlertDialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        className
+      )}
+      {...props} />
+  </AlertDialogPortal>
+))
+AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input.email)) {
-      alert("Please enter a valid email.");
-      return;
-    }
+const AlertDialogHeader = ({
+  className,
+  ...props
+}) => (
+  <div
+    className={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
+    {...props} />
+)
+AlertDialogHeader.displayName = "AlertDialogHeader"
 
-    // Log the form data to the console
-    console.log("Form Data Submitted: ", input);
-    setInput({ email: "", password: "" });
-  };
+const AlertDialogFooter = ({
+  className,
+  ...props
+}) => (
+  <div
+    className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
+    {...props} />
+)
+AlertDialogFooter.displayName = "AlertDialogFooter"
 
-  return (
-    <div className="py-[3rem] px-[3rem] mt-[75px]">
-      <div className="flex items-center justify-center">
-        <form onSubmit={signupHandler} className="w-[30rem] shadow-lg p-8 flex flex-col gap-5">
-          <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">Login</h1>
+const AlertDialogTitle = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Title ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
+))
+AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
 
-          <div>
-            <span className="font-medium">Email</span>
-            <Input
-              type="email"
-              name="email"
-              value={input.email}
-              onChange={changeEventHandler}
-              placeholder="Enter email"
-              className="focus-visible:ring-transparent my-2"
-            />
-          </div>
-          <div className="relative">
-            <span className="font-medium">Password</span>
-            <Input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={input.password}
-              onChange={changeEventHandler}
-              placeholder="Enter password"
-              className="focus-visible:ring-transparent my-2"
-            />
-            <span
-              className="absolute right-3 top-[50%] translate-y-[-50%] cursor-pointer text-gray-600"
-              onClick={handleTogglePasswordVisibility}
-            >
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </span>
-          </div>
+const AlertDialogDescription = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Description
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props} />
+))
+AlertDialogDescription.displayName =
+  AlertDialogPrimitive.Description.displayName
 
-          <Button
-            className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit"
-          >
-            Login
-          </Button>
+const AlertDialogAction = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Action ref={ref} className={cn(buttonVariants(), className)} {...props} />
+))
+AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
-          <span className="text-center">
-            Don't have an account? <Link to={'/Signup'} className="text-[#f67b24]">Signup</Link>
-          </span>
-        </form>
-      </div>
-    </div>
-  );
-};
+const AlertDialogCancel = React.forwardRef(({ className, ...props }, ref) => (
+  <AlertDialogPrimitive.Cancel
+    ref={ref}
+    className={cn(buttonVariants({ variant: "outline" }), "mt-2 sm:mt-0", className)}
+    {...props} />
+))
+AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
 
-export default LoginForm;
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+}
