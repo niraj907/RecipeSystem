@@ -45,13 +45,7 @@ const { error, isLoading , verifyEmail} = useAuthStore();
     }
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const verificationCode = code.join("");
-  //   console.log(`Verification code submitted: ${verificationCode}`);
 
-
-  // };
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -65,7 +59,7 @@ const { error, isLoading , verifyEmail} = useAuthStore();
     const verificationCode = code.join("");
    try {
     await verifyEmail(verificationCode);
-    navigate("/");
+    navigate("/login");
     toast.success("Email verified sucessfully");
    } catch (error) {
        toast.error(error.response ? error.response.data.message : "Something went wrong Email verified!");

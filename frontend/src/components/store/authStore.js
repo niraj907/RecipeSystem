@@ -53,6 +53,16 @@ signup: async (email, password, username, images, country, gender) => {
 		}
 	},
 
+  logout: async () => {
+		set({ isLoading: true, error: null });
+		try {
+			await axios.post(`${API_URL}/logout`);
+			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
+		} catch (error) {
+			set({ error: "Error logging out", isLoading: false });
+			throw error;
+		}
+	},
 
   verifyEmail: async (code) => {
     set({ isLoading: true, error: null });

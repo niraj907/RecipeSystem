@@ -9,16 +9,12 @@ import SignUpForm from "./components/auth/SignUpForm";
 import LoginForm from "./components/auth/LoginForm";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import EmailVerificationPage from "./components/auth/EmailVerificationPage";
-import { useAuthStore } from "./components/store/authStore";
+import ErrorPage from "./components/ErrorPage";
 
 // admin
 import SignupForm from "./admin/auth/SignupForm";
+import ProtectedRoute from "./ProtectedRoute";
 const App = () => {
-
- const {isCheckingAuth , checkAuth , isAuthenticated, user} =useAuthStore();
-
-useEffect
-
   return (
     <div className="relative">
       <Routes>
@@ -29,16 +25,28 @@ useEffect
         <Route path="/login" element={<><Navbar /><LoginForm /><Footer /></>} />
         <Route path="/forgot-password" element={<><ForgotPassword /></>} />
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
-        <Route path="/user-dashboard" element={<Layout />} />
+        {/* <Route path="/user-dashboard" element={<Layout />} /> */}
+
+
+        <Route
+          path="/user-dashboard"
+          element={
+            <ProtectedRoute>
+             <Layout />
+            </ProtectedRoute>
+          }
+        />
 
 
 
 
 
+{/* admin panel */}
         <Route path="/admin-signup" element={<SignupForm />} />
 
 
-
+          {/* Fallback for any unmatched routes */}
+          <Route path="*" element={<ErrorPage />} />
 
 
       </Routes>
