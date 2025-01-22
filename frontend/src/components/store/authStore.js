@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import axios from "axios";
 
+
 const API_URL = "http://localhost:4000/api/a1/auth";
 
 export const useAuthStore = create((set)=>({
@@ -9,6 +10,7 @@ isAuthenticated:false,
 error:null,
 isLoading:false,
 isCheckingAuth:true,
+message : null,
 
 signup: async (email, password, username, images, country, gender) => {
     set({ isLoading: true, error: null });
@@ -26,6 +28,7 @@ signup: async (email, password, username, images, country, gender) => {
           "Content-Type": "multipart/form-data",
         },
       });
+
   
       set({ user: response.data.user, isAuthenticated: true, isLoading: false });
     } catch (error) {
@@ -85,5 +88,34 @@ checkAuth: async () => {
         set({ error: null, isCheckingAuth: false, isAuthenticated: false });
     }
 },
+
+forgotPassword: async (email) => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.post(`${API_URL}/forgot-password`, { email });
+    set({ message: response.data.message, isLoading: false });
+  } catch (error) {
+    set({
+      isLoading: false,
+      error: error.response.data.message || "Error sending reset password email",
+    });
+    throw error;
+  }
+ } ,
+
+ resetPassword: async (token, password) => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.post(`${API_URL}/reset-password/${token}`, { password });
+    set({ message: response.data.message, isLoading: false });
+  } catch (error) {
+    set({
+      isLoading: false,
+      error: error.response.data.message || "Error resetting password",
+    });
+    throw error;
+  }
+},
+
   
 }))

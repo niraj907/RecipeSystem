@@ -10,10 +10,11 @@ import LoginForm from "./components/auth/LoginForm";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import EmailVerificationPage from "./components/auth/EmailVerificationPage";
 import ErrorPage from "./components/ErrorPage";
+import ProtectedRoute from "./ProtectedRoute";
+import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 // admin
 import SignupForm from "./admin/auth/SignupForm";
-import ProtectedRoute from "./ProtectedRoute";
 const App = () => {
   return (
     <div className="relative">
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="/login" element={<><Navbar /><LoginForm /><Footer /></>} />
         <Route path="/forgot-password" element={<><ForgotPassword /></>} />
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
-        {/* <Route path="/user-dashboard" element={<Layout />} /> */}
+        <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />
+    
 
 
         <Route

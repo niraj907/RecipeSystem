@@ -5,7 +5,6 @@ import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import image1 from "../assets/image1.jpg";
 import { useAuthStore } from "./store/authStore";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
@@ -16,7 +15,8 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  const { isAuthenticated ,logout , error } = useAuthStore();
+  const { isAuthenticated ,logout ,user } = useAuthStore();
+
 
 
   const toggleDropdown = () => {
@@ -51,8 +51,9 @@ const Navbar = () => {
       });
   
       if (result.isConfirmed) {
+        await logout();
         toast.success("Logged out successfully.");
-        navigate("/"); // Redirect after confirmation
+        navigate("/");
       } else {
         toast.info("Logout cancelled.");
       }
@@ -137,14 +138,16 @@ const Navbar = () => {
   <div className="relative" ref={dropdownRef}>
     <button
       type="button"
-      className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+      className="hidden lg:block rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
       id="user-menu-button"
       onClick={toggleDropdown}
     >
+      
       <span className="sr-only">Open user menu</span>
       <img
         className="w-8 h-8 rounded-full"
-        src={image1}
+        src={user.images[0].url}
+        
         alt="User Profile"
       />
     </button>
