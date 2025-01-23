@@ -6,14 +6,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useAuthStore } from '../store/authStore';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 const ResetPasswordPage = () => {
 
-    const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const { resetPassword, isLoading } = useAuthStore();
+  const [showPassword, setShowPassword] = useState(false);
+  const [ConfirmshowPassword, setConfirmshowPassword] = useState(false);
 
-    const { token } = useParams();
+  const { token } = useParams();
 	const navigate = useNavigate();
+  
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
+  const handleToggleConfirmPassword = () => {
+    setConfirmshowPassword((prevState) => !prevState);
+  };
 
     const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -25,7 +37,7 @@ const ResetPasswordPage = () => {
 		try {
 			await resetPassword(token, password);
 
-			toast.success("Password reset successfully, redirecting to login page...");
+			toast.success("Password reset successfully.");
 			setTimeout(() => {
 				navigate("/login");
 			}, 2000);
@@ -45,7 +57,7 @@ const ResetPasswordPage = () => {
           {/* Email Input */}
           <div className="relative w-full">
             <Input
-              type="password"
+            type={showPassword ? "text" : "password"}
               placeholder="New Password"
               value={password}
 			onChange={(e) => setPassword(e.target.value)}
@@ -53,11 +65,17 @@ const ResetPasswordPage = () => {
               className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
             <FaUnlock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
+            <span
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
+      onClick={handleTogglePasswordVisibility}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </span>
           </div>
 
           <div className="relative w-full">
             <Input
-              type="password"
+                type={ConfirmshowPassword ? "text" : "password"}
               placeholder="Confirm New Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -65,6 +83,14 @@ const ResetPasswordPage = () => {
               className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
             <FaUnlock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
+
+            <span
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
+      onClick={handleToggleConfirmPassword}
+    >
+      {ConfirmshowPassword ? <FaEyeSlash /> : <FaEye />}
+    </span>
+
           </div>
 
           {/* Submit Button */}
