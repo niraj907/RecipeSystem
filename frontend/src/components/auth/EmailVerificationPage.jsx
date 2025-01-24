@@ -49,7 +49,6 @@ const { error, isLoading , verifyEmail} = useAuthStore();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-
     // Check if all the fields are filled
     if (code.some(digit => digit === "")) {
       toast.error("Please fill in all the fields.");
@@ -64,7 +63,6 @@ const { error, isLoading , verifyEmail} = useAuthStore();
    } catch (error) {
        toast.error(error.response ? error.response.data.message : "Something went wrong Email verified!");
    }
-
 };
 
 

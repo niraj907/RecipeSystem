@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import { useAuthStore } from "../store/authStore";
 import { Loader } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,10 @@ const navigate = useNavigate();
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+
+  const handleClick = async () => {
+alert("Google Login");
+  }
 
   const signupHandler = async (e) => {
     e.preventDefault();
@@ -94,12 +99,17 @@ const navigate = useNavigate();
   </Link>
 </div>
 
-          <Button
-            className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit" disabled = {isLoading}
-          >
+<Button
+        className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
+            type="submit" disabled = {isLoading}>
             {isLoading ? <Loader className='w-6 h-6 animate-spin' /> : "Login"}
-          </Button>
+</Button>
+
+<p className='text-center'>- Or Sign in with - </p>
+<div  onClick={handleClick} className='text-center shadow-sm flex justify-center items-center space-x-2 bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-md focus:outline-none focus:ring focus:ring-offset-indigo-200 focus:ring-opacity-50 disabled:bg-gray-400 cursor-pointer'>
+<FcGoogle className='text-2xl'/> 
+<p className='text-[1rem] font-sans'> Login with Google</p>
+</div>
 
           <span className="text-center">
             Don't have an account? <Link to={'/Signup'} className="text-[#f67b24de]">Signup</Link>
