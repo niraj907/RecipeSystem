@@ -3,17 +3,19 @@ import logo from "../assets/logo.png";
 import { Button } from "./ui/button";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { isAuthenticated ,logout ,user } = useAuthStore();
 
@@ -36,8 +38,6 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-
 
   const handleClick = async () => {
     try {
@@ -89,6 +89,7 @@ const Navbar = () => {
         </NavLink>
 
         {/* Desktop Menu */}
+        {location.pathname !== "/edit-profile" && (
         <ul className="hidden lg:flex gap-7 font-sans text-[18px] px-4">
           <li
             className="cursor-pointer hover:text-orange-600"
@@ -115,7 +116,7 @@ const Navbar = () => {
             Testimonial
           </li>
         </ul>
-
+ )}
 
 
         {!isAuthenticated ? (
@@ -146,10 +147,12 @@ const Navbar = () => {
       <span className="sr-only">Open user menu</span>
       <img
         className="w-8 h-8 rounded-full"
-        src={user.images[0].url}
+      src= {user?.images?.[0]?.url || "/default-profile.png"}
+      // src={user.images[0].url || "https://github.com/shadcn.png"}
         
         alt="User Profile"
       />
+    
     </button>
     {isDropdownOpen && (
       <div
@@ -159,8 +162,8 @@ const Navbar = () => {
         aria-labelledby="user-menu-button"
       >
         <a
-          href="#"
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        onClick={() => navigate("/edit-profile")}
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
           role="menuitem"
         >
           Profile

@@ -12,10 +12,12 @@ isLoading:false,
 isCheckingAuth:true,
 message : null,
 
-signup: async (email, password, username, images, country, gender) => {
+signup: async (name,email, password, username, images, country, gender) => {
+  
     set({ isLoading: true, error: null });
     try {
       const formData = new FormData();
+      formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
       formData.append("username", username);
@@ -118,4 +120,45 @@ forgotPassword: async (email) => {
 },
 
   
+// update code 
+updateProfile: async (pid, updatedProfile) => {
+  set({ isLoading: true, error: null });
+
+  try {
+    const response = await fetch(`${API_URL}/${pid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProfile),
+    });
+
+    // Check for HTTP errors
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update profile");
+    }
+
+    // Parse and handle successful response
+    const data = await response.json();
+    set((state) => ({
+      ...state,
+      user: data.user, // Assuming the response returns the updated user object
+      error: null,
+      isLoading: false,
+    }));
+
+    return { success: true, message: "Profile updated successfully" };
+  } catch (error) {
+    set({
+      error: error.message || "Error updating profile",
+      isLoading: false,
+    });
+    return { success: false, message: error.message };
+  }
+},
+
+
+
+
 }))

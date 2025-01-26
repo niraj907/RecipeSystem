@@ -29,6 +29,7 @@ const SignUpForm = () => {
 
   const {signup,error, isLoading } = useAuthStore();
 
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePasswordVisibility = () => {
@@ -48,6 +49,7 @@ const SignUpForm = () => {
   
     // Validation checks
     if (
+      !input.name ||
       !input.email ||
       !input.password ||
       !input.username ||
@@ -68,6 +70,7 @@ const SignUpForm = () => {
     try {
       // Call the Zustand store function
       await signup(
+        input.name,
         input.email,
         input.password,
         input.username,
@@ -94,6 +97,19 @@ const SignUpForm = () => {
           <h1 className="text-center font-bold text-2xl sm:text-3xl font-serif text-[#F67A24]">
             Sign up
           </h1>
+
+        
+          <div>
+            <span className="font-medium">Name</span>
+            <Input
+              type="text"
+              name="name"
+              value={input.name}
+              onChange={changeEventHandler}
+              placeholder="Enter name"
+              className="focus-visible:ring-transparent my-2"
+            />
+          </div>
 
           <div>
             <span className="font-medium">Email</span>

@@ -15,6 +15,7 @@ import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 // admin
 import SignupForm from "./admin/auth/SignupForm";
+import EditProfile from "./components/EditProfile";
 const App = () => {
   return (
     <div className="relative">
@@ -27,17 +28,26 @@ const App = () => {
         <Route path="/forgot-password" element={<><ForgotPassword /></>} />
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
         <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />
-    
-
+ 
 
         <Route
           path="/user-dashboard"
-          element={
-            <ProtectedRoute>
+          element={ 
+          <ProtectedRoute>
              <Layout />
             </ProtectedRoute>
           }
         />
+
+<Route
+  path="/edit-profile"
+  element={
+    <ProtectedRoute>
+   <Navbar  />   <EditProfile />
+    </ProtectedRoute>
+  }
+/>
+
 
 
 
