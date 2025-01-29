@@ -147,9 +147,9 @@ const Navbar = () => {
       <span className="sr-only">Open user menu</span>
       <img
         className="w-8 h-8 rounded-full"
-      src= {user?.images?.[0]?.url || "/default-profile.png"}
+      src= {user?.images?.[0]?.url || "https://github.com/shadcn.png" }
       // src={user.images[0].url || "https://github.com/shadcn.png"}
-        
+  
         alt="User Profile"
       />
     

@@ -121,43 +121,42 @@ forgotPassword: async (email) => {
 
   
 // update code 
+
+
 updateProfile: async (pid, updatedProfile) => {
   set({ isLoading: true, error: null });
 
   try {
-    const response = await fetch(`${API_URL}/${pid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProfile),
+    const formData = new FormData();
+    Object.entries(updatedProfile).forEach(([key, value]) => {
+      if (key === "image") {
+        formData.append("images", value); // Append image file
+      } else {
+        formData.append(key, value);
+      }
     });
 
-    // Check for HTTP errors
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update profile");
-    }
+    const response = await axios.put(`${API_URL}/${pid}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    // Parse and handle successful response
-    const data = await response.json();
-    set((state) => ({
-      ...state,
-      user: data.user, // Assuming the response returns the updated user object
+    set({
+      user: response.data.user,
       error: null,
       isLoading: false,
-    }));
+    });
 
     return { success: true, message: "Profile updated successfully" };
   } catch (error) {
     set({
-      error: error.message || "Error updating profile",
+      error: error.response?.data?.message || "Error updating profile",
       isLoading: false,
     });
     return { success: false, message: error.message };
   }
 },
-
 
 
 

@@ -10,12 +10,15 @@ const EditProfile = () => {
     name: "",
     email: "",
     username: "",
+    images: "",
     country: "",
     gender: "",
   });
   const [image, setImage] = useState(null);
   const [isSaving, setIsSaving] = useState(false); // Track saving state
   const { user, updateProfile } = useAuthStore();
+
+  console.log(user.images);
 
   console.log(user.password);
   // Prefill form data with user info when the component mounts
@@ -25,6 +28,7 @@ const EditProfile = () => {
         name: user.name || "",
         email: user.email || "",
         username: user.username || "",
+        images: user.images || "" ,
         country: user.country || "",
         gender: user.gender || "",
       });
@@ -59,34 +63,52 @@ const EditProfile = () => {
   };
 
   // Handle form submission with setTimeout
+  // const handleUpdateProfile = () => {
+  //   setIsSaving(true); // Set saving state to true
+  //   setTimeout(async () => {
+  //     try {
+  //       // Create an object to hold the updated profile data
+  //       const updatedProfile = { ...formData };
+
+  //       // Add the image to the form data if one is selected
+  //       if (image) {
+  //         updatedProfile.image = image;
+  //       }
+
+  //       // Call the Zustand store's `updateProfile` function
+  //       const response = await updateProfile(user._id, updatedProfile);
+
+  //       if (response.success) {
+  //         toast.success(response.message);
+  //       } else {
+  //         toast.error(response.message);
+  //       }
+  //     } catch (error) {
+  //       toast.error("An error occurred while updating your profile.");
+  //     } finally {
+  //       setIsSaving(false); // Reset saving state
+  //     }
+  //   }, 1000); // Delay of 1 second
+  // };
   const handleUpdateProfile = () => {
-    setIsSaving(true); // Set saving state to true
+    setIsSaving(true);
     setTimeout(async () => {
       try {
-        // Create an object to hold the updated profile data
-        const updatedProfile = { ...formData };
-
-        // Add the image to the form data if one is selected
-        if (image) {
-          updatedProfile.image = image;
-        }
-
-        // Call the Zustand store's `updateProfile` function
+        const { email, ...updatedProfile } = formData; // Exclude email from the update
+        if (image) updatedProfile.images = image;
+  
         const response = await updateProfile(user._id, updatedProfile);
-
-        if (response.success) {
-          toast.success(response.message);
-        } else {
-          toast.error(response.message);
-        }
+        response.success
+          ? toast.success(response.message)
+          : toast.error(response.message);
       } catch (error) {
         toast.error("An error occurred while updating your profile.");
       } finally {
-        setIsSaving(false); // Reset saving state
+        setIsSaving(false);
       }
-    }, 1000); // Delay of 1 second
+    }, 1000);
   };
-
+  
   return (
     <div className="w-full py-10 md:py-16 xl:py-20 px-8 mt-[3rem] bg-gray-50">
       <div className="max-w-[1200px] mx-auto px-6 sm:px-8 md:px-12 bg-white shadow-lg rounded-2xl p-6 sm:p-10">
@@ -137,7 +159,7 @@ const EditProfile = () => {
         </div>
 
         {/* Email Input */}
-        <div>
+        {/* <div>
           <label
             className="font-medium text-gray-700 block my-2"
             htmlFor="email"
@@ -152,9 +174,25 @@ const EditProfile = () => {
             onChange={handleInputChange}
             className="w-full focus-visible:ring-transparent"
           />
-        </div>
+        </div> */}
 
-      
+      {/* Email Input */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+  <label className="font-medium text-gray-700 block my-2" htmlFor="email">
+    Email
+  </label>
+  <Input
+    type="email"
+    name="email"
+    id="email"
+    value={formData.email}
+    onChange={handleInputChange} // Optional: You can remove this if the field is disabled
+    className="w-full bg-gray-100 text-gray-500 cursor-not-allowed focus-visible:ring-transparent"
+    disabled // This makes the input field non-editable
+  />
+</div>
+
 
         {/* Username Input */}
         <div>
@@ -172,6 +210,7 @@ const EditProfile = () => {
             onChange={handleInputChange}
             className="w-full focus-visible:ring-transparent"
           />
+        </div>
         </div>
 
         {/* Country and Gender Section */}
@@ -192,22 +231,28 @@ const EditProfile = () => {
               className="w-full focus-visible:ring-transparent"
             />
           </div>
-          <div>
-            <label
-              className="font-medium text-gray-700 block my-2"
-              htmlFor="gender"
-            >
-              Gender
-            </label>
-            <Input
-              type="text"
-              name="gender"
-              id="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              className="w-full focus-visible:ring-transparent"
-            />
-          </div>
+
+
+<div>
+  <label
+    className="font-medium text-gray-700 block my-2"
+    htmlFor="gender"
+  >
+    Gender
+  </label>
+  <select
+    name="gender"
+    id="gender"
+    value={formData.gender}
+    onChange={handleInputChange}
+    className="w-full focus-visible:ring-transparent"
+  >
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+</div>
+
+
         </div>
 
         {/* Submit Button */}
