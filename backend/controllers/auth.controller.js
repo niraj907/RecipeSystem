@@ -1,5 +1,4 @@
 import { User } from '../models/user.model.js';
-
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
@@ -7,7 +6,7 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
-import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail, sendWelcomeEmail } from '../mailtrap/emails.js';
+import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail} from '../mailtrap/emails.js';
 
 
 dotenv.config();
@@ -20,9 +19,9 @@ cloudinary.config({
 
 
 export const signup = async (req, res) => {
-  const { email, password, username, country, gender } = req.body;
+  const { name, email, password, username, country, gender } = req.body;
   try {
-    if (!email || !password || !username || !country || !gender) {
+    if (!name || !email || !password || !username || !country || !gender) {
       console.log('All fields are required');
       throw new Error("All fields are required");
     }
@@ -67,6 +66,7 @@ export const signup = async (req, res) => {
     console.log("Saving item to the database...");
 
     const user = new User({
+      name,
       email,
       password: hashedPassword,
       username, 
@@ -122,7 +122,7 @@ try {
   user.verificationTokenExpiresAt = undefined;
   await user.save();
 
-  await sendWelcomeEmail(user.email, user.username);
+  // await sendWelcomeEmail(user.email, user.username);
 
   res.status(200).json({
     success: true,
@@ -165,6 +165,7 @@ export const login = async (req, res) => {
       user: {
         ...user._doc,
         password: undefined,
+
       }
     })
 
@@ -258,7 +259,7 @@ export const checkAuth = async(req,res) =>{
   }
 }
 
-
+// Retrieve All Users
 export const getAllUsers = async (req, res) => {
   try {
       console.log("Fetching all users");
@@ -285,15 +286,52 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// Update User
+// update code
 export const updateUserById = async (req, res) => {
   try {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.status(200).json(user);
+    const {  ...otherUpdates } = req.body;
+    let updatedUserData = { ...otherUpdates };
+    // Handle image uploads if provided
+    if (req.files && req.files.images) {
+      const imageFile = req.files.images;
+
+      // Validate file type
+      const allowedExtensions = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+      if (!allowedExtensions.includes(imageFile.mimetype)) {
+        return res.status(400).json({ success: false, message: "Invalid file type" });
+      }
+
+      // Upload the file to Cloudinary
+      const cloudinaryResponse = await cloudinary.uploader.upload(imageFile.tempFilePath);
+
+      if (!cloudinaryResponse || cloudinaryResponse.error) {
+        return res.status(500).json({ success: false, message: "Error uploading image" });
+      }
+
+      // Update the images array
+      updatedUserData.images = [
+        {
+          public_id: cloudinaryResponse.public_id,
+          url: cloudinaryResponse.secure_url,
+        },
+      ];
+    }
+
+    // Update the user in the database
+    const user = await User.findByIdAndUpdate(req.params.id, updatedUserData, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, user });
   } catch (error) {
-    res.status(500).json({success: false, message: error.message});
+    console.error("Error in updateUserById:", error.message);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 
 // Delete User
 export const deleteUserById = async (req, res) => {

@@ -23,25 +23,25 @@ export const sendVerificationEmail = async (email, verificationToken) => {
   };
   
 
-export const sendWelcomeEmail = async (email , username) => {
-const recipient= [{email}];
-try {
+// export const sendWelcomeEmail = async (email , username) => {
+// const recipient= [{email}];
+// try {
   
- const response =  await mailtrapClient.send({
-    from: sender,
-    to: recipient,
-    template_uuid: "fc9dcaa0-b6a9-429f-9df2-083bd8d8272d",
-    template_variables: {
-      company_info_name: "Recipe System",
-      username: username,
-    },
-  });
-  console.log('Welcome email sent sucessfully',response);
-} catch (error) {
-  console.error(`Error sending welcome email`, error);
-  throw new Error(`Error sending welcome email: ${error}`);
-}
-};  
+//  const response =  await mailtrapClient.send({
+//     from: sender,
+//     to: recipient,
+//     template_uuid: "fc9dcaa0-b6a9-429f-9df2-083bd8d8272d",
+//     template_variables: {
+//       company_info_name: "Recipe System",
+//       username: username,
+//     },
+//   });
+//   console.log('Welcome email sent sucessfully',response);
+// } catch (error) {
+//   console.error(`Error sending welcome email`, error);
+//   throw new Error(`Error sending welcome email: ${error}`);
+// }
+// };  
 
 
 export const sendPasswordResetEmail = async (email, resetURL) => {
