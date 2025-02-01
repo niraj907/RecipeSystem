@@ -13,10 +13,10 @@ cloudinary.config({
 // add recipe
 export const addRecipe = async (req, res) => {
   try {
-    const { name , category , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal ,hindi,  english} = req.body;
+    const { name , cateRecipe , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal ,hindi,  english} = req.body;
 
     // field all required 
-    if (!name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !hindi || !english) {
+    if (!name || !cateRecipe || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !hindi || !english) {
       console.log('All fields are required');
       // throw new Error("All fields are required");
       return res.status(400).json({ success: false, msg: "All fields are required" });
@@ -61,7 +61,7 @@ export const addRecipe = async (req, res) => {
         },
       ],
       name,
-      category,
+      cateRecipe,
       description,
       ingredients,
       instructions,
@@ -91,9 +91,6 @@ export const addRecipe = async (req, res) => {
 
 
 
-
-
-
 // get all recipes
 export const getAllRecipes = async (req, res) => { 
   try {
@@ -111,6 +108,27 @@ export const getAllRecipes = async (req, res) => {
   res.status(500).json({success: false, message: error.message});
 }
 }
+
+
+// get search recipe
+export const getSearchedRecipe = async (req, res) => {
+  try {
+    const query = req.query.q;
+    if (!query) {
+        return res.status(400).json({ message: "Query parameter is required" });
+    }
+    const recipes = await recipeModel.find({ name: { $regex: query, $options: "i" } });
+
+    if (recipes.length === 0) {
+        return res.status(404).json({ message: "No recipes found" });
+    }
+
+    res.status(200).json(recipes);
+} catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+}
+};
+
 
 
 
