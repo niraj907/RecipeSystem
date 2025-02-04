@@ -23,8 +23,8 @@ const App = () => {
         <Route path="/" element={<Layout />} />
         <Route path="/categories/:category" element={<><Navbar /><CategoryPage /><Footer /></>} />
         <Route path="/view" element={<><Navbar /><View /><Footer /></>} />
-        <Route path="/signup" element={<><Navbar /><SignUpForm /><Footer /></>} />
-        <Route path="/login" element={<><Navbar /><LoginForm /><Footer /></>} />
+        <Route path="/signup" element={<><SignUpForm /></>} />
+        <Route path="/login" element={<><LoginForm /></>} />
         <Route path="/forgot-password" element={<><ForgotPassword /></>} />
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
         <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />

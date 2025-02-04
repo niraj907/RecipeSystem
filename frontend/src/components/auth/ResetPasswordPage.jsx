@@ -30,6 +30,11 @@ const ResetPasswordPage = () => {
     const handleSubmit = async (e) => {
 		e.preventDefault();
 
+    if (!password || !confirmPassword) {
+      toast.error("All fields are required!");
+      return;
+    }
+
 		if (password !== confirmPassword) {
 			toast.error("Passwords do not match");
 			return;
@@ -61,7 +66,7 @@ const ResetPasswordPage = () => {
               placeholder="New Password"
               value={password}
 			onChange={(e) => setPassword(e.target.value)}
-              required
+             
               className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
             <FaUnlock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
@@ -79,7 +84,7 @@ const ResetPasswordPage = () => {
               placeholder="Confirm New Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              required
+              
               className="pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             />
             <FaUnlock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />

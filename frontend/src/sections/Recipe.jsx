@@ -16,18 +16,37 @@ const Recipe = () => {
     setSearchItem(searchTerm);
   };
 
+  const recipesItem = ({ image, name, cateRecipe , time, href }) => {
+    return (
+      <div className="flex flex-col items-center">
+        <img
+          src={image}
+          alt={cateRecipe}
+          className="w-full h-60 object-cover"
+        />
+
+        <Link to={href}>
+        <Button className="bg-white text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">
+                      View
+                    </Button>
+        
+        </Link>
+      </div>
+    );
+  };
+
   const recipes = [
-    { title: "Chicken Burger", cateRecipe: "Lunch", time: "30 minutes", image: breakfastImg },
-    { title: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
-    { title: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
-    { title: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
-    { title: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
-    { title: "Bisket", cateRecipe: "Snacks", time: "30 minutes", image: snacksImg },
+    { name: "Chicken Burger", cateRecipe: "Lunch", time: "30 minutes", image: breakfastImg ,href:"/views/Chicken Burger"   },
+    { name: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
+    { name: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
+    { name: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
+    { name: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
+    { name: "Bisket", cateRecipe: "Snacks", time: "30 minutes", image: snacksImg },
   ];
 
   // Filter recipes based on search input
   const filteredRecipes = recipes.filter((recipe) =>
-    recipe.title.toLowerCase().includes(searchItem.toLowerCase())
+    recipe.name.toLowerCase().includes(searchItem.toLowerCase())
   );
 
   return (
@@ -54,7 +73,7 @@ const Recipe = () => {
               >
                 <img
                   src={recipe.image}
-                  alt={recipe.title}
+                  alt={recipe.name}
                   className="w-full h-60 object-cover"
                 />
 
@@ -66,7 +85,7 @@ const Recipe = () => {
                 <div className="p-4">
                   <div className="flex justify-between items-center">
                     <h2 className="text-lg font-semibold text-[#333]">
-                      {recipe.title}
+                      {recipe.name}
                     </h2>
 
                     <Button className="bg-white text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">

@@ -26,9 +26,9 @@ const navigate = useNavigate();
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const handleClick = async () => {
-alert("Google Login");
-  }
+//   const handleClick = async () => {
+// alert("Google Login");
+//   }
 
   const signupHandler = async (e) => {
     e.preventDefault();
@@ -75,6 +75,7 @@ alert("Google Login");
               className="focus-visible:ring-transparent my-2"
             />
           </div>
+          
           <div className="relative">
             <span className="font-medium">Password</span>
             <Input
