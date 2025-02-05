@@ -14,10 +14,10 @@ cloudinary.config({
 // add recipe
 export const addRecipe = async (req, res) => {
   try {
-    const { menuId, name , cateRecipe , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal ,hindi,  english} = req.body;
+    const { menuId, name , category , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal ,hindi,  english} = req.body;
 
     // field all required 
-    if (!menuId || !name || !cateRecipe || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !hindi || !english) {
+    if (!menuId || !name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !hindi || !english) {
       console.log('All fields are required');
       // throw new Error("All fields are required");
       return res.status(400).json({ success: false, msg: "All fields are required" });
@@ -63,7 +63,7 @@ export const addRecipe = async (req, res) => {
         },
       ],
       name,
-      cateRecipe,
+      category,
       description,
       ingredients,
       instructions,
@@ -122,6 +122,22 @@ export const getSearchedRecipe = async (req, res) => {
 }
 };
 
+
+// Get category-based items
+export const getCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const recipes = await recipeModel.find({ category: new RegExp(`^${category}$`, "i") });
+
+    if (!recipes.length) {
+      return res.status(404).json({ success: false, msg: "Category not found" });
+    }
+
+    return res.status(200).json({ success: true, msg: "Category found successfully", data: recipes });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Internal Server Error", error: error.message });
+  }
+};
 
 // get recipe by id
 export const getRecipeId = async (req, res) => {

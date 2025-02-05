@@ -7,7 +7,7 @@ import fileUpload from 'express-fileupload';
 
 import recipeRoutes from './routes/recipe.route.js'
 import authRoutes from './routes/auth.route.js';
-import countRoutes from './routes/count.route.js'
+import countRoutes from './routes/count.route.js';
 
 dotenv.config();
 
@@ -49,6 +49,7 @@ app.use(express.static('public'));
 app.use('/recipe/api', recipeRoutes); // recipe route
 app.use('/api/a1/auth',authRoutes); // user route
 app.use("/api/count",countRoutes);
+
 
 // Start server
 app.listen(PORT, () => {

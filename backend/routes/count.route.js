@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import express from "express";
+import { getUserCount ,getUserGenderCount} from "../controllers/count.controller.js";
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Counter of user');
-});
+router.get("/total-users", getUserCount);
+router.get("/total-gender", getUserGenderCount);
 
 export default router;
