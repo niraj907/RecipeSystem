@@ -183,11 +183,11 @@ updateProfile: async (pid, updatedProfile) => {
     });
 
     const response = await axios.put(`${API_URL}/${pid}`, formData);
-
+    console.log("Profile Data Before Sending:", updatedProfile);
 
     set({ user: response.data.user, error: null, isLoading: false });
 
-    return { success: true, message: "Profile updated successfully" };
+    return { success: true, message: "Profile updated successfully" };``
   } catch (error) {
     set({ error: error.response?.data?.message || "Error updating profile", isLoading: false });
     console.error("Frontend error connecting to backend:", error);

@@ -11,10 +11,10 @@ const CategoryPage = () => {
 
 const {category} = useParams();  
   const recipes = [
-    { title: "Chicken Burger", cateRecipe: "Lunch", time: "30 minutes", image: breakfastImg },
-    { title: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
-    { title: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
-    { title: "Bisket", cateRecipe: "Snacks", time: "30 minutes", image: snacksImg },
+    { title: "Chicken Burger", category: "Lunch", time: "30 minutes", image: breakfastImg },
+    { title: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { title: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { title: "Bisket", category: "Snacks", time: "30 minutes", image: snacksImg },
   ];
 
  return (
@@ -54,7 +54,7 @@ const {category} = useParams();
             </div>
 
             <div className="flex justify-between items-center mt-2">
-              <p className="text-sm text-gray-500">{recipe.cateRecipe}</p>
+              <p className="text-sm text-gray-500">{recipe.category}</p>
               <p className="text-sm text-gray-500 mt-2 flex items-center">
                 <LuAlarmClockCheck className="mr-1" /> {recipe.time}
               </p>

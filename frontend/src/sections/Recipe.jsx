@@ -16,12 +16,12 @@ const Recipe = () => {
     setSearchItem(searchTerm);
   };
 
-  const recipesItem = ({ image, name, cateRecipe , time, href }) => {
+  const recipesItem = ({ image, name, category , time, href }) => {
     return (
       <div className="flex flex-col items-center">
         <img
           src={image}
-          alt={cateRecipe}
+          alt={category}
           className="w-full h-60 object-cover"
         />
 
@@ -36,12 +36,12 @@ const Recipe = () => {
   };
 
   const recipes = [
-    { name: "Chicken Burger", cateRecipe: "Lunch", time: "30 minutes", image: breakfastImg ,href:"/views/Chicken Burger"   },
-    { name: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
-    { name: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
-    { name: "Momo", cateRecipe: "Lunch", time: "30 minutes", image: lunchImg },
-    { name: "Pizza", cateRecipe: "Dinner", time: "30 minutes", image: dinnerImg },
-    { name: "Bisket", cateRecipe: "Snacks", time: "30 minutes", image: snacksImg },
+    { name: "Chicken Burger", category: "Lunch", time: "30 minutes", image: breakfastImg ,href:"/views/Chicken Burger"   },
+    { name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { name: "Bisket", category: "Snacks", time: "30 minutes", image: snacksImg },
   ];
 
   // Filter recipes based on search input
@@ -94,7 +94,7 @@ const Recipe = () => {
                   </div>
 
                   <div className="flex justify-between items-center mt-2">
-                    <p className="text-sm text-gray-500">{recipe.cateRecipe}</p>
+                    <p className="text-sm text-gray-500">{recipe.category}</p>
                     <p className="text-sm text-gray-500 mt-2 flex items-center">
                       <LuAlarmClockCheck className="mr-1" /> {recipe.time}
                     </p>
