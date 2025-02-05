@@ -14,16 +14,18 @@ dotenv.config();
 const app = express();
 const PORT = 4000;
 
+// Cloudinary Configuration Check
+if (!process.env.CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+  console.error("Cloudinary credentials are missing");
+  process.exit(1); // Exit server if credentials are not set
+}
+
 // Middleware
-app.use(fileUpload({
-  useTempFiles : true,
-  tempFileDir : '/tmp/'
-}));
-3
-app.use(express.json()); // allow us to parse incoming requests: req.body
-app.use(cookieParser()); // allows us to parse incoming cookies
-app.use(express.urlencoded({ extended: true ,limit: '50mb' })); 
-app.use(cors());
+app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
+app.use(express.json({ limit: '50mb' })); // Support larger payloads
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
 
 // CORS configuration
 const corsOptions = {

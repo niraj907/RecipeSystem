@@ -2,12 +2,10 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const recipeSchema = new Schema({
-//   menuId : {
-// type:Number
-//   } ,
-
-   images: [{public_id: { type: String, required: true,},
-   url: { type: String, required: true,},},
+  menuId : { type:Number, required : true } ,
+  images: [
+    {public_id: { type: String, required: true,},
+    url: { type: String, required: true,},},
   ],
   name: {type: String, required: true,},
   cateRecipe: { type: String,  required: true,},

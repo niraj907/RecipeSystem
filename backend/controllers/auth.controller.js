@@ -177,6 +177,7 @@ export const login = async (req, res) => {
 
 }
 
+
 export const logout = async (req, res) => { 
 res.clearCookie("token");
 res.status(200).json({success: true, message: "Logged out successfully"});
@@ -223,7 +224,7 @@ export const resetPassword = async (req,res) =>{
     });
 
     if(!user){
-      return res.status(400).json({success:false,message: "Invalid or expired reset token"});
+      return res.status(400).json({success:false,message: "This email is not registered with us."});
     }
 
     //update password
@@ -286,25 +287,36 @@ export const getUserById = async (req, res) => {
   }
 };
 
+
 // update code
 export const updateUserById = async (req, res) => {
   try {
+    console.log("Update request received for user:", req.params.id);
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files);
+
     const {  ...otherUpdates } = req.body;
     let updatedUserData = { ...otherUpdates };
+
     // Handle image uploads if provided
     if (req.files && req.files.images) {
+      console.log("Processing image upload...");
       const imageFile = req.files.images;
 
       // Validate file type
       const allowedExtensions = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
       if (!allowedExtensions.includes(imageFile.mimetype)) {
+        console.log("Invalid file type:", imageFile.mimetype);
         return res.status(400).json({ success: false, message: "Invalid file type" });
       }
 
+
       // Upload the file to Cloudinary
+      console.log("Uploading to Cloudinary...");
       const cloudinaryResponse = await cloudinary.uploader.upload(imageFile.tempFilePath);
 
       if (!cloudinaryResponse || cloudinaryResponse.error) {
+        console.log("Cloudinary upload error:", cloudinaryResponse.error);
         return res.status(500).json({ success: false, message: "Error uploading image" });
       }
 
@@ -317,17 +329,23 @@ export const updateUserById = async (req, res) => {
       ];
     }
 
+    if (!req.params.id || req.params.id.length !== 24) {
+      return res.status(400).json({ success: false, message: "Invalid user ID format" });
+    }
     // Update the user in the database
+    console.log("Updating user in database...");
     const user = await User.findByIdAndUpdate(req.params.id, updatedUserData, { new: true });
 
     if (!user) {
+      console.log("User not found for update");
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
+    console.log("User updated successfully:", user);
     res.status(200).json({ success: true, user });
   } catch (error) {
     console.error("Error in updateUserById:", error.message);
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message:"Error in updateUserById",  error: error.message});
   }
 };
 
