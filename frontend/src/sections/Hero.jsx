@@ -27,7 +27,7 @@ const Hero = () => {
               </Button>
 
 
-<Link to="/view"
+<Link to="/view/id"
   className="flex items-center gap-2 bg-white text-[#666666] 
   hover:bg-[#FEF5EC] hover:text-[#F67A24] 
   hover:ring-[#F67A24] hover:ring-4 

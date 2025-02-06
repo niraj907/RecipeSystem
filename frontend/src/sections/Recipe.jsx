@@ -7,47 +7,40 @@ import breakfastImg from "../assets/Breakfast.jpg";
 import lunchImg from "../assets/Lunch.jpg";
 import dinnerImg from "../assets/Dinner.jpg";
 import snacksImg from "../assets/Snacks.jpg";
+import { FaArrowAltCircleDown } from "react-icons/fa";
+import { FaArrowAltCircleUp } from "react-icons/fa";
+
+import { Link } from "react-router";
 
 const Recipe = () => {
   const [searchItem, setSearchItem] = useState("");
+  const [showAll, setShowAll] = useState(false); // New state to control showing more recipes
 
   const handleInputChange = (e) => {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
   };
 
-  const recipesItem = ({ image, name, category , time, href }) => {
-    return (
-      <div className="flex flex-col items-center">
-        <img
-          src={image}
-          alt={category}
-          className="w-full h-60 object-cover"
-        />
-
-        <Link to={href}>
-        <Button className="bg-white text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">
-                      View
-                    </Button>
-        
-        </Link>
-      </div>
-    );
-  };
-
   const recipes = [
-    { name: "Chicken Burger", category: "Lunch", time: "30 minutes", image: breakfastImg ,href:"/views/Chicken Burger"   },
-    { name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
-    { name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
-    { name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
-    { name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
-    { name: "Bisket", category: "Snacks", time: "30 minutes", image: snacksImg },
+    { id: "1", name: "Chicken Burger", category: "Lunch", time: "30 minutes", image: breakfastImg },
+    { id: "2", name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { id: "3", name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { id: "4", name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { id: "5", name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { id: "6", name: "Bisket", category: "Snacks", time: "30 minutes", image: snacksImg },
+    { id: "7", name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { id: "8", name: "Momo", category: "Lunch", time: "30 minutes", image: lunchImg },
+    { id: "9", name: "Pizza", category: "Dinner", time: "30 minutes", image: dinnerImg },
+    { id: "10", name: "Bisket", category: "Snacks", time: "30 minutes", image: snacksImg },
   ];
 
   // Filter recipes based on search input
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(searchItem.toLowerCase())
   );
+
+  // Show only the first 6 recipes when "showAll" is false
+  const displayedRecipes = showAll ? filteredRecipes : filteredRecipes.slice(0, 6);
 
   return (
     <section id="recipes" className="w-full py-[60px] xl:py-[85px] bg-[#FEF5EC]">
@@ -59,14 +52,14 @@ const Recipe = () => {
             value={searchItem}
             onChange={handleInputChange}
             placeholder="Search"
-            className="w-[15rem] md:w-80 xl:w-96 xl-text-[16px] xl:text-xl font-semibold  rounded overflow-hidden"
+            className="w-[15rem] md:w-80 xl:w-96 xl-text-[16px] xl:text-xl font-semibold rounded focus-visible:ring-transparent my-2"
           />
         </div>
 
         {/* Recipe Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredRecipes.length > 0 ? (
-            filteredRecipes.map((recipe, index) => (
+          {displayedRecipes.length > 0 ? (
+            displayedRecipes.map((recipe, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative"
@@ -78,8 +71,8 @@ const Recipe = () => {
                 />
 
                 {/* Heart Icon */}
-                <div className="absolute top-4 right-4 bg-orange-500 rounded-full w-10 h-10 flex items-center justify-center">
-                  <FaRegHeart className="text-white  text-[18px]" />
+                <div className="absolute top-4 right-4 bg-orange-500 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer">
+                  <FaRegHeart className="text-white text-[18px]" />
                 </div>
 
                 <div className="p-4">
@@ -88,9 +81,9 @@ const Recipe = () => {
                       {recipe.name}
                     </h2>
 
-                    <Button className="bg-white text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">
+                    <Link to="/view/id" className="bg-white px-4 rounded-md text-orange-600 border-2 border-orange-600 hover:bg-white hover:border-orange-500 hover:text-orange-500">
                       View
-                    </Button>
+                    </Link>
                   </div>
 
                   <div className="flex justify-between items-center mt-2">
@@ -108,6 +101,24 @@ const Recipe = () => {
             </p>
           )}
         </div>
+
+        {/* View More / View Less */}
+        {filteredRecipes.length > 6 && (
+     <div className="text-2xl flex justify-center items-center gap-2 text-center pt-[5rem] cursor-pointer">
+     <h2
+       className="font-semibold text-[#333]"
+       onClick={() => setShowAll(!showAll)}
+     >
+       {showAll ? "View Less" : "View More"}
+     </h2>
+   
+     {/* Wrap the icon in a clickable div */}
+     <div onClick={() => setShowAll(!showAll)} className="cursor-pointer">
+       {showAll ? <FaArrowAltCircleUp /> : <FaArrowAltCircleDown />}
+     </div>
+   </div>
+   
+        )}
       </div>
     </section>
   );
