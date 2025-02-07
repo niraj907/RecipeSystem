@@ -42,6 +42,22 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
+  fetchRecipeById: async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/${id}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching recipe: ${response.statusText}`);
+      }
+      const data = await response.json();  // Make sure the response is JSON
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching recipe by ID:", error);
+      throw new Error("Failed to fetch recipe");
+    }
+  },
+  
+
   searchRecipes: async (query) => {
     if (!query) {
       set({ recipes: [], error: "Search query is required" });
