@@ -6,7 +6,7 @@ import breakfastImg from "../assets/Breakfast.jpg";
 import lunchImg from "../assets/Lunch.jpg";
 import dinnerImg from "../assets/Dinner.jpg";
 import snacksImg from "../assets/Snacks.jpg";
-import { Button } from "@/components/ui/button"; // Assuming Button is already created
+import { Button } from "@/components/ui/button"; 
 
 const CategoryPage = () => {
   const { category } = useParams();
