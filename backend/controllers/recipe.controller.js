@@ -104,23 +104,49 @@ export const getAllRecipes = async (req, res) => {
 
 
 // get search recipe
+// export const getSearchedRecipe = async (req, res) => {
+//   try {
+//     const query = req.query.q;
+//     if (!query) {
+//         return res.status(400).json({ message: "Query parameter is required" });
+//     }
+//     const recipes = await recipeModel.find({ name: { $regex: query, $options: "i" } });
+
+//     if (recipes.length === 0) {
+//         return res.status(404).json({ message: "No recipes found" });
+//     }
+
+//     res.status(200).json(recipes);
+// } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+// }
+// };
+
 export const getSearchedRecipe = async (req, res) => {
   try {
+    console.log("Search request received with query:", req.query.q); // Debug log
     const query = req.query.q;
+    
     if (!query) {
-        return res.status(400).json({ message: "Query parameter is required" });
+      console.log("Query parameter missing"); // Debug log
+      return res.status(400).json({ message: "Query parameter is required" });
     }
+    
     const recipes = await recipeModel.find({ name: { $regex: query, $options: "i" } });
 
     if (recipes.length === 0) {
-        return res.status(404).json({ message: "No recipes found" });
+      console.log("No recipes found for:", query); // Debug log
+      return res.status(404).json({ message: "No recipes found" });
     }
 
+    console.log("Recipes found:", recipes); // Debug log
     res.status(200).json(recipes);
-} catch (error) {
+  } catch (error) {
+    console.error("Error in search:", error.message); // Debug log
     res.status(500).json({ message: "Server error", error: error.message });
-}
+  }
 };
+
 
 
 // Get category-based items

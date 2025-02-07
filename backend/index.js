@@ -46,9 +46,10 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.static('public'));
-app.use('/recipe/api', recipeRoutes); // recipe route
+app.use('/api/recipe', recipeRoutes); // recipe route
 app.use('/api/a1/auth',authRoutes); // user route
 app.use("/api/count",countRoutes);
+
 
 
 // Start server
