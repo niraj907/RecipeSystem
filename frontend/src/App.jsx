@@ -33,7 +33,7 @@ const App = () => {
  
 
         <Route
-          path="/user-dashboard"
+          path="/"
           element={ 
           <ProtectedRoute>
              <Layout />

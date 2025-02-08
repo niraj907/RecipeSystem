@@ -1,6 +1,8 @@
 import React from "react";
 import momo from "../assets/momos.jpg";
 import { LuPrinterCheck } from "react-icons/lu";
+import KitchenGuide from "./recipe/KitchenGuide";
+import VideoCategory from "./recipe/VideoCategory";
 
 const View = () => {
   return (
@@ -11,15 +13,15 @@ const View = () => {
           <img
             src={momo}
             alt="Dish presentation"
-            className="w-full max-w-[70rem] mx-auto rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer object-cover"
+            className="w-full max-w-[70rem] mx-auto rounded-lg object-cover"
             style={{ height: "auto", maxHeight: "500px" }}
           />
 
           {/* name */}
-          <h1 className="text-4xl font-bold text-[#333] py-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#333] py-4">
             Spicy delicious chicken wing
           </h1>
-          <p className="text-[#666666] font-sans">
+          <p className="text-gray-600 text-sm sm:text-base font-sans">
             Momo is a type of dumpling that originates from Tibet and Nepal, and
             has become popular in various regions of South Asia, including
             India, Bhutan, and even parts of China. These dumplings are
@@ -28,26 +30,40 @@ const View = () => {
             along with spices and seasonings.
           </p>
 
-          <div className="py-6">
-            <h2 className="text-3xl font-semibold font-sans">Preparation time</h2>
-            <div className="flex  items-center py-4">
-              <div className="border-r-2 border-gray-500 pr-4">
-                <h2 className="text-2xl font-semibold text-[#666666]">TOTAL TIME</h2>
-                <p>60 MIN</p>
+ {/* Preparation Time */}
+ <div className="py-6">
+            <h2 className="text-2xl sm:text-3xl font-semibold font-sans">
+              Preparation Time
+            </h2>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center  py-6">
+              <div className="border-r sm:border-gray-500 pr-4">
+                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                  TOTAL TIME
+                </h2>
+                <p className="text-base font-medium">60 MIN</p>
               </div>
-              <div className="border-r-2 border-gray-500 px-4">
-              <h2 className="text-2xl font-semibold text-[#666666]">PREPARATION TIME</h2>
-                <p>60 MIN</p>
+              <div className="border-r sm:border-gray-500 px-4">
+                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                  PREP TIME
+                </h2>
+                <p className="text-base font-medium">20 MIN</p>
               </div>
-              <div className="border-r-2 border-gray-500 px-4">
-              <h2 className="text-2xl font-semibold text-[#666666]">COOKING TIME</h2>
-                <p>60 MIN</p>
-              </div>
-              <div className="px-4 text-3xl">
-              <LuPrinterCheck />
+              <div className="border-r sm:border-gray-500 lg:px-4">
+                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                  COOK TIME
+                </h2>
+                <p className="text-base font-medium">40 MIN</p>
               </div>
 
+              <div className="px-4 text-3xl flex justify-center cursor-pointer">
+                <LuPrinterCheck />
+              </div>
             </div>
+
+<KitchenGuide/>
+<VideoCategory/>
+
           </div>
         </div>
       </div>

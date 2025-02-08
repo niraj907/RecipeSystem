@@ -51,7 +51,7 @@ const navigate = useNavigate();
     try {
       await login(input.email, input.password);
       toast.success("Login successful!");
-      navigate("/user-dashboard");
+      navigate("/");
     } catch (err) {
       toast.error(error || "Login failed!");
     }
