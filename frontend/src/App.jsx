@@ -14,7 +14,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 // admin
-import SignupForm from "./admin/auth/SignupForm";
+import SignupForm from "@/components/admin/auth/SignupForm.jsx";
 import EditProfile from "./components/EditProfile";
 const App = () => {
   return (

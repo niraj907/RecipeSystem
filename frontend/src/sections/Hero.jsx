@@ -8,7 +8,6 @@ import { useRecipeStore } from '@/components/store/recipeStore';
 const Hero = () => {
   // Fetch recipes from the store
   const { recipes, fetchRecipes } = useRecipeStore();
-console.log(recipes)
   // Fetch recipes on component mount
   useEffect(() => {
     fetchRecipes();
