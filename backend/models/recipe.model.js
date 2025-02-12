@@ -18,6 +18,7 @@ const recipeSchema = new Schema({
   nepal: { type: String, required: true },
   hindi: { type: String, required: true },
   english: { type: String, required: true },
+  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Create and export the recipe model
