@@ -61,7 +61,7 @@ const Navbar = () => {
   };
   
 
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = () => { 
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
@@ -112,6 +112,12 @@ const Navbar = () => {
             onClick={() => scrollToSection("testimonial")}
           >
             Testimonial
+          </li>
+          <li
+            className="cursor-pointer hover:text-orange-600"
+            onClick={() => scrollToSection("testimonial")}
+          >
+            Favourites
           </li>
         </ul>
  )}

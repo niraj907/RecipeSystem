@@ -5,7 +5,7 @@ import VideoCategory from "./recipe/VideoCategory";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { Loader } from "lucide-react";
 import { useParams } from "react-router-dom";
-
+import Share from "./Share";
 const View = () => {
 
   const { id } = useParams();
@@ -40,7 +40,7 @@ const View = () => {
         />
       
           {/* name */}
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#333] py-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#333] py-4">
           {recipe.name}
           </h1>
           <p className="text-gray-600 text-sm sm:text-base font-sans">
@@ -55,27 +55,40 @@ const View = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center  py-6">
               <div className="border-r sm:border-gray-500 pr-4">
-                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
                   TOTAL TIME
                 </h2>
                 <p className="text-base font-medium"> {recipe.tot_time}</p>
               </div>
               <div className="border-r sm:border-gray-500 px-4">
-                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
                   PREP TIME
                 </h2>
                 <p className="text-base font-medium"> {recipe.prep_time}</p>
               </div>
               <div className="border-r sm:border-gray-500 lg:px-4">
-                <h2 className="text-lg font-semibold text-gray-500 opacity-80">
+                <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
                   COOK TIME
                 </h2>
                 <p className="text-base font-medium"> {recipe.cook_time}</p>
               </div>
 
-              <div className="px-4 text-3xl flex justify-center cursor-pointer">
+{/* Printer */}
+              {/* <div className="px-4 text-3xl flex justify-center cursor-pointer">
                 <LuPrinterCheck />
+
+              </div> */}
+
+
+         {/* Social Media Share */}
+              <div className="sm:px-4">
+                <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
+                  Social Media
+                </h2>
+                <Share className="text-3xl flex justify-center cursor-pointer" />
               </div>
+          
+
             </div>
 
         {/* Kitchen Guide */}

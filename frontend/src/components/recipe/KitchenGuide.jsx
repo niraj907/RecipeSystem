@@ -12,16 +12,18 @@ const KitchenGuide = ({ recipe }) => {
     }));
   };
 
+  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6">
       {/* Ingredients Section */}
       <div>
-        <h1 className="text-2xl font-bold mb-4">Ingredients</h1>
+        <h1 className="text-lg sm:text-2xl font-bold mb-4">Ingredients</h1>
         <ul className="space-y-3">
           {recipe.ingredients.map((item, index) => (
             <li
               key={index}
-              className="flex items-center space-x-3 cursor-pointer"
+              className="flex items-center space-x-3 text-sm sm:text-base cursor-pointer"
               onClick={() => toggleCheck(index)}
             >
               {checkedItems[index] ? (
@@ -41,14 +43,14 @@ const KitchenGuide = ({ recipe }) => {
 
       {/* Instructions Section */}
       <div>
-        <h1 className="text-2xl font-bold mb-4">Instructions</h1>
+        <h1 className="text-lg sm:text-2xl font-bold mb-4">Instructions</h1>
         <div className="space-y-4">
           {recipe.instructions.map((step, index) => (
             <div key={index} className="flex items-start space-x-4">
               <div className="flex items-center justify-center w-8 h-8 min-w-[2rem] min-h-[2rem] bg-orange-500 text-white text-lg font-bold rounded-full">
                 {index + 1}
               </div>
-              <p className="text-gray-700 text-lg flex-1">{step}</p>
+              <p className="text-gray-700 text-base sm:text-lg flex-1">{step}</p>
             </div>
           ))}
         </div>
