@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
      gender: { type: String, required: true, enum: ['male', 'female'] },
      lastLogin : {type: Date, default : Date.now},
      isVerified : {type: Boolean, default: false},
+     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "recipe" }],
      resetPasswordToken : String,
      resetPasswordExpiresAt: Date,
      verificationToken: String,

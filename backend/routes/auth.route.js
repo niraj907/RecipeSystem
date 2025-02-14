@@ -10,7 +10,8 @@ import {
   getAllUsers,
   getUserById,
   updateUserById,
-  deleteUserById
+  deleteUserById,
+
 } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
@@ -31,5 +32,7 @@ router.get('/allUser', getAllUsers); // get all user
 router.get('/:id', getUserById); //get user by id
 router.put('/:id', updateUserById); // update 
 router.delete('/:id', deleteUserById); // delete
+
+
 
 export default router;

@@ -1,7 +1,6 @@
 import { User } from '../models/user.model.js';
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
-
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 
@@ -141,6 +140,7 @@ try {
 
 export const login = async (req, res) => { 
   const { email, password} = req.body;
+  console.log("📥 Raw Request Body:", req.body);
 
   try {
     const user = await User.findOne({email});
@@ -350,7 +350,6 @@ export const updateUserById = async (req, res) => {
 };
 
 
-
 // Delete User
 export const deleteUserById = async (req, res) => {
   try {
@@ -362,4 +361,98 @@ export const deleteUserById = async (req, res) => {
 };
 
 
+export const addToFavorites = async (req, res) => {
+  try {
+    console.log("🔍 Incoming request to add recipe to favorites.");
+    console.log("📥 Raw Request Body:", req.body);
 
+    // Check if request body is empty
+    if (!req.body || Object.keys(req.body).length === 0) {
+      console.error("🚨 Error: Request body is empty!");
+      return res.status(400).json({ success: false, message: "Request body is empty. Please send userId and recipeId." });
+    }
+
+    // Extract userId and recipeId from req.body
+    const { userId, recipeId } = req.body;
+    console.log("🔎 Extracted userId:", userId);
+    console.log("🔎 Extracted recipeId:", recipeId);
+
+    // Validate userId and recipeId
+    if (!userId || !recipeId) {
+      console.error("🚨 Error: Missing userId or recipeId!");
+      return res.status(400).json({ success: false, message: "Missing userId or recipeId." });
+    }
+
+    // Ensure userId and recipeId are valid ObjectId format
+    if (userId.length !== 24 || recipeId.length !== 24) {
+      console.error("🚨 Error: Invalid ID format!");
+      return res.status(400).json({ success: false, message: "Invalid userId or recipeId format." });
+    }
+
+    // Find user and add recipe to favorites
+    console.log("🔍 Searching for user with userId:", userId);
+    const user = await User.findById(userId);
+    if (!user) {
+      console.error("🚨 Error: User not found!");
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    // Check if recipe is already in favorites
+    console.log("🔍 Checking if recipe is already in favorites...");
+    if (user.favorites.includes(recipeId)) {
+      console.error("🚨 Error: Recipe is already in favorites!");
+      return res.status(400).json({ success: false, message: "Recipe is already in favorites." });
+    }
+
+    // Add recipeId to favorites
+    console.log("🔍 Adding recipe to favorites...");
+    user.favorites.push(recipeId);
+    await user.save();
+
+    console.log("✅ Recipe added to favorites successfully!");
+    res.status(200).json({ success: true, message: "Recipe added to favorites." });
+  } catch (error) {
+    console.error("🚨 Server Error:", error);
+    res.status(500).json({ success: false, message: "Server error", error });
+  }
+};
+
+
+
+// // Remove from favorites
+// export const removeFromFavorites = async (req, res) => {
+//   const { userId } = req.params;
+//   const { recipeId } = req.body;
+
+//   try {
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ success: false, message: "User not found" });
+//     }
+
+//     user.favorites = user.favorites.filter((id) => id.toString() !== recipeId);
+//     await user.save();
+
+//     res.status(200).json({ success: true, message: "Removed from favorites", favorites: user.favorites });
+//   } catch (error) {
+//     console.error("Error removing from favorites:", error);
+//     res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };
+
+// // Get all favorite recipes
+// export const getFavorites = async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const user = await User.findById(userId).populate("favorites"); // Populate recipe details
+//     if (!user) {
+//       return res.status(404).json({ success: false, message: "User not found" });
+//     }
+
+//     res.status(200).json({ success: true, favorites: user.favorites });
+//   } catch (error) {
+//     console.error("Error fetching favorites:", error);
+//     res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };

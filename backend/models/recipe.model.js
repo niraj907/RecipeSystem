@@ -8,7 +8,7 @@ const recipeSchema = new Schema({
     url: { type: String, required: true,},},
   ],
   name: {type: String, required: true,},
-  category: { type: String,  required: true,},
+  category: { type: String, required: true, enum: ['breakfast', 'lunch','dinner','snacks'] },
   description: { type: String, required: true, },
   ingredients: { type: Array, required: true, },
   instructions: { type: Array, required: true,},
@@ -18,7 +18,6 @@ const recipeSchema = new Schema({
   nepal: { type: String, required: true },
   hindi: { type: String, required: true },
   english: { type: String, required: true },
-  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Create and export the recipe model
