@@ -4,10 +4,14 @@ import { LuAlarmClockCheck } from 'react-icons/lu';
 import { FaRegPlayCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useRecipeStore } from '@/components/store/recipeStore';
+import { useAuthStore } from '@/components/store/authStore';
+import { toast } from "sonner";
 
 const Hero = () => {
   // Fetch recipes from the store
   const { recipes, fetchRecipes } = useRecipeStore();
+     const { isAuthenticated } = useAuthStore();
+   
   // Fetch recipes on component mount
   useEffect(() => {
     fetchRecipes();
@@ -44,6 +48,7 @@ const Hero = () => {
                   </Button>
 
                   {/* View Recipe Link */}
+                  {isAuthenticated ? (
                   <Link 
                     to={`/view/${firstRecipe._id}`} 
                     className="flex items-center gap-2 bg-white text-[#666666] hover:bg-[#FEF5EC] hover:text-[#F67A24] hover:ring-[#F67A24] hover:ring-4 px-6 py-2 rounded-md transition-all ease-in-out duration-300"
@@ -51,10 +56,28 @@ const Hero = () => {
                     <FaRegPlayCircle />
                     <span className='md:text-[16px]'>View Recipe</span>
                   </Link>
+) : (
+  <button
+    onClick={() => toast.error("Please login to view the recipe!")}
+    className="flex items-center gap-2 bg-white text-[#666666] hover:bg-[#FEF5EC] hover:text-[#F67A24] hover:ring-[#F67A24] hover:ring-4 px-6 py-2 rounded-md transition-all ease-in-out duration-300"
+  >
+ <FaRegPlayCircle />
+                    <span className='md:text-[16px]'>View Recipe</span>
+                  
+  </button>
+)}
+
+
+
+
+
+
+
                 </div>
               </>
             ) : (
               <p>Loading recipe...</p>
+
             )}
           </div>
 

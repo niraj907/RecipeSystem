@@ -16,6 +16,7 @@ import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 // admin
 import SignupForm from "@/components/admin/auth/SignupForm.jsx";
 import EditProfile from "./components/EditProfile";
+import Favourites from "./components/Favourites";
 const App = () => {
   return (
     <div className="relative">
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/view/:id" element={<><Navbar /><View /><Footer /></>}
         
         />
+        <Route path="/favourites" element={<><Navbar /><Favourites /><Footer /></>} />
         <Route path="/signup" element={<><SignUpForm /></>} />
         <Route path="/login" element={<><LoginForm /></>} />
         <Route path="/forgot-password" element={<><ForgotPassword /></>} />

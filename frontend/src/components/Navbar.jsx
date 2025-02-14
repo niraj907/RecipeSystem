@@ -9,7 +9,6 @@ import { useAuthStore } from "./store/authStore";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 
-
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,14 +16,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { isAuthenticated ,logout ,user } = useAuthStore();
-
-
+  const { isAuthenticated, logout, user } = useAuthStore();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,19 +45,18 @@ const Navbar = () => {
         cancelButtonColor: "#d33",
         confirmButtonText: "Logout",
       });
-  
+
       if (result.isConfirmed) {
         await logout();
         toast.success("Logged out successfully.");
         navigate("/");
-      } 
+      }
     } catch (error) {
       toast.error("Unsuccessful logout.");
     }
   };
-  
 
-  const toggleMobileMenu = () => { 
+  const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
@@ -71,8 +66,6 @@ const Navbar = () => {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
-
-
 
   return (
     <div className="fixed top-0 bg-white w-full z-50 shadow-md">
@@ -88,101 +81,100 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         {location.pathname !== "/edit-profile" && (
-        <ul className="hidden lg:flex gap-7 font-sans text-[18px] px-4">
-          <li
-            className="cursor-pointer hover:text-orange-600"
-            onClick={() => scrollToSection("home")}
-          >
-            Home
-          </li>
-          <li
-            className="cursor-pointer hover:text-orange-600"
-            onClick={() => scrollToSection("recipes")}
-          >
-            Recipes
-          </li>
-          <li
-            className="cursor-pointer hover:text-orange-600"
-            onClick={() => scrollToSection("about")}
-          >
-            About Us
-          </li>
-          <li
-            className="cursor-pointer hover:text-orange-600"
-            onClick={() => scrollToSection("testimonial")}
-          >
-            Testimonial
-          </li>
-          <li
-            className="cursor-pointer hover:text-orange-600"
-            onClick={() => scrollToSection("testimonial")}
-          >
-            Favourites
-          </li>
-        </ul>
- )}
+          <ul className="hidden lg:flex gap-7 font-sans text-[18px] px-4">
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("home")}
+            >
+              Home
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("recipes")}
+            >
+              Recipes
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("about")}
+            >
+              About Us
+            </li>
+            <li
+              className="cursor-pointer hover:text-orange-600"
+              onClick={() => scrollToSection("testimonial")}
+            >
+              Testimonial
+            </li>
+            {isAuthenticated && (
+              <li
+                className="cursor-pointer hover:text-orange-600"
+                onClick={() => navigate("/favourites")}
+              >
+                Favourites
+              </li>
+            )}
+          </ul>
+        )}
 
-
+        {/* Authentication and User Dropdown */}
         {!isAuthenticated ? (
-  <div className="flex gap-4 items-center">
-    <Button
-      onClick={() => navigate("/admin-signup")}
-      className="hidden lg:block bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
-      ring-2 ring-[#F67A24] px-8 rounded-md transition-all duration-300 text-[16px]"
-    >
-      Admin Panel
-    </Button>
-    <Button
-      onClick={() => navigate("/signup")}
-      className="hidden lg:block bg-[#F67A24] hover:bg-[#f67b24e8] text-white px-8 py-2 rounded-md transition duration-300"
-    >
-      Create Account
-    </Button>
-  </div>
-) : (
-  <div className="relative" ref={dropdownRef}>
-    <button
-      type="button"
-      className="hidden lg:block rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-      id="user-menu-button"
-      onClick={toggleDropdown}
-    >
-      
-      <span className="sr-only">Open user menu</span>
-      <img
-        className="w-8 h-8 rounded-full"
-      src= {user?.images?.[0]?.url || "https://github.com/shadcn.png" }
-      // src={user.images[0].url || "https://github.com/shadcn.png"}
-  
-        alt="User Profile"
-      />
-    
-    </button>
-    {isDropdownOpen && (
-      <div
-        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="user-menu-button"
-      >
-        <a
-        onClick={() => navigate("/edit-profile")}
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-          role="menuitem"
-        >
-          Profile
-        </a>
-        <a
-          href="#"
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          role="menuitem"   onClick={handleClick}
-        >
-          Log Out
-        </a>
-      </div>
-    )}
-  </div>
-)}
+          <div className="flex gap-4 items-center">
+            <Button
+              onClick={() => navigate("/admin-signup")}
+              className="hidden lg:block bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
+              ring-2 ring-[#F67A24] px-8 rounded-md transition-all duration-300 text-[16px]"
+            >
+              Admin Panel
+            </Button>
+            <Button
+              onClick={() => navigate("/signup")}
+              className="hidden lg:block bg-[#F67A24] hover:bg-[#f67b24e8] text-white px-8 py-2 rounded-md transition duration-300"
+            >
+              Create Account
+            </Button>
+          </div>
+        ) : (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              className="hidden lg:block rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+              id="user-menu-button"
+              onClick={toggleDropdown}
+            >
+              <span className="sr-only">Open user menu</span>
+              <img
+                className="w-10 h-10 rounded-full"
+                src={user?.images?.[0]?.url || "https://github.com/shadcn.png"}
+                alt="User Profile"
+              />
+            </button>
+            {isDropdownOpen && (
+              <div
+                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="user-menu-button"
+              >
+                <a
+                  onClick={() => navigate("/edit-profile")}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  role="menuitem"
+                >
+                  Profile
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  onClick={handleClick}
+                >
+                  Log Out
+                </a>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Mobile Menu Icon */}
         <div className="lg:hidden">
@@ -228,6 +220,14 @@ const Navbar = () => {
             >
               Testimonial
             </li>
+            {isAuthenticated && (
+              <li
+                className="cursor-pointer hover:text-orange-600"
+                onClick={() => navigate("/favourites")}
+              >
+                Favourites
+              </li>
+            )}
             <Button
               onClick={() => navigate("/admin-signup")}
               className="w-[7rem] px-6 bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 

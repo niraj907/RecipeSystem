@@ -5,6 +5,7 @@ const API_URL = "http://localhost:4000/api/recipe";
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
+  favorites: {},
   loading: false,
   error: null,
 
@@ -12,6 +13,7 @@ export const useRecipeStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
+  // Fetch all recipes
   fetchRecipes: async () => {
     set({ loading: true, error: null });
     try {
@@ -22,6 +24,7 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
+  // Fetch recipes by category
   fetchRecipesByCategory: async (category) => {
     set({ loading: true, error: null });
     try {
@@ -31,6 +34,7 @@ export const useRecipeStore = create((set) => ({
       set({ error: error.response?.data?.msg || "Error fetching recipes by category", loading: false });
     }
   },
+
 
   fetchAllRecipes: async () => {
     set({ loading: true, error: null });
@@ -42,20 +46,7 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
-  // fetchRecipeById: async (id) => {
-  //   try {
-  //     const response = await fetch(`${API_URL}/${id}`);
-  //     if (!response.ok) {
-  //       throw new Error(`Error fetching recipe: ${response.statusText}`);
-  //     }
-  //     const data = await response.json();  // Make sure the response is JSON
-  //     console.log(data);
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Error fetching recipe by ID:", error);
-  //     throw new Error("Failed to fetch recipe");
-  //   }
-  // },
+   // Fetch a single recipe by ID
   fetchRecipeById: async (id) => {
     set({ loading: true, error: null }); // Set loading to true before fetching
     try {
@@ -68,8 +59,7 @@ export const useRecipeStore = create((set) => ({
     }
   },
   
-  
-
+// Search recipes
   searchRecipes: async (query) => {
     if (!query) {
       set({ recipes: [], error: "Search query is required" });
@@ -89,6 +79,7 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
+  // Create a new recipe
   createRecipe: async (newRecipe) => {
     if (!newRecipe.menuId || !newRecipe.name || !newRecipe.category || !newRecipe.description || !newRecipe.ingredients || !newRecipe.instructions || !newRecipe.tot_time || !newRecipe.prep_time || !newRecipe.cook_time || !newRecipe.nepal || !newRecipe.hindi || !newRecipe.english || !newRecipe.images) {
       return { success: false, message: "Please fill all fields" };
@@ -102,6 +93,8 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
+
+  // Delete a recipe
   deleteRecipe: async (id) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
@@ -112,6 +105,7 @@ export const useRecipeStore = create((set) => ({
     }
   },
 
+  // Update an existing recipe
   updateRecipe: async (id, updatedRecipe) => {
     try {
       const response = await axios.put(`${API_URL}/${id}`, updatedRecipe);
@@ -134,4 +128,14 @@ export const useRecipeStore = create((set) => ({
       return null;
     }
   },
+
+  addToFavorites: (recipe) => set((state) => ({
+    favorites: { ...state.favorites, [recipe._id]: true },
+  })),
+
+  removeFromFavorites: (recipeId) => set((state) => {
+    const newFavorites = { ...state.favorites };
+    delete newFavorites[recipeId];
+    return { favorites: newFavorites };
+  }),
 }));

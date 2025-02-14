@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import { useAuthStore } from "../store/authStore";
 import { Loader } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
