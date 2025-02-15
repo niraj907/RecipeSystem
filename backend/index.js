@@ -9,6 +9,7 @@ import recipeRoutes from './routes/recipe.route.js'
 import authRoutes from './routes/auth.route.js';
 import countRoutes from './routes/count.route.js';
 import userRoutes from "./routes/user.routes.js";
+import adminRoutes from "./routes/admin.routes.js"
 
 dotenv.config();
 
@@ -49,10 +50,17 @@ app.get('/', (req, res) => {
 app.use(express.static('public'));
 app.use('/api/recipe', recipeRoutes); // recipe route
 app.use('/api/a1/auth',authRoutes); // user route
+app.use('/api/a2/auth',adminRoutes); //admin route
 app.use("/api/count",countRoutes);
 app.use("/api/users", userRoutes);
 
 
+
+app.use((req, res, next) => {
+  console.log("Received request body:", req.body);
+  console.log("Received headers:", req.headers);
+  next();
+});
 
 // Start server
 app.listen(PORT, () => {

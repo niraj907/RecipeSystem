@@ -34,5 +34,4 @@ router.put('/:id', updateUserById); // update
 router.delete('/:id', deleteUserById); // delete
 
 
-
 export default router;
