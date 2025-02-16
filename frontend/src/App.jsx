@@ -27,21 +27,14 @@ const App = () => {
         
         />
         <Route path="/favourites" element={<><Navbar /><Favourites /><Footer /></>} />
-        <Route path="/signup" element={<><SignUpForm /></>} />
+        <Route path="/signup" element={<> <SignUpForm /></>} />
         <Route path="/login" element={<><LoginForm /></>} />
-        <Route path="/forgot-password" element={<><ForgotPassword /></>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
         <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />
  
 
-        <Route
-          path="/"
-          element={ 
-          <ProtectedRoute>
-             <Layout />
-            </ProtectedRoute>
-          }
-        />
+
 
 <Route
   path="/edit-profile"
@@ -63,7 +56,6 @@ const App = () => {
 
           {/* Fallback for any unmatched routes */}
           <Route path="*" element={<ErrorPage />} />
-
 
       </Routes>
     </div>

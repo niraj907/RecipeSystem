@@ -128,10 +128,10 @@ const Navbar = () => {
               Admin Panel
             </Button>
             <Button
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/login")}
               className="hidden lg:block bg-[#F67A24] hover:bg-[#f67b24e8] text-white px-8 py-2 rounded-md transition duration-300"
             >
-              Create Account
+              Login
             </Button>
           </div>
         ) : (
