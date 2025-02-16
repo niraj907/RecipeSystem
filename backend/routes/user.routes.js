@@ -4,7 +4,7 @@ import { addToFavorites,removeFromFavorites,getFavorites} from "../controllers/a
 const router = express.Router();
 
 router.post('/add-favorite', addToFavorites); // Add recipe to favorites
-router.delete('/remove-favorite', removeFromFavorites);
+router.post('/remove-favorite', removeFromFavorites);
 router.get("/:userId/favorites", getFavorites); // Get all favorite recipes
 
 export default router;

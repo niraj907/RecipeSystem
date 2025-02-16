@@ -52,7 +52,7 @@ app.use('/api/recipe', recipeRoutes); // recipe route
 app.use('/api/a1/auth',authRoutes); // user route
 app.use('/api/a2/auth',adminRoutes); //admin route
 app.use("/api/count",countRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes); // favourite router
 
 
 

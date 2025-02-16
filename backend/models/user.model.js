@@ -21,12 +21,12 @@ const userSchema = new mongoose.Schema({
      gender: { type: String, required: true, enum: ['male', 'female'] },
      lastLogin : {type: Date, default : Date.now},
      isVerified : {type: Boolean, default: false},
-     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "recipe" }],
+     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recipe", default: [] }],
      resetPasswordToken : String,
      resetPasswordExpiresAt: Date,
      verificationToken: String,
      verificationTokenExpiresAt: Date
-},{timeseries:true});
+    }, { timestamps: true }); 
 
 
 export const User = mongoose.model('User', userSchema);

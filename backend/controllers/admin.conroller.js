@@ -31,6 +31,8 @@ cloudinary.config({
 //   }
 // };
 
+// createAdmin();
+
 const createAdmin = async () => {
   try {
     const existingAdmin = await admin.findOne({ email: "nirajchaudhary@gmail.com" });
@@ -55,8 +57,6 @@ const createAdmin = async () => {
     console.error("Error creating admin:", error);
   }
 };
-
-// createAdmin();
 
 createAdmin();
 
@@ -223,8 +223,7 @@ export const adminLogout = async (req, res) => {
     }
 };
 
-
-
+// Reset Password
 export const adminResetPassword = async (req,res) =>{
   try {
     const {token} = req.params;

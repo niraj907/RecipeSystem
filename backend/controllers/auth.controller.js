@@ -3,6 +3,9 @@ import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import { recipeModel } from "../models/recipe.model.js";
+
 
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
 import { sendPasswordResetEmail, sendResetSuccessEmail, sendVerificationEmail} from '../mailtrap/emails.js';
@@ -365,7 +368,7 @@ export const deleteUserById = async (req, res) => {
   }
 };
 
-
+//addToFavorites
 export const addToFavorites = async (req, res) => {
   try {
     console.log("🔍 Incoming request to add recipe to favorites.");
@@ -422,23 +425,14 @@ export const addToFavorites = async (req, res) => {
   }
 };
 
-
-
+//removeFromFavorites
 export const removeFromFavorites = async (req, res) => {
   try {
     console.log("🔍 Incoming request to remove recipe from favorites.");
     console.log("📥 Raw Request Body:", req.body);
 
-    // Check if request body is empty
-    if (!req.body || Object.keys(req.body).length === 0) {
-      console.error("🚨 Error: Request body is empty!");
-      return res.status(400).json({ success: false, message: "Request body is empty. Please send userId and recipeId." });
-    }
-
-    // Extract userId and recipeId from req.body
+    // Extract userId and recipeId from request body
     const { userId, recipeId } = req.body;
-    console.log("🔎 Extracted userId:", userId);
-    console.log("🔎 Extracted recipeId:", recipeId);
 
     // Validate userId and recipeId
     if (!userId || !recipeId) {
@@ -446,45 +440,51 @@ export const removeFromFavorites = async (req, res) => {
       return res.status(400).json({ success: false, message: "Missing userId or recipeId." });
     }
 
-    // Ensure userId and recipeId are valid ObjectId format
-    if (userId.length !== 24 || recipeId.length !== 24) {
+    // Ensure valid ObjectId format (MongoDB ObjectIds are 24-character hex strings)
+    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(recipeId)) {
       console.error("🚨 Error: Invalid ID format!");
       return res.status(400).json({ success: false, message: "Invalid userId or recipeId format." });
     }
 
-    // Find user and remove recipe from favorites
+    // Find the user in the database
     console.log("🔍 Searching for user with userId:", userId);
     const user = await User.findById(userId);
+
     if (!user) {
       console.error("🚨 Error: User not found!");
       return res.status(404).json({ success: false, message: "User not found." });
     }
 
-    // Check if recipe is in favorites
-    console.log("🔍 Checking if recipe is in favorites...");
+    // Ensure user.favorites exists and is an array
+    if (!Array.isArray(user.favorites)) {
+      console.error("🚨 Error: user.favorites is not an array!");
+      return res.status(500).json({ success: false, message: "Internal error: user favorites data is missing." });
+    }
+
+    // Check if the recipe exists in user's favorites
     if (!user.favorites.includes(recipeId)) {
       console.error("🚨 Error: Recipe is not in favorites!");
       return res.status(400).json({ success: false, message: "Recipe is not in favorites." });
     }
 
-    // Remove recipeId from favorites
+    // Remove the recipe from the user's favorites
     console.log("🔍 Removing recipe from favorites...");
-    user.favorites = user.favorites.filter(id => id.toString() !== recipeId);
+    user.favorites = user.favorites.filter(id => id?.toString() !== recipeId);
+
+    // Save updated user data
     await user.save();
 
     console.log("✅ Recipe removed from favorites successfully!");
-    res.status(200).json({ success: true, message: "Recipe removed from favorites." });
+    return res.status(200).json({ success: true, message: "Recipe removed from favorites." });
+
   } catch (error) {
     console.error("🚨 Server Error:", error);
-    res.status(500).json({ success: false, message: "Server error", error });
+    return res.status(500).json({ success: false, msg: "Server error", error: error.message });
   }
 };
 
 
-
-
-
-// // Get all favorite recipes
+// Get all favorite recipes
 export const getFavorites = async (req, res) => {
   const { userId } = req.params;
 
@@ -497,6 +497,7 @@ export const getFavorites = async (req, res) => {
     res.status(200).json({ success: true, favorites: user.favorites });
   } catch (error) {
     console.error("Error fetching favorites:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, msg: "Server error", error: error.message });
   }
 };
+
