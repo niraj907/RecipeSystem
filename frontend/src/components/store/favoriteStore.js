@@ -16,7 +16,7 @@ export const useFavoriteStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const response = await axios.get(`${API_URL}/${userId}/favorites`);
-      // Assume response.data.favorites is an array of recipe IDs.
+      console.log("Fetched favorites:", response.data.favorites); // Debugging log
       set({ favorites: response.data.favorites, loading: false });
     } catch (error) {
       set({
@@ -63,8 +63,4 @@ export const useFavoriteStore = create((set) => ({
       return { success: false, message: error.response?.data?.message || "Error removing from favorites" };
     }
   },
-  // clearFavorites: () => set({ favorites: [] }), 
 }));
-
-
-

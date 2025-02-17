@@ -5,6 +5,7 @@ const API_URL = "http://localhost:4000/api/recipe";
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
+  // favorites: {},
   loading: false,
   error: null,
 
@@ -127,4 +128,14 @@ export const useRecipeStore = create((set) => ({
       return null;
     }
   },
+
+  // addToFavorites: (recipe) => set((state) => ({
+  //   favorites: { ...state.favorites, [recipe._id]: true },
+  // })),
+
+  // removeFromFavorites: (recipeId) => set((state) => {
+  //   const newFavorites = { ...state.favorites };
+  //   delete newFavorites[recipeId];
+  //   return { favorites: newFavorites };
+  // }),
 }));
