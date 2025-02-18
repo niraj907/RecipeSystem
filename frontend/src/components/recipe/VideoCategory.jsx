@@ -3,22 +3,30 @@ import { Button } from "../ui/button";
 
 const VideoCategory = ({ recipe }) => {
   const nepaliVideo = recipe.nepal || "";
+  const nepaliVideoPublishedName = recipe.nepalPublishedName || "";
   const hindiVideo = recipe.hindi || "";
+  const hindiVideoPublishedName = recipe.hindiPublishedName || "";
   const englishVideo = recipe.english || "";
+  const englishVideoPublishedName = recipe.englishPublishedName || "";
 
   const videos = {
-    nepali: nepaliVideo,
-    hindi: hindiVideo,
-    english: englishVideo,
-    all: [nepaliVideo, hindiVideo, englishVideo].filter(Boolean), // Remove empty values
+    nepali: { url: nepaliVideo, publishedBy: nepaliVideoPublishedName },
+    hindi: { url: hindiVideo, publishedBy: hindiVideoPublishedName },
+    english: { url: englishVideo, publishedBy: englishVideoPublishedName },
+    all: [
+      { url: nepaliVideo, publishedBy: nepaliVideoPublishedName },
+      { url: hindiVideo, publishedBy: hindiVideoPublishedName },
+      { url: englishVideo, publishedBy: englishVideoPublishedName },
+    ].filter((video) => video.url), // Remove empty videos
   };
 
   const [selectedCategory, setSelectedCategory] = useState("nepali");
   const [selectedVideo, setSelectedVideo] = useState(videos.nepali);
 
   const changeVideo = (category) => {
-    setSelectedCategory(category.toLowerCase());
-    setSelectedVideo(category === "All" ? videos.all : videos[category.toLowerCase()] || "");
+    const lowerCategory = category.toLowerCase();
+    setSelectedCategory(lowerCategory);
+    setSelectedVideo(lowerCategory === "all" ? videos.all : videos[lowerCategory] || { url: "", publishedBy: "" });
   };
 
   const getVideoIdFromUrl = (url) => {
@@ -51,38 +59,50 @@ const VideoCategory = ({ recipe }) => {
       <div className="w-full">
         {Array.isArray(selectedVideo) ? (
           // Show all videos in a grid
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {selectedVideo.map((video, index) => {
-              const videoId = getVideoIdFromUrl(video);
-              return videoId ? (
-                <div key={index} className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+        
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {selectedVideo.map((video, index) => {
+                const videoId = getVideoIdFromUrl(video.url);
+                return videoId ? (
+                  <div key={index} className="w-full">
+                    {/* Video container */}
+                    <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${videoId}`}
+                        title={`YouTube Video ${index + 1}`}
+                        className="absolute top-0 left-0 w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                    {/* Published By Text */}
+                    <p className="text-base font-medium text-center mt-2">
+                    Video Published by: {video.publishedBy}
+                    </p>
+                  </div>
+                ) : (
+                  <p key={index} className="text-center text-red-500">Invalid YouTube URL</p>
+                );
+              })}
+            </div>
+         
+        ) : (
+          (() => {
+            const videoId = getVideoIdFromUrl(selectedVideo.url);
+            return videoId ? (
+              <div className="w-full">
+                <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
                   <iframe
                     src={`https://www.youtube.com/embed/${videoId}`}
-                    title={`YouTube Video ${index + 1}`}
+                    title="YouTube Video"
                     className="absolute top-0 left-0 w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
                 </div>
-              ) : (
-                <p key={index} className="text-center text-red-500">
-                  Invalid YouTube URL
+                <p className="text-base font-medium text-center mt-2">
+                 Video Published by: {selectedVideo.publishedBy}
                 </p>
-              );
-            })}
-          </div>
-        ) : (
-          (() => {
-            const videoId = getVideoIdFromUrl(selectedVideo);
-            return videoId ? (
-              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoId}`}
-                  title="YouTube Video"
-                  className="absolute top-0 left-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
               </div>
             ) : (
               <p className="text-center text-red-500">Invalid YouTube URL</p>

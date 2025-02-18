@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/users"; // Adjust the API URL as needed
+const API_URL = "http://localhost:4000/api/users"; 
 
 export const useFavoriteStore = create((set) => ({
   favorites: [],

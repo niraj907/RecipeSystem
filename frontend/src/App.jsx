@@ -14,7 +14,11 @@ import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 // admin
-import SignupForm from "@/components/admin/auth/SignupForm.jsx";
+import AdminLoginForm from "@/components/admin/AdminLoginForm";
+import AdminDashboard from "./components/admin/Dashboard/AdminDashboard";
+
+
+
 import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
 const App = () => {
@@ -33,25 +37,11 @@ const App = () => {
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
         <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />
  
-
-
-
-<Route
-  path="/edit-profile"
-  element={
-    <ProtectedRoute>
-   <Navbar  />   <EditProfile />
-    </ProtectedRoute>
-  }
-/>
-
-
-
-
-
+        <Route path="/edit-profile" element={ <><Navbar /><EditProfile /></>} />
 
 {/* admin panel */}
-        <Route path="/admin-signup" element={<SignupForm />} />
+        <Route path="/admin-login" element={<AdminLoginForm />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
 
           {/* Fallback for any unmatched routes */}

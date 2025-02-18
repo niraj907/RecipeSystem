@@ -121,7 +121,7 @@ const Navbar = () => {
         {!isAuthenticated ? (
           <div className="flex gap-4 items-center">
             <Button
-              onClick={() => navigate("/admin-signup")}
+              onClick={() => navigate("/admin-login")}
               className="hidden lg:block bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
               ring-2 ring-[#F67A24] px-8 rounded-md transition-all duration-300 text-[16px]"
             >
@@ -229,7 +229,7 @@ const Navbar = () => {
               </li>
             )}
             <Button
-              onClick={() => navigate("/admin-signup")}
+              onClick={() => navigate("/admin-login")}
               className="w-[7rem] px-6 bg-white text-[#F67A24] hover:bg-white hover:text-[#F67A24] 
               ring-2 ring-[#F67A24] rounded-md transition-all duration-300 text-[16px]"
             >
