@@ -10,15 +10,16 @@ import LoginForm from "./components/auth/LoginForm";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import EmailVerificationPage from "./components/auth/EmailVerificationPage";
 import ErrorPage from "./components/ErrorPage";
-import ProtectedRoute from "./ProtectedRoute";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 // admin
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import AdminDashboard from "./components/admin/Dashboard/AdminDashboard";
-
-
-
+import Sidebar from "@/components/admin/Dashboard/Sidebar";
+import Header from "@/components/admin/Dashboard/Header";
+import AddRecipe from "@/components/admin/Dashboard/AddRecipe";
+import ViewRecipe from "./components/admin/Dashboard/ViewRecipe";
+import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
 
 import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
@@ -42,7 +43,10 @@ const App = () => {
 
 {/* admin panel */}
         <Route path="/admin-login" element={<AdminLoginForm />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
+        <Route path="/recipes/add" element={<><Sidebar/><Header/> <AddRecipe/> </> } />
+        <Route path="/recipes/update" element={<><Sidebar/><Header/> <UpdateRecipe/> </> } />
+        <Route path="/recipes/view/:id" element={<><Sidebar/><Header/> <ViewRecipe/> </> } />
 
 
           {/* Fallback for any unmatched routes */}

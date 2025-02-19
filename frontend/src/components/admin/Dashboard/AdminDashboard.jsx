@@ -1,3 +1,4 @@
+import { Routes, Route } from "react-router-dom"; 
 import React, { useState } from "react";
 import Sidebar from "@/components/admin/Dashboard/Sidebar";
 import Header from "@/components/admin/Dashboard/Header";
@@ -10,7 +11,9 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
+    
     <div className="flex">
+      
       {/* Sidebar receives open state and toggle function */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 

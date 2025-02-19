@@ -22,7 +22,7 @@ const AdminLoginForm = () => {
     try {
       await login(data.email, data.password);
       toast.success("Login successful");
-      navigate("/admin-dashboard"); // Redirect on successful login
+      navigate("/dashboard"); // Redirect on successful login
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     }

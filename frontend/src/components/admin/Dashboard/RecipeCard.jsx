@@ -23,7 +23,7 @@ const RecipeCard = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    fetchAllRecipes(); 
+    fetchAllRecipes(); // Fetch recipes when component mounts
   }, [fetchAllRecipes]);
 
   const filteredRecipes = selectedCategory
@@ -63,7 +63,7 @@ const RecipeCard = () => {
                   <div className="flex justify-between items-center">
                     <h2 className="text-lg font-semibold text-[#333]">{recipe.name}</h2>
                     <Link
-                      to={`/view/${recipe._id}`}
+                      to={`/recipes/view/${recipe._id}`}
                       className=" px-4 py-1 rounded-md text-orange-600 border-2 border-orange-600 hover:bg-orange-600 hover:text-white transition"
                     >
                       View

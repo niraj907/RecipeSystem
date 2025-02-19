@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Home, Book, Filter, Star, LogOut } from "lucide-react";
+import { Menu, Home, Book, Star, LogOut, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
@@ -9,7 +9,8 @@ import useAdminStore from "@/components/admin/adminStore";
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false); 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { logout } = useAdminStore();
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Sidebar = () => {
       <div
         className={`fixed z-50 h-screen p-5 flex flex-col gap-5 bg-[#FFF8F4] transition-all duration-300 ${
           isCollapsed ? "w-20" : "w-64"
-        }       
+        } 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
         sm:translate-x-0`}
       >
@@ -61,22 +62,42 @@ const Sidebar = () => {
         <ul className="space-y-3 text-gray-700">
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/dashboard")}
           >
             <Home /> {!isCollapsed && "Home"}
           </li>
-          <li
-            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
-            onClick={() => navigate("/recipes")}
+
+          {/* Recipes Dropdown */}
+          <div
+            className="p-2 flex items-center rounded-md cursor-pointer hover:bg-orange-200"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            <Book /> {!isCollapsed && "Recipes"}
-          </li>
-          <li
-            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
-            onClick={() => navigate("/filter")}
-          >
-            <Filter /> {!isCollapsed && "Filter"}
-          </li>
+            <div className="flex items-center gap-3 w-full">
+              <Book />
+              {!isCollapsed && <span>Recipes</span>}
+              {!isCollapsed && (
+                <ChevronDown className={`ml-auto transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+              )}
+            </div>
+          </div>
+
+          {dropdownOpen && (
+            <div className="ml-6 space-y-2">
+              <li
+                className="cursor-pointer p-2 hover:bg-orange-200 rounded-md"
+                onClick={() => navigate("/recipes/add")}
+              >
+                Add
+              </li>
+              <li
+                className="cursor-pointer p-2 hover:bg-orange-200 rounded-md"
+                onClick={() => navigate("/recipes/update")}
+              >
+                Update
+              </li>
+            </div>
+          )}
+
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
             onClick={() => navigate("/favorites")}
