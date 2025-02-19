@@ -26,7 +26,6 @@ const AdminLoginForm = () => {
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed");
     }
-   // reset(); // Clear form fields after submission
   };
 
   return (
@@ -86,7 +85,6 @@ const AdminLoginForm = () => {
             </Link>
           </div>
 
-          {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
 
           <Button
             className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"

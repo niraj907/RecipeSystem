@@ -1,49 +1,95 @@
-// import React from 'react'
+import { useState, useEffect } from "react";
+import { useRecipeStore } from "@/components/store/recipeStore";
+import { Link } from "react-router-dom";
+import { LuAlarmClockCheck } from "react-icons/lu";
+import { GoAlertFill } from "react-icons/go";
 
-// const RecipeCard = () => {
-//   return (
-   
-//   )
-// }
+const CategoryItem = ({ category, onClick, isSelected }) => {
+  return (
+    <button
+      onClick={() => onClick(category)}
+      className={`flex-1 text-center border border-gray-300 py-3  px-2 lg:px-4 
+                  text-gray-600 font-semibold text-base sm:text-lg 
+                  hover:bg-gray-100
+                  ${isSelected ? "bg-gray-200" : ""}`}
+    >
+      {category}
+    </button>
+  );
+};
 
-// export default RecipeCard
+const RecipeCard = () => {
+  const { recipes, fetchAllRecipes } = useRecipeStore();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
+  useEffect(() => {
+    fetchAllRecipes(); 
+  }, [fetchAllRecipes]);
 
+  const filteredRecipes = selectedCategory
+    ? recipes.filter((recipe) => recipe.category === selectedCategory)
+    : recipes;
 
+  const categories = ["all", "breakfast", "lunch", "dinner", "snacks"];
 
-const Dashboard = ({ title, ingredients, time }) => {
-    return (
-      <div className="bg-white p-4 rounded-lg shadow w-60">
-        <h3 className="font-bold text-lg mb-2">{title}</h3>
-        <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-3">
-          {ingredients.map((item, index) => (
-            <span key={index} className="bg-gray-200 p-1 rounded">{item}</span>
-          ))}
-        </div>
-        <div className="flex justify-between items-center">
-          <button className="bg-orange-500 text-white px-3 py-1 rounded">Watch Tutorial</button>
-          <span className="text-gray-500">{time} mins</span>
-        </div>
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">Recipes</h1>
+      <div className="flex border border-gray-400 divide-x divide-gray-300 rounded-md">
+        {categories.map((category) => (
+       <CategoryItem
+       key={category}
+       category={category}
+       onClick={(selected) => setSelectedCategory(selected === "all" ? "" : selected)}
+       isSelected={selectedCategory === category || (category === "all" && selectedCategory === "")}
+     />
+     
+        ))}
       </div>
-    );
-  };
-  
-  const RecipeCard = () => {
-    return (
-      <div className="p-5">
-        <div className="bg-orange-400 text-white p-5 rounded-lg text-center mb-5">
-          <h2 className="text-2xl font-bold">Add your own recipe</h2>
-          <p>Upload and share your homemade recipe with the community!</p>
-        </div>
-        <h2 className="text-2xl font-bold mb-4">Based on the food you like</h2>
-        <div className="flex gap-5">
-          <Dashboard title="Scallion Pancakes" ingredients={["Flour", "Onion", "Oil"]} time={15} />
-          <Dashboard title="Matar Paneer" ingredients={["Paneer", "Tomato", "Veggies"]} time={20} />
-          <Dashboard title="Veg Soup" ingredients={["Cabbage", "Water", "Salt"]} time={10} />
-        </div>
+      <div className="mt-6">
+        {filteredRecipes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredRecipes.map((recipe) => (
+              <div
+                key={recipe._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <img
+                  src={recipe.images?.[0]?.url || "https://via.placeholder.com/300"}
+                  alt={recipe.name}
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-4">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-semibold text-[#333]">{recipe.name}</h2>
+                    <Link
+                      to={`/view/${recipe._id}`}
+                      className=" px-4 py-1 rounded-md text-orange-600 border-2 border-orange-600 hover:bg-orange-600 hover:text-white transition"
+                    >
+                      View
+                    </Link>
+                  </div>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-sm text-gray-500">{recipe.category}</p>
+                    <p className="text-sm text-gray-500 flex items-center">
+                      <LuAlarmClockCheck className="mr-1" /> {recipe.tot_time || "N/A"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-64">
+            <div className="text-center flex flex-col items-center">
+              <GoAlertFill className="text-orange-500 text-6xl mb-4" />
+              <p className="text-lg text-gray-600 font-medium">No recipes found</p>
+            </div>
+          </div>
+        )}
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-
-  export default RecipeCard
+export default RecipeCard;
