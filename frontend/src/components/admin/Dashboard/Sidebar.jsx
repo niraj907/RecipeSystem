@@ -54,7 +54,7 @@ const Sidebar = () => {
             }}
           />
           {!isCollapsed && (
-            <img src={logo} className="w-40 cursor-pointer" alt="TasteTrack Logo" />
+            <img src={logo} className="w-40 cursor-pointer" alt="TasteTrack Logo"   onClick={() => navigate("/dashboard")} />
           )}
         </div>
 

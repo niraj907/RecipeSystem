@@ -80,18 +80,40 @@ export const useRecipeStore = create((set) => ({
 
   // Create a new recipe
   createRecipe: async (newRecipe) => {
-    if (!newRecipe.menuId || !newRecipe.name || !newRecipe.category || !newRecipe.description || !newRecipe.ingredients || !newRecipe.instructions || !newRecipe.tot_time || !newRecipe.prep_time || !newRecipe.cook_time || !newRecipe.nepal || !newRecipe.hindi || !newRecipe.english || !newRecipe.images) {
-      return { success: false, message: "Please fill all fields" };
+    console.log("Received Recipe Data:", newRecipe);
+  
+    // Check for missing fields
+    const requiredFields = [
+      "menuId", "name", "category", "description", "ingredients",
+      "instructions", "tot_time", "prep_time", "cook_time",
+      "nepal", "nepalPublishedName", "hindi", "hindiPublishedName",
+      "english", "englishPublishedName", "images"
+    ];
+  
+    const missingFields = requiredFields.filter(field => !newRecipe[field]);
+    
+    if (missingFields.length > 0) {
+      console.error("Missing Fields:", missingFields);
+      return { success: false, message: `Missing fields: ${missingFields.join(", ")}` };
     }
+  
     try {
+      console.log("Sending request to API:", API_URL);
       const response = await axios.post(`${API_URL}`, newRecipe);
+      
+      console.log("API Response...:", response.data);
       set((state) => ({ recipes: [...state.recipes, response.data.data] }));
+      
       return { success: true, message: "Recipe added successfully" };
     } catch (error) {
-      return { success: false, message: error.response?.data?.msg || "Error adding recipe" };
+      console.error("API Error:", error);
+      return { 
+        success: false, 
+        message: error.response?.data?.msg || error.message || "Error adding recipe" 
+      };
     }
   },
-
+  
 
   // Delete a recipe
   deleteRecipe: async (id) => {
