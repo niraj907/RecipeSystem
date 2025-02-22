@@ -67,6 +67,7 @@ const SignUpForm = () => {
       return;
     }
   
+    console.log("Form Data Submitted: ", input);
     try {
       // Call the Zustand store function
       await signup(

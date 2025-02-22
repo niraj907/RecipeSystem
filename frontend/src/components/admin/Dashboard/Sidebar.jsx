@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Home, Book, Star, LogOut, ChevronDown } from "lucide-react";
+import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
@@ -89,15 +89,21 @@ const Sidebar = () => {
               >
                 Add
               </li>
-              <li
+              {/* <li
                 className="cursor-pointer p-2 hover:bg-orange-200 rounded-md"
                 onClick={() => navigate("/recipes/update")}
               >
                 Update
-              </li>
+              </li> */}
             </div>
           )}
 
+          <li
+            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
+            onClick={() => navigate("/dashboard/maintenance")}
+          >
+            <Settings /> {!isCollapsed && "Maintenance"}
+          </li>
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
             onClick={() => navigate("/favorites")}

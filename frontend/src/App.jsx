@@ -19,7 +19,8 @@ import Sidebar from "@/components/admin/Dashboard/Sidebar";
 import Header from "@/components/admin/Dashboard/Header";
 import AddRecipe from "@/components/admin/Dashboard/AddRecipe";
 import ViewRecipe from "./components/admin/Dashboard/ViewRecipe";
-import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
+// import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
+import Maintain from "./components/admin/Dashboard/Maintain";
 
 import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
@@ -45,8 +46,9 @@ const App = () => {
         <Route path="/admin-login" element={<AdminLoginForm />} />
         <Route path="/dashboard" element={<AdminDashboard />} />
         <Route path="/recipes/add" element={<><Sidebar/><Header/> <AddRecipe/> </> } />
-        <Route path="/recipes/update" element={<><Sidebar/><Header/> <UpdateRecipe/> </> } />
+        {/* <Route path="/recipes/update" element={<><Sidebar/><Header/> <UpdateRecipe/> </> } /> */}
         <Route path="/recipes/view/:id" element={<><Sidebar/><Header/> <ViewRecipe/> </> } />
+        <Route path="/dashboard/maintenance" element={<><Sidebar/><Header/> <Maintain/> </> } />
 
 
           {/* Fallback for any unmatched routes */}
