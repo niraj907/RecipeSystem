@@ -145,9 +145,38 @@ createRecipe: async (newRecipe) => {
   },
 
   // Update an existing recipe
+  // updateRecipe: async (id, updatedRecipe) => {
+  //   try {
+  //     const response = await axios.put(`${API_URL}/${id}`, updatedRecipe);
+  //     set((state) => ({
+  //       recipes: state.recipes.map((recipe) =>
+  //         recipe._id === id ? response.data.data : recipe
+  //       ),
+  //     }));
+  //     return { success: true, message: "Recipe updated successfully" };
+  //   } catch (error) {
+  //     return { success: false, message: "Error updating recipe" };
+  //   }
+  // },
+
+  // Update an existing recipe
   updateRecipe: async (id, updatedRecipe) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}`, updatedRecipe);
+      const formData = new FormData();
+      Object.keys(updatedRecipe).forEach(key => {
+        if (key === 'image' && updatedRecipe[key]) {
+          formData.append('image', updatedRecipe[key]);
+        } else {
+          formData.append(key, updatedRecipe[key]);
+        }
+      });
+
+      const response = await axios.put(`${API_URL}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
       set((state) => ({
         recipes: state.recipes.map((recipe) =>
           recipe._id === id ? response.data.data : recipe
