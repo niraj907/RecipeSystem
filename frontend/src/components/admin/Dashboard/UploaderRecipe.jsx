@@ -5,7 +5,7 @@ import { AiFillFileImage } from "react-icons/ai";
 
 const UploaderRecipe = ({ onFilesSelected, images }) => {
 const [files, setFiles] = useState([]);
-console.log("UploaderRecipe Image:",images);
+//console.log("UploaderRecipe Image:",images);
 
   const handleFileChange = (e) => {
     const uploadedFiles = Array.from(e.target.files);
@@ -67,7 +67,7 @@ console.log("UploaderRecipe Image:",images);
 
       {/* Fixing the conditional check */}
     
-   {  files!== null && 
+   {files!== null && 
   files
 ?.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-4">
@@ -99,9 +99,6 @@ console.log("UploaderRecipe Image:",images);
           })}
         </div>
       )}
-
-
-
     </main>
   );
 };
