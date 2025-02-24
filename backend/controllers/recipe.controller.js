@@ -14,10 +14,10 @@ cloudinary.config({
 // add recipe
 export const addRecipe = async (req, res) => {
   try {
-    const { menuId, name , category , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal ,hindi,  english} = req.body;
+    const { menuId, name , category , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal, nepalPublishedName,hindi, hindiPublishedName, english,englishPublishedName} = req.body;
 
     // field all required 
-    if (!menuId || !name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !hindi || !english) {
+    if (!menuId || !name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !nepalPublishedName ||!hindi || !hindiPublishedName || !english || !englishPublishedName) {
       console.log('All fields are required');
       // throw new Error("All fields are required");
       return res.status(400).json({ success: false, msg: "All fields are required" });
@@ -71,8 +71,11 @@ export const addRecipe = async (req, res) => {
       prep_time, 
       cook_time, 
       nepal ,
+      nepalPublishedName,
       hindi, 
-       english
+      hindiPublishedName,
+      english,
+      englishPublishedName
        
     });
     

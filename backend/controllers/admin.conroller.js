@@ -2,7 +2,8 @@ import { admin } from '../models/admin.model.js';
 import bcryptjs from "bcryptjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
-import crypto from 'crypto';  
+import crypto from 'crypto'; 
+import jwt from 'jsonwebtoken'; 
 import { sendPasswordResetEmail , sendResetSuccessEmail} from '../mailtrap/emails.js';
 dotenv.config();
 
@@ -13,26 +14,6 @@ cloudinary.config({
 });
 
 // ceateAdmin
-// const createAdmin = async () => {
-//   try {
-//     const salt = await bcryptjs.genSalt(10); // Generate salt
-//     const hashedPassword = await bcryptjs.hash("nirajchy", salt); // Hash the password
-
-//     const newAdmin = new admin({
-//       name: "niraj",
-//       email: "nirajchaudhary@gmail.com",
-//       password: hashedPassword, // Store hashed password
-//     });
-
-//     await newAdmin.save();
-//     console.log("Admin created successfully");
-//   } catch (error) {
-//     console.error("Error creating admin:", error);
-//   }
-// };
-
-// createAdmin();
-
 const createAdmin = async () => {
   try {
     const existingAdmin = await admin.findOne({ email: "nirajchaudhary@gmail.com" });
@@ -61,36 +42,97 @@ const createAdmin = async () => {
 createAdmin();
 
 // adminLogin
+// export const adminLogin = async (req, res) => {
+//   const { email, password } = req.body; 
+
+//   try {
+//     if (!email || !password) {
+//       return res.status(400).json({ message: "Email and password are required" });
+//     }
+
+//     // Find the admin by email
+//     const adminUser = await admin.findOne({ email });
+
+//     if (!adminUser) {
+//       return res.status(404).json({ message: "Admin not found" });
+//     }
+
+//     // Compare entered password with hashed password in DB
+//     const isMatch = await bcryptjs.compare(password, adminUser.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+
+//     // Update last login time
+//     adminUser.lastLogin = new Date();
+//     await adminUser.save();
+
+//     return res.status(200).json({ message: "Login successful", admin: adminUser });
+
+//   } catch (error) {
+//     console.error("Login error:", error.message);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
+
+// Example login function
 export const adminLogin = async (req, res) => {
-  const { email, password } = req.body; 
+  const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
-    }
-
-    // Find the admin by email
-    const adminUser = await admin.findOne({ email });
-
-    if (!adminUser) {
+    const adminUser  = await admin.findOne({ email });
+    if (!adminUser ) {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    // Compare entered password with hashed password in DB
-    const isMatch = await bcryptjs.compare(password, adminUser.password);
+    const isMatch = await bcryptjs.compare(password, adminUser .password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Update last login time
-    adminUser.lastLogin = new Date();
-    await adminUser.save();
+    // Generate a JWT token
+    const token = jwt.sign({ id: adminUser ._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ message: "Login successful", admin: adminUser });
-
+    // Set the token in a cookie
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' }); // Use secure cookies in production
+    res.status(200).json({ message: "Login successful", admin: adminUser  });
   } catch (error) {
     console.error("Login error:", error.message);
     return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get Admins
+// export const getAdmin = async (req, res) => {
+//   try {
+//     console.log("Fetching all users");
+//     const admins = await admin.find(); // Renamed variable to avoid conflict
+//     res.status(200).json(admins);
+//   } catch (error) {
+//     console.log("Failed to fetch admin data", error);
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+
+
+export const getAdmin = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    const adminUser  = await admin.findById(req.user.id);
+    if (!adminUser ) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    res.status(200).json({ admin: adminUser  });
+  } catch (error) {
+    console.error("Failed to fetch admin data", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
