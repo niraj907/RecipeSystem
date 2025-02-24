@@ -51,21 +51,21 @@ const UpdateRecipe = ({ recipe, onClose }) => {
     }
   };
 
-  const handleUpdateRecipe = async () => {
-    try {
-      const updatedRecipe = { ...formData };
-      if (image) {
-        updatedRecipe.image = image;
-      }
-      await updateRecipe(recipe._id, updatedRecipe); // Use recipe._id instead of recipe.id
-      toast.success("Recipe updated successfully!");
-      onClose();
-    } catch (error) {
-      toast.error("Failed to update recipe.");
-      console.error(error);
+  // In UpdateRecipe component's handleUpdateRecipe function
+const handleUpdateRecipe = async () => {
+  try {
+    const updatedRecipe = { ...formData };
+    if (image) {
+      updatedRecipe.images = [image]; // Send as array under 'images' key
     }
-  };
-
+    await updateRecipe(recipe._id, updatedRecipe);
+    toast.success("Recipe updated successfully!");
+    onClose();
+  } catch (error) {
+    toast.error("Failed to update recipe.");
+    console.error(error);
+  }
+};
   if (!recipe) return null;
 
   return (
@@ -80,6 +80,7 @@ const UpdateRecipe = ({ recipe, onClose }) => {
             style={{ maxHeight: "90vh" }}
           >
             <div className="flex items-center justify-between p-4">
+              
               <h3 className="text-xl font-semibold text-gray-900">
                 Update Recipe
               </h3>
@@ -249,6 +250,7 @@ const UpdateRecipe = ({ recipe, onClose }) => {
                     onChange={(e) => handleInputChange(e, "description")}
                   ></textarea>
                 </div>
+               
                 <div
                   onClick={handleImageClick}
                   className="cursor-pointer relative"
@@ -277,6 +279,7 @@ const UpdateRecipe = ({ recipe, onClose }) => {
                     onChange={handleImageChange}
                   />
                 </div>
+
               </div>
               <div>
                 <label className="block text-gray-700 font-medium">
@@ -319,7 +322,7 @@ const UpdateRecipe = ({ recipe, onClose }) => {
                 onClick={handleUpdateRecipe}
                 className="text-white bg-orange-700 hover:bg-orange-800 rounded-lg text-sm px-5 py-2.5"
               >
-                Edit Data
+                Edit Change
               </button>
               <button
                 onClick={onClose}

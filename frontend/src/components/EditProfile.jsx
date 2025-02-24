@@ -146,6 +146,7 @@ const handleUpdateProfile = async () => {
               className="hidden"
             />
           </div>
+          
         </div>
 
         {/* Name Input */}

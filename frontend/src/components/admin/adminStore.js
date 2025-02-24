@@ -9,6 +9,24 @@ const useAdminStore = create((set) => ({
   loading: false,
   error: null,
 
+// adminStore.js
+fetchAdmin: async () => {
+  set({ loading: true, error: null });
+  try {
+    const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
+    console.log("API Response: ", response.data);
+    set({
+      admin: response.data.admin || null,
+      isAuthenticated: !!response.data.admin,
+      loading: false
+    });
+  } catch (error) {
+    console.error("Fetch Admin Error: ", error);
+    set({ error: error.response?.data?.message || 'Failed to fetch admin', loading: false });
+  }
+},
+
+
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
@@ -40,19 +58,40 @@ const useAdminStore = create((set) => ({
     }
   },
 
-  updateAdmin: async (id, updatedData) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await axios.put(
-        `${API_URL}/${id}`,
-        updatedData,
-        { withCredentials: true }
-      );
-      set({ admin: response.data.adminUser, loading: false });
-    } catch (error) {
-      set({ error: error.response?.data?.message || 'Update failed', loading: false });
-    }
-  },
+ // Update admin profile
+ updateAdmin: async (id, updatedData) => {
+  set({ loading: true, error: null });
+  try {
+    const formData = new FormData();
+    Object.keys(updatedData).forEach(key => {
+      if (key === 'images') {
+        // Handle image array
+        updatedData.images.forEach(image => {
+          formData.append('images', image);
+        });
+      } else {
+        formData.append(key, updatedData[key]);
+      }
+    });
+
+    const response = await axios.put(
+      `${API_URL}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+
+    set((state) => ({
+      admin: state.admin.map((admins) =>
+        admins._id === id ? response.data.data : admins
+      ),
+    }));
+    return { success: true, message: "Admin updated successfully" };
+  } catch (error) {
+    set({ error: error.response?.data?.message || 'Update failed', loading: false });
+  }
+},
 
   forgotPassword: async (email) => {
     set({ loading: true, error: null });
