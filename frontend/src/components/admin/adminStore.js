@@ -9,22 +9,49 @@ const useAdminStore = create((set) => ({
   loading: false,
   error: null,
 
-// adminStore.js
+
+// fetchAdmin: async () => {
+//   set({ loading: true, error: null });
+//   try {
+//     const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
+//     console.log("API Response: ", response.data);
+//     set({
+//       admin: response.data.admin || null,
+//       isAuthenticated: !!response.data.admin,
+//       loading: false
+//     });
+// console.log("Admin state updated: ", response.data.admin);
+//   } catch (error) {
+//     console.error("Fetch Admin Error: ", error);
+//     set({ error: error.response?.data?.message || 'Failed to fetch admin', loading: false });
+//   }
+// },
+
+
 fetchAdmin: async () => {
   set({ loading: true, error: null });
   try {
     const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
     console.log("API Response: ", response.data);
+
+    const adminData = Array.isArray(response.data) ? response.data[0] : response.data.admin;
+
     set({
-      admin: response.data.admin || null,
-      isAuthenticated: !!response.data.admin,
+      admin: adminData || null,
+      isAuthenticated: !!adminData,
       loading: false
     });
+
+    console.log("Admin state updated: ", adminData);
   } catch (error) {
     console.error("Fetch Admin Error: ", error);
     set({ error: error.response?.data?.message || 'Failed to fetch admin', loading: false });
   }
 },
+
+
+
+
 
 
   login: async (email, password) => {

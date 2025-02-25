@@ -3,6 +3,8 @@ import useAdminStore from '@/components/admin/adminStore';
 import { toast } from "sonner";
 
 const EditAdminProfile = ({ admin, onClose }) => {
+
+  console.log("admin Edit",admin)
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const { updateAdmin } = useAdminStore();
@@ -164,7 +166,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
                   />
                 ) : (
                   <img
-                    src={admin?.images?.[0]?.url || "/default-profile.png"}
+                    src={admin?.images?.[0]?.url || "https://github.com/shadcn.png"}
                     className="w-32 h-32 object-cover mt-4 sm:mt-0"
                     alt="User Profile"
                   />

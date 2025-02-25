@@ -8,12 +8,21 @@ const Header = ({ setSidebarOpen }) => {
    const [selectedAdmin, setSelectedAdmin] = useState(null);
   const { admin, fetchAdmin } = useAdminStore();
 
-  useEffect(() => {
-    fetchAdmin(); // Fetch admin data when the component mounts
-  }, []);
+  // useEffect(() => {
+  //   fetchAdmin(); // Fetch admin data when the component mounts
+  // }, []);
 
-  console.log("Admin: ", admin);
+  useEffect(() => {
+    fetchAdmin();
+  }, []);
+  
+  useEffect(() => {
+    console.log("Admin updated in state:", admin);
+  }, [admin]);  // Log admin when it updates
+  
  
+  console.log("Adminsss: ", admin);
+
 
   const handleEdit = () => {
     setSelectedAdmin(admin);
