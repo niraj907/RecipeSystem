@@ -3,7 +3,6 @@ import bcryptjs from "bcryptjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import crypto from 'crypto'; 
-import jwt from 'jsonwebtoken'; 
 import { sendPasswordResetEmail , sendResetSuccessEmail} from '../mailtrap/emails.js';
 dotenv.config();
 
@@ -41,65 +40,46 @@ const createAdmin = async () => {
 
 createAdmin();
 
+
+
 // adminLogin
-// export const adminLogin = async (req, res) => {
-//   const { email, password } = req.body; 
-
-//   try {
-//     if (!email || !password) {
-//       return res.status(400).json({ message: "Email and password are required" });
-//     }
-
-//     // Find the admin by email
-//     const adminUser = await admin.findOne({ email });
-
-//     if (!adminUser) {
-//       return res.status(404).json({ message: "Admin not found" });
-//     }
-
-//     // Compare entered password with hashed password in DB
-//     const isMatch = await bcryptjs.compare(password, adminUser.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "Invalid credentials" });
-//     }
-
-//     // Update last login time
-//     adminUser.lastLogin = new Date();
-//     await adminUser.save();
-
-//     return res.status(200).json({ message: "Login successful", admin: adminUser });
-
-//   } catch (error) {
-//     console.error("Login error:", error.message);
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-
-
-// Example login function
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     const adminUser  = await admin.findOne({ email });
+
     if (!adminUser ) {
       return res.status(404).json({ message: "Admin not found" });
     }
 
+    console.log("Stored Hash:", adminUser .password); // Debug log
     const isMatch = await bcryptjs.compare(password, adminUser .password);
+    console.log("Password Match:", isMatch); // Debug log
+
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign({ id: adminUser ._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Update last login time
+    adminUser .lastLogin = new Date();
+    await adminUser .save();
 
-    // Set the token in a cookie
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' }); // Use secure cookies in production
-    res.status(200).json({ message: "Login successful", admin: adminUser  });
+    // Respond with success message and admin details (excluding password)
+    res.status(200).json({
+      message: "Login successful",
+      admin: {
+        id: adminUser ._id,
+        name: adminUser .name,
+        email: adminUser .email,
+      },
+    });
   } catch (error) {
-    console.error("Login error:", error.message);
+    console.error("Login error:", error.message || error);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -107,34 +87,31 @@ export const adminLogin = async (req, res) => {
 // Get Admins
 // export const getAdmin = async (req, res) => {
 //   try {
-//     console.log("Fetching all users");
-//     const admins = await admin.find(); // Renamed variable to avoid conflict
-//     res.status(200).json(admins);
-//   } catch (error) {
-//     console.log("Failed to fetch admin data", error);
-//     res.status(500).json({ success: false, message: error.message });
-//   }
+//        console.log("Fetching all admins");
+//        const admins = await admin.find();
+//        res.status(200).json(admins);
+//    } catch (error) {
+//      console.log("Error fetching admins", error);
+//      res.status(500).json({success: false, message: error.message});
+//    }
 // };
-
-
 
 export const getAdmin = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ message: "Unauthorized access" });
+    console.log("Fetching admin details");
+    const adminUser = await admin.findOne(); // Fetch the first admin user
+
+    if (!adminUser) {
+      return res.status(404).json({ success: false, message: "Admin not found" });
     }
 
-    const adminUser  = await admin.findById(req.user.id);
-    if (!adminUser ) {
-      return res.status(404).json({ message: "Admin not found" });
-    }
-
-    res.status(200).json({ admin: adminUser  });
+    res.status(200).json({ admin: adminUser });
   } catch (error) {
-    console.error("Failed to fetch admin data", error);
+    console.log("Error fetching admin", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 // update code
 export const updateAdmin = async (req, res) => {
