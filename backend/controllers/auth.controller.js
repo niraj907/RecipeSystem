@@ -298,38 +298,49 @@ export const getUserById = async (req, res) => {
 
 // update code
 export const updateUserById = async (req, res) => {
+  const { id } = req.params; // Get user ID from request parameters
+  const { name, email, username, country, gender } = req.body; // Destructure the fields to update
+
   try {
-    console.log("Update request received for user:", req.params.id);
-    console.log("Request body:", req.body);
-    console.log("Request files:", req.files);
+    // Validate that at least one field is provided for update
+    if (!name && !email && !username && !country && !gender && !req.files?.images) {
+      return res.status(400).json({ success: false, message: "At least one field is required for update." });
+    }
 
-    const {  ...otherUpdates } = req.body;
-    let updatedUserData = { ...otherUpdates };
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User  not found." });
+    }
 
-    // Handle image uploads if provided
+    // Update user fields if provided
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (username) user.username = username;
+    if (country) user.country = country;
+    if (gender) user.gender = gender;
+
+    // Handle image upload if a new image is provided
     if (req.files && req.files.images) {
-      console.log("Processing image upload...");
       const imageFile = req.files.images;
 
       // Validate file type
       const allowedExtensions = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
       if (!allowedExtensions.includes(imageFile.mimetype)) {
-        console.log("Invalid file type:", imageFile.mimetype);
-        return res.status(400).json({ success: false, message: "Invalid file type" });
+        return res.status(400).json({ success: false, msg: "Invalid file type" });
       }
 
-
       // Upload the file to Cloudinary
-      console.log("Uploading to Cloudinary...");
+      console.log("Uploading image to Cloudinary...");
       const cloudinaryResponse = await cloudinary.uploader.upload(imageFile.tempFilePath);
 
       if (!cloudinaryResponse || cloudinaryResponse.error) {
-        console.log("Cloudinary upload error:", cloudinaryResponse.error);
-        return res.status(500).json({ success: false, message: "Error uploading image" });
+        console.error("Cloudinary Error:", cloudinaryResponse.error || "Unknown error");
+        return res.status(500).json({ success: false, msg: "Error uploading image" });
       }
 
-      // Update the images array
-      updatedUserData.images = [
+      // Update user image information
+      user.images = [
         {
           public_id: cloudinaryResponse.public_id,
           url: cloudinaryResponse.secure_url,
@@ -337,26 +348,22 @@ export const updateUserById = async (req, res) => {
       ];
     }
 
-    if (!req.params.id || req.params.id.length !== 24) {
-      return res.status(400).json({ success: false, message: "Invalid user ID format" });
-    }
-    // Update the user in the database
-    console.log("Updating user in database...");
-    const user = await User.findByIdAndUpdate(req.params.id, updatedUserData, { new: true });
+    // Save the updated user
+    await user.save();
 
-    if (!user) {
-      console.log("User not found for update");
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-
-    console.log("User updated successfully:", user);
-    res.status(200).json({ success: true, user });
+    res.status(200).json({
+      success: true,
+      message: "User  updated successfully.",
+      user: {
+        ...user._doc,
+        password: undefined, // Exclude password from response
+      },
+    });
   } catch (error) {
-    console.error("Error in updateUserById:", error.message);
-    res.status(500).json({ success: false, message:"Error in updateUserById",  error: error.message});
+    console.error("Error updating user:", error.message);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
-
 
 // Delete User
 export const deleteUserById = async (req, res) => {

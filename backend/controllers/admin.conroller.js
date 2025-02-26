@@ -229,7 +229,7 @@ export const adminLogout = async (req, res) => {
 
         await sendPasswordResetEmail(
             adminUser.email,
-            `http://localhost:5173/reset-password/${resetToken}`
+            `http://localhost:5173/reset-password-admin/${resetToken}`
         );
 
         console.log("Password reset link sent to:", adminUser.email);  
