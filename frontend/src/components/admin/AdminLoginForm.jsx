@@ -80,7 +80,7 @@ const AdminLoginForm = () => {
           </div>
 
           <div>
-            <Link to={'/forgot-password'} className='text-[#f67b24de]'>
+            <Link to={'/forgot-password-admin'} className='text-[#f67b24de]'>
               Forgot Password ?
             </Link>
           </div>

@@ -95,7 +95,7 @@ const Recipe = () => {
   console.log("Displayed recipes (showAll:", showAll, "):", displayedRecipes);
 
   return (
-    <section id="recipes" className="w-full py-[60px] xl:py-[85px] bg-[#FEF5EC]">
+    <section id="recipes" className="w-full py-10 bg-[#FEF5EC]">
       <div className="max-w-[1200px] mx-auto px-8 md:px-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-xl xl:text-2xl font-bold text-[#333]">Popular Recipe</h1>
@@ -171,7 +171,7 @@ const Recipe = () => {
         </div>
 
         {filteredRecipes.length > 6 && (
-          <div className="text-2xl flex justify-center items-center gap-2 text-center pt-[5rem] cursor-pointer">
+          <div className="text-[1rem] flex justify-end items-center gap-2 text-center py-6 cursor-pointer">
             <h2 className="font-semibold text-[#333]" onClick={() => setShowAll(!showAll)}>
               {showAll ? "View Less" : "View More"}
             </h2>

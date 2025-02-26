@@ -1,11 +1,14 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "./store/authStore";
 import { toast } from "sonner";
+import { FaUserPen } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 
-const EditProfile = () => {
-  const inputRef = useRef(null);
+const EditProfile = ({ user, onClose }) => {
+    const inputRef = useRef(null);
+    const [image, setImage] = useState(null);
+
+  const { updateProfile } = useAuthStore();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,34 +17,36 @@ const EditProfile = () => {
     country: "",
     gender: "",
   });
-  const [image, setImage] = useState(null);
-  const [isSaving, setIsSaving] = useState(false); // Track saving state
-  const { user, updateProfile } = useAuthStore();
 
-  // Prefill form data with user info when the component mounts
-  useEffect(() => {
+useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        username: user.username || "",
-        images: user.images || "" ,
-        country: user.country || "",
-        gender: user.gender || "",
+        name: user.name || '',
+        email: user.email || '',
+        username: user.username || '',
+        images: user.images || '',
+        country: user.country || '',
+        gender: user.gender || '',
       });
-    }
+    } 
   }, [user]);
+  
 
-  // Handle file input click
   const handleImageClick = () => {
     inputRef.current.click();
   };
 
-  // Handle image selection and validation
+  // Handle input changes
+  const handleInputChange = (e, field) => {
+    setFormData({
+      ...formData,
+      [field]: e.target.value,
+    });
+  };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith("image/")) {
         toast.error("Please upload a valid image file.");
         return;
@@ -50,179 +55,110 @@ const EditProfile = () => {
     }
   };
 
-  // Handle input field changes
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // Handle profile update
+  const handleUpdateProfile = async () => {
+    try {
+      const updatedProfile = new FormData(); // Create a new FormData object
+      updatedProfile.append("name", formData.name);
+      updatedProfile.append("email", formData.email);
+      updatedProfile.append("username", formData.username);
+      updatedProfile.append("country", formData.country);
+      updatedProfile.append("gender", formData.gender);
+      
+      // If there's a new image, append it as well
+      if (image) {
+        updatedProfile.append("images", image); // Append the image file
+      }
+
+      await updateProfile(user._id, updatedProfile);
+      toast.success("Profile updated successfully!");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to update profile.");
+      console.error(error);
+    }
   };
 
-//  const handleUpdateProfile = () => {
-//     setIsSaving(true);
-//     setTimeout(async () => {
-//       try {
-//         // const { email, ...updatedProfile } = formData; 
-//        // if (image) updatedProfile.images = image;
-//        const updatedProfile = {
-//         name: formData.name,
-//         username: formData.username,
-//         country: formData.country,
-//         gender: formData.gender,
-//         images: image || user?.images?.[0]?.url, // Ensure image is sent correctly
-//       };
-      
-//         const response = await updateProfile(user._id, updatedProfile);
-//         response.success
-//           ? toast.success(response.message)
-//           : toast.error(response.message);
-//       } catch (error) {
-//         toast.error("An error occurred while updating your profile.");
-
-//       } finally {
-//         setIsSaving(false);
-//       }
-//     }, 1000);
-//   };
-
-
-
-const handleUpdateProfile = async () => {
-  if (!user?._id) {
-    toast.error("User ID not found.");
-    return;
-  }
-
-  setIsSaving(true);
-  try {
-    const updatedProfile = {
-      name: formData.name,
-      username: formData.username,
-      country: formData.country,
-      gender: formData.gender,
-      images: image || user?.images?.[0]?.url, // Ensure only file is sent
-    };
-
-    const response = await updateProfile(user._id, updatedProfile);
-    response.success ? toast.success(response.message) : toast.error(response.message);
-  } catch (error) {
-    toast.error("An error occurred while updating your profile.");
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-
   return (
-    <div className="w-full py-10 md:py-16 xl:py-20 px-8 mt-[3rem] bg-gray-50">
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-8 md:px-12 bg-white shadow-lg rounded-2xl p-6 sm:p-10">
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-          <h1 className="text-2xl sm:text-3xl font-medium text-gray-800">
-            Edit Profile
-          </h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+        <div className="flex justify-between items-center pb-4">
+          <h3 className="text-xl font-semibold">Update Profile</h3>
+          <button onClick={onClose} className="text-gray-400 hover:bg-gray-200 p-2 rounded-lg">
+            <IoClose className="text-[1rem]"/>
+          </button>
+        </div>
 
-          {/* Image Upload */}
+        <div className="space-y-4 py-4">
+
+<div className="flex flex-col items-center mt-4">
           <div onClick={handleImageClick} className="cursor-pointer relative">
             {image ? (
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Uploaded Preview"
-                className="w-24 h-24 rounded-full object-cover mt-4 sm:mt-0"
-              />
+              <img src={URL.createObjectURL(image)} className="w-24 h-24 rounded-full object-cover" alt="Preview" />
+            ) : user?.images?.[0]?.url ? (
+              <img src={user.images[0].url} className="w-24 h-24 rounded-full object-cover" alt="Profile" />
             ) : (
-              <img
-                src={user?.images?.[0]?.url || "/default-profile.png"}
-                className="w-24 h-24 rounded-full object-cover mt-4 sm:mt-0"
-                alt="User Profile"
-              />
+              <FaUserPen className="w-24 h-24 text-gray-400 border p-4 rounded-full" />
             )}
-            <input
-              type="file"
-              ref={inputRef}
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
+            <input type="file" ref={inputRef} accept="image/*" className="hidden" onChange={handleImageChange} />
           </div>
-          
         </div>
 
-        {/* Name Input */}
-        <div>
-          <label className="font-medium text-gray-700 block my-2" htmlFor="name">
-            Name
-          </label>
-          <Input
-            type="text"
-            name="name"
-            id="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="w-full focus-visible:ring-transparent"
-          />
-        </div>
+<div> 
 
-        {/* Email Input */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div>
-  <label className="font-medium text-gray-700 block my-2" htmlFor="email">
-    Email
-  </label>
-  <Input
-    type="email"
-    name="email"
-    id="email"
-    value={formData.email}
-    className="w-full bg-gray-100 text-gray-500 cursor-not-allowed focus-visible:ring-transparent"
-    disabled // This makes the input field non-editable
-  />
-</div>
+        <label className="block text-gray-700 font-medium">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded mt-1"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e, "name")}
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="w-full p-2 border rounded mt-1 cursor-not-allowed"
+                  value={formData.email}
+                  disabled 
+                  onChange={(e) => handleInputChange(e, "email")}
+                />
+              </div>
 
 
-        {/* Username Input */}
-        <div>
-          <label
-            className="font-medium text-gray-700 block my-2"
-            htmlFor="username"
-          >
-            Username
-          </label>
-          <Input
-            type="text"
-            name="username"
-            id="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            className="w-full focus-visible:ring-transparent"
-          />
-        </div>
-        </div>
-
-        {/* Country and Gender Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label
-              className="font-medium text-gray-700 block my-2"
-              htmlFor="country"
-            >
-              Country
-            </label>
-            <Input
-              type="text"
-              name="country"
-              id="country"
-              value={formData.country}
-              onChange={handleInputChange}
-              className="w-full focus-visible:ring-transparent"
-            />
-          </div>
+              <div>
+                <label className="block text-gray-700 font-medium">
+                Country
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded mt-1"
+                  value={formData.country}
+                  onChange={(e) => handleInputChange(e, "country")}
+                />
+              </div>
 
 
-<div>
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded mt-1"
+                  value={formData.username}
+                  onChange={(e) => handleInputChange(e, "username")}
+                />
+              </div>
+        
+  <div>
   <label
-    className="font-medium text-gray-700 block my-2"
+    className="font-medium text-gray-700 block"
     htmlFor="gender"
   >
     Gender
@@ -231,29 +167,31 @@ const handleUpdateProfile = async () => {
     name="gender"
     id="gender"
     value={formData.gender}
-    onChange={handleInputChange}
-    className="w-full focus-visible:ring-transparent"
+    onChange={(e) => handleInputChange(e, "gender")}
+    className="w-full focus-visible:ring-transparent mt-1"
   >
     <option value="male">Male</option>
     <option value="female">Female</option>
   </select>
 </div>
-
-
+        
         </div>
 
-        {/* Submit Button */}
-        <div className="text-right mt-4">
-          <Button
-            type="submit"
-            className={`px-6 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition duration-200 ${
-              isSaving ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={handleUpdateProfile}
-            disabled={isSaving}
-          >
-            {isSaving ? "Saving..." : "Save Changes"}
-          </Button>
+        <div className="flex justify-end gap-3">
+        <button
+                type="button"
+                onClick={handleUpdateProfile}
+                className="text-white bg-orange-500 hover:bg-orange-300 rounded-lg text-sm px-5 py-2.5"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={onClose}
+                type="button"
+                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
         </div>
       </div>
     </div>

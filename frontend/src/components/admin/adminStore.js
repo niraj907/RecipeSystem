@@ -10,47 +10,32 @@ const useAdminStore = create((set) => ({
   error: null,
 
 
-// fetchAdmin: async () => {
-//   set({ loading: true, error: null });
-//   try {
-//     const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
-//     console.log("API Response: ", response.data);
-//     set({
-//       admin: response.data.admin || null,
-//       isAuthenticated: !!response.data.admin,
-//       loading: false
-//     });
-// console.log("Admin state updated: ", response.data.admin);
-//   } catch (error) {
-//     console.error("Fetch Admin Error: ", error);
-//     set({ error: error.response?.data?.message || 'Failed to fetch admin', loading: false });
-//   }
-// },
+ fetchAdmin: async () => {
+    set({ loading: true, error: null });
 
+    try {
+      const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
+      console.log("API Response: ", response.data);
 
-fetchAdmin: async () => {
-  set({ loading: true, error: null });
-  try {
-    const response = await axios.get(`${API_URL}/admin`, { withCredentials: true });
-    console.log("API Response: ", response.data);
+      // Extract the admin data correctly based on API response structure
+      const adminData = response.data?.admin || (Array.isArray(response.data) ? response.data[0] : null);
 
-    const adminData = Array.isArray(response.data) ? response.data[0] : response.data.admin;
+      set({
+        admin: adminData || null,
+        isAuthenticated: Boolean(adminData),
+        loading: false
+      });
 
-    set({
-      admin: adminData || null,
-      isAuthenticated: !!adminData,
-      loading: false
-    });
+      console.log("Admin state updated: ", adminData);
+    } catch (error) {
+      console.error("Fetch Admin Error: ", error);
 
-    console.log("Admin state updated: ", adminData);
-  } catch (error) {
-    console.error("Fetch Admin Error: ", error);
-    set({ error: error.response?.data?.message || 'Failed to fetch admin', loading: false });
-  }
-},
-
-
-
+      set({
+        error: error.response?.data?.message ?? "Failed to fetch admin. Please try again.",
+        loading: false
+      });
+    }
+  },
 
 
 
@@ -85,40 +70,40 @@ fetchAdmin: async () => {
     }
   },
 
- // Update admin profile
- updateAdmin: async (id, updatedData) => {
-  set({ loading: true, error: null });
-  try {
-    const formData = new FormData();
-    Object.keys(updatedData).forEach(key => {
-      if (key === 'images') {
-        // Handle image array
-        updatedData.images.forEach(image => {
-          formData.append('images', image);
-        });
-      } else {
-        formData.append(key, updatedData[key]);
-      }
-    });
 
-    const response = await axios.put(
-      `${API_URL}/${id}`, formData, {
+
+  // Update admin profile 
+  updateAdmin: async (id, updatedData) => {
+    set({ loading: true, error: null });
+    try {
+      const formData = new FormData();
+      Object.keys(updatedData).forEach(key => {
+        if (key === 'images') {
+          updatedData.images.forEach(image => {
+            formData.append('images', image);
+          });
+        } else {
+          formData.append(key, updatedData[key]);
+        }
+      });
+
+      await axios.put(`${API_URL}/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }
-    );
+      });
 
-    set((state) => ({
-      admin: state.admin.map((admins) =>
-        admins._id === id ? response.data.data : admins
-      ),
-    }));
-    return { success: true, message: "Admin updated successfully" };
-  } catch (error) {
-    set({ error: error.response?.data?.message || 'Update failed', loading: false });
-  }
-},
+      // Fetch updated admin details after update
+      await useAdminStore.getState().fetchAdmin(id);
+
+      return { success: true, message: "Admin updated successfully" };
+    } catch (error) {
+      set({ error: error.response?.data?.message || 'Update failed', loading: false });
+    }
+  } ,
+
+
+
 
   forgotPassword: async (email) => {
     set({ loading: true, error: null });

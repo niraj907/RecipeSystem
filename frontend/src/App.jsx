@@ -21,8 +21,10 @@ import AddRecipe from "@/components/admin/Dashboard/AddRecipe";
 import ViewRecipe from "./components/admin/Dashboard/ViewRecipe";
 // import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
 import Maintain from "./components/admin/Dashboard/Maintain";
+import ForgortPasswordAdmin from "./components/admin/Dashboard/ForgortPasswordAdmin";
 
-import EditProfile from "./components/EditProfile";
+
+// import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
 const App = () => {
   return (
@@ -40,7 +42,7 @@ const App = () => {
         <Route path="/verify-email" element={<><EmailVerificationPage /></>} />
         <Route path='/reset-password/:token' element={<><ResetPasswordPage /></>} />
  
-        <Route path="/edit-profile" element={ <><Navbar /><EditProfile /></>} />
+        {/* <Route path="/edit-profile" element={ <><Navbar /><EditProfile /></>} /> */}
 
 {/* admin panel */}
         <Route path="/admin-login" element={<AdminLoginForm />} />
@@ -49,6 +51,7 @@ const App = () => {
         {/* <Route path="/recipes/update" element={<><Sidebar/><Header/> <UpdateRecipe/> </> } /> */}
         <Route path="/recipes/view/:id" element={<><Sidebar/><Header/> <ViewRecipe/> </> } />
         <Route path="/dashboard/maintenance" element={<><Sidebar/><Header/> <Maintain/> </> } />
+        <Route path="/forgot-password-admin" element={<><ForgortPasswordAdmin/> </> } />
 
 
           {/* Fallback for any unmatched routes */}

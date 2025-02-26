@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from "../assets/logo.png";
+import logo from "@/assets/logo.png";
 import { Button } from "./ui/button";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "./store/authStore";
+import { useAuthStore } from "@/components/store/authStore";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+import EditProfile from "@/components/EditProfile"
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +23,16 @@ const Navbar = () => {
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
+  };
+
+  const handleEdit = () => {
+    setSelectedUser(user); // Set the logged-in user for editing
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
   };
 
   useEffect(() => {
@@ -143,7 +156,8 @@ const Navbar = () => {
               onClick={toggleDropdown}
             >
               <span className="sr-only">Open user menu</span>
-              <img
+              
+              <img 
                 className="w-10 h-10 rounded-full"
                 src={user?.images?.[0]?.url || "https://github.com/shadcn.png"}
                 alt="User Profile"
@@ -156,13 +170,17 @@ const Navbar = () => {
                 aria-orientation="vertical"
                 aria-labelledby="user-menu-button"
               >
+
                 <a
-                  onClick={() => navigate("/edit-profile")}
+                  onClick={handleEdit} 
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                   role="menuitem"
                 >
                   Profile
                 </a>
+
+
+
                 <a
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -244,6 +262,13 @@ const Navbar = () => {
           </ul>
         </div>
       )}
+
+       {/* Modal for updating recipe */}
+       {isModalOpen && (
+        <EditProfile user={selectedUser} onClose={closeModal} />
+      )}
+
+
     </div>
   );
 };

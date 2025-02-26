@@ -196,17 +196,27 @@ const handleUpdateRecipe = async () => {
                     onChange={(e) => handleInputChange(e, "english")}
                   />
                 </div>
+              
                 <div>
-                  <label className="block text-gray-700 font-medium">
-                    Category
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full p-2 border rounded mt-1"
-                    value={formData.category}
-                    onChange={(e) => handleInputChange(e, "category")}
-                  />
-                </div>
+  <label
+    className="font-medium text-gray-700 block"
+    htmlFor="category"
+  >
+    Category
+  </label>
+  <select
+    name="category"
+    id="category"
+    value={formData.category}
+    onChange={(e) => handleInputChange(e, "category")}
+    className="w-full focus-visible:ring-transparent mt-1"
+  >
+    <option value="breakfast">Breakfast</option>
+    <option value="lunch">Lunch</option>
+    <option value="dinner">Dinner</option>
+    <option value="snacks">Snacks</option>
+  </select>
+</div>
                 <div>
                   <label className="block text-gray-700 font-medium">
                     Total Time
@@ -320,7 +330,7 @@ const handleUpdateRecipe = async () => {
               <button
                 type="button"
                 onClick={handleUpdateRecipe}
-                className="text-white bg-orange-700 hover:bg-orange-800 rounded-lg text-sm px-5 py-2.5"
+                className="text-white bg-orange-500 hover:bg-orange-300 rounded-lg text-sm px-5 py-2.5"
               >
                 Edit Change
               </button>

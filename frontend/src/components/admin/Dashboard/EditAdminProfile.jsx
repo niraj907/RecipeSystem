@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useAdminStore from '@/components/admin/adminStore';
+import { FaUserPen } from "react-icons/fa6";
+
 import { toast } from "sonner";
 
 const EditAdminProfile = ({ admin, onClose }) => {
 
-  console.log("admin Edit",admin)
+  // console.log("admin Edit",admin)
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
-  const { updateAdmin } = useAdminStore();
+  const { updateAdmin,fetchAdmin } = useAdminStore();
 
   // State to hold form data
   const [formData, setFormData] = useState({
@@ -17,7 +19,6 @@ const EditAdminProfile = ({ admin, onClose }) => {
     username: '',
   });
 
-  // Populate form data when admin prop changes
   useEffect(() => {
     if (admin) {
       setFormData({
@@ -26,8 +27,12 @@ const EditAdminProfile = ({ admin, onClose }) => {
         password: admin.password || '',
         username: admin.username || '',
       });
+    } else {
+      // Fetch updated admin details if not available
+      fetchAdmin(admin?._id);
     }
-  }, [admin]);
+  }, [admin, fetchAdmin]);
+  
 
   const handleImageClick = () => {
     inputRef.current.click();
@@ -68,13 +73,15 @@ const EditAdminProfile = ({ admin, onClose }) => {
     }
   };
 
+
+
   return (
     <div>
       <div
         id="static-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 "
       >
-        <div className="relative p-4 w-full max-w-xl">
+        <div className="relative p-6 w-full max-w-lg">
           <div className="relative bg-white rounded-lg overflow-y-auto">
             <div className="flex items-center justify-between p-4">
               <h3 className="text-xl font-semibold text-gray-900">
@@ -103,6 +110,22 @@ const EditAdminProfile = ({ admin, onClose }) => {
               </button>
             </div>
             <div className="p-4 space-y-4">
+
+          
+<div className="flex flex-col items-center mt-4">
+          <div onClick={handleImageClick} className="cursor-pointer relative">
+            {image ? (
+              <img src={URL.createObjectURL(image)} className="w-24 h-24 rounded-full object-cover" alt="Preview" />
+            ) : admin?.images?.[0]?.url ? (
+              <img src={admin.images[0].url} className="w-24 h-24 rounded-full object-cover" alt="Profile" />
+            ) : (
+              <FaUserPen className="w-24 h-24 text-gray-400 border p-4 rounded-full" />
+            )}
+            <input type="file" ref={inputRef} accept="image/*" className="hidden" onChange={handleImageChange} />
+          </div>
+        </div>
+
+          
               <div>
                 <label className="block text-gray-700 font-medium">
                   Name
@@ -121,8 +144,9 @@ const EditAdminProfile = ({ admin, onClose }) => {
                 </label>
                 <input
                   type="email"
-                  className="w-full p-2 border rounded mt-1"
+                  className="w-full p-2 border rounded mt-1 cursor-not-allowed"
                   value={formData.email}
+                  disabled 
                   onChange={(e) => handleInputChange(e, "email")}
                 />
               </div>
@@ -132,7 +156,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   className="w-full p-2 border rounded mt-1"
                   value={formData.password}
                   onChange={(e) => handleInputChange(e, "password")}
@@ -150,35 +174,8 @@ const EditAdminProfile = ({ admin, onClose }) => {
                   onChange={(e) => handleInputChange(e, "username")}
                 />
               </div>
+              
 
-              <div
-                onClick={handleImageClick}
-                className="cursor-pointer relative"
-              >
-                <label className="block text-gray-700 font-medium mb-1">
-                  Image
-                </label>
-                {image ? (
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt="Uploaded Preview"
-                    className="w-32 h-32 object-cover mt-4 sm:mt-0"
-                  />
-                ) : (
-                  <img
-                    src={admin?.images?.[0]?.url || "https://github.com/shadcn.png"}
-                    className="w-32 h-32 object-cover mt-4 sm:mt-0"
-                    alt="User Profile"
-                  />
-                )}
-                <input
-                  type="file"
-                  ref={inputRef}
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-              </div>
             </div>
             <div className="flex items-center p-4">
               <button

@@ -119,79 +119,28 @@ forgotPassword: async (email) => {
   }
 },
 
-  
-// update code 
-// updateProfile: async (pid, updatedProfile) => {
-//   set({ isLoading: true, error: null });
 
-//   try {
-//     const formData = new FormData();
-//     // Object.entries(updatedProfile).forEach(([key, value]) => {
-//     //   if (key === "image") {
-//     //     formData.append("images", value); // Append image file
-//     //   } else {
-//     //     formData.append(key, value);
-//     //   }
-//     // });
-//     Object.entries(updatedProfile).forEach(([key, value]) => {
-//       if (key === "images" && value) {
-//         formData.append("images", value); // Ensure this is correctly appended
-//       } else {
-//         formData.append(key, value);
-//       }
-//     });
-    
-
-//     // const response = await axios.put(`${API_URL}/${pid}`, formData, {
-//     //   headers: {
-//     //     "Content-Type": "multipart/form-data",
-//     //   },
-//     // });
-//     const response = await axios.put(`${API_URL}/${pid}`, formData);
-
-// console.log("Profile Data Before Sending:", updatedProfile);
-//     set({
-//       user: response.data.user,
-//       error: null,
-//       isLoading: false,
-//     });
-
-//     return { success: true, message: "Profile updated successfully" };
-//   } catch (error) {
-//     set({
-//       error: error.response?.data?.message || "Error updating profile",
-//       isLoading: false,
-//     });
-//     console.error("Frontend error connecting to backend:", error);
-//     return { success: false, message:"Error updating profile",error: error.message };
-//   }
-// },
 
 
 // part 2
-updateProfile: async (pid, updatedProfile) => {
+updateProfile: async (id, formData) => {
   set({ isLoading: true, error: null });
-
   try {
-    const formData = new FormData();
-    Object.entries(updatedProfile).forEach(([key, value]) => {
-      if (key === "images" && value instanceof File) {
-        formData.append("images", value); 
-      } else {
-        formData.append(key, value);
-      }
+    // Make a PUT request to update the user profile
+    const response = await axios.put(`${API_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    const response = await axios.put(`${API_URL}/${pid}`, formData);
-    console.log("Profile Data Before Sending:", updatedProfile);
-
-    set({ user: response.data.user, error: null, isLoading: false });
-
-    return { success: true, message: "Profile updated successfully" };``
+    // Update the user state with the new user data
+    set({ user: response.data.user, isAuthenticated: true, isLoading: false });
   } catch (error) {
-    set({ error: error.response?.data?.message || "Error updating profile", isLoading: false });
-    console.error("Frontend error connecting to backend:", error);
-    return { success: false, message: "Error updating profile", error: error.message };
+    set({
+      error: error.response?.data?.message || "Error updating profile",
+      isLoading: false,
+    });
+    throw error;
   }
 },
 
