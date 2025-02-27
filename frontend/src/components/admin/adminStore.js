@@ -105,20 +105,36 @@ const useAdminStore = create((set) => ({
 
 
 
+  // forgotPassword: async (email) => {
+  //   set({ loading: true, error: null });
+  //   try {
+  //     await axios.post(`${API_URL}/adminforgotPassword`, { email });
+  //     set({ loading: false });
+  //   } catch (error) {
+  //     set({ error: error.response?.data?.message || 'Request failed', loading: false });
+  //   }
+  // },
+
   forgotPassword: async (email) => {
-    set({ loading: true, error: null });
+    set({ isLoading: true, error: null });
+
     try {
-      await axios.post(`${API_URL}/adminforgotPassword`, { email });
-      set({ loading: false });
+      const response = await axios.post(`${API_URL}/adminforgotPassword`, { email });
+
+      set({ isLoading: false });
+      return true; // Success case
     } catch (error) {
-      set({ error: error.response?.data?.message || 'Request failed', loading: false });
+      const errorMessage = error.response?.data?.message || "Email not found. Please enter a registered email.";
+      set({ isLoading: false, error: errorMessage });
+      return false; // Error case
     }
   },
+
 
   resetPassword: async (token, password) => {
     set({ loading: true, error: null });
     try {
-      await axios.post(`${API_URL}/adminResetPassword/${token}`, { password });
+      await axios.post(`${API_URL}/reset-password-admin/${token}`, { password });
       set({ loading: false });
     } catch (error) {
       set({ error: error.response?.data?.message || 'Reset failed', loading: false });

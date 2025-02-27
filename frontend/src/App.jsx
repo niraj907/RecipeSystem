@@ -22,7 +22,7 @@ import ViewRecipe from "./components/admin/Dashboard/ViewRecipe";
 // import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
 import Maintain from "./components/admin/Dashboard/Maintain";
 import ForgortPasswordAdmin from "./components/admin/Dashboard/ForgortPasswordAdmin";
-
+import ResetPasswordPageAdmin from "./components/admin/Dashboard/ResetPasswordPageAdmin";
 
 // import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
@@ -52,6 +52,7 @@ const App = () => {
         <Route path="/recipes/view/:id" element={<><Sidebar/><Header/> <ViewRecipe/> </> } />
         <Route path="/dashboard/maintenance" element={<><Sidebar/><Header/> <Maintain/> </> } />
         <Route path="/forgot-password-admin" element={<><ForgortPasswordAdmin/> </> } />
+        <Route path="/reset-password-admin/:token" element={<><ResetPasswordPageAdmin/> </> } />
 
 
           {/* Fallback for any unmatched routes */}

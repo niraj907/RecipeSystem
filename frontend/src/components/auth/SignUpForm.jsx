@@ -14,70 +14,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useForm, Controller } from "react-hook-form";
 
 const SignUpForm = () => {
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-    username: "",
-    country: "",
-    gender: "",
-    images: [], // Array to store selected image files
-  });
-
-  const navigate = useNavigate();
-
-  const {signup,error, isLoading } = useAuthStore();
-
-
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [images, setImages] = useState([]);
+  const navigate = useNavigate();
+  const { signup, isLoading } = useAuthStore();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const changeEventHandler = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
-
   const setImagesHandler = (files) => {
-    setInput({ ...input, images: files }); // Update image files in state
+    setImages(files);
   };
 
-  const signupHandler = async (e) => {
-    e.preventDefault();
-  
-    // Validation checks
-    if (
-      !input.name ||
-      !input.email ||
-      !input.password ||
-      !input.username ||
-      !input.country ||
-      !input.gender ||
-      input.images.length === 0
-    ) {
-      toast.error("All fields are required!");
+  const onSubmit = async (data) => {
+    if (images.length === 0) {
+      toast.error("Please upload at least one image.");
       return;
     }
-  
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input.email)) {
-      toast.error("Please enter a valid email.");
-      return;
-    }
-  
-    console.log("Form Data Submitted: ", input);
+
     try {
-      // Call the Zustand store function
       await signup(
-        input.name,
-        input.email,
-        input.password,
-        input.username,
-        input.images,
-        input.country,
-        input.gender
+        data.name,
+        data.email,
+        data.password,
+        data.username,
+        images,
+        data.country,
+        data.gender
       );
       toast.success("Signup successful!");
       navigate("/verify-email");
@@ -86,53 +59,59 @@ const SignUpForm = () => {
       toast.error(error.response ? error.response.data.message : "Something went wrong!");
     }
   };
-  
 
   return (
-    <div className="w-full py-10 px-4 ">
+    <div className="w-full py-10 px-4">
       <div className="flex items-center justify-center">
         <form
-          onSubmit={signupHandler}
+          onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-[30rem] md:max-w-[25rem] lg:max-w-[30rem] shadow-lg p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-md"
         >
           <h1 className="text-center font-bold text-2xl sm:text-3xl font-serif text-[#F67A24]">
             Sign up
           </h1>
 
-        
           <div>
             <span className="font-medium">Name</span>
             <Input
               type="text"
-              name="name"
-              value={input.name}
-              onChange={changeEventHandler}
               placeholder="Enter name"
               className="focus-visible:ring-transparent my-2"
+              {...register("name", { required: "Name is required" })}
             />
+            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
           <div>
             <span className="font-medium">Email</span>
             <Input
               type="email"
-              name="email"
-              value={input.email}
-              onChange={changeEventHandler}
               placeholder="Enter email"
               className="focus-visible:ring-transparent my-2"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Enter a valid email address",
+                },
+              })}
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
           <div className="relative">
             <span className="font-medium">Password</span>
             <Input
               type={showPassword ? "text" : "password"}
-              name="password"
-              value={input.password}
-              onChange={changeEventHandler}
               placeholder="Enter password"
               className="focus-visible:ring-transparent my-2"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 4,
+                  message: "Password must be at least 4 characters long",
+                },
+              })}
             />
             <span
               className="absolute right-4 top-[65%] translate-y-[-50%] cursor-pointer text-gray-600"
@@ -140,29 +119,25 @@ const SignUpForm = () => {
             >
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </span>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
 
           <div>
             <span className="font-medium">Username</span>
             <Input
               type="text"
-              name="username"
-              value={input.username}
-              onChange={changeEventHandler}
               placeholder="Enter username"
               className="focus-visible:ring-transparent my-2"
+              {...register("username", { required: "Username is required" })}
             />
+            {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
           </div>
 
           <div>
-            <Uploader
-              images={input.images.length}
-              onFilesSelected={setImagesHandler}
-            />
-            {input.images.length > 0 && (
+            <Uploader images={images.length} onFilesSelected={setImagesHandler} />
+            {images.length > 0 && (
               <p className="text-sm text-gray-600 mt-2">
-                Selected Images:{" "}
-                {input.images.map((file) => file.name).join(", ")}
+                Selected Images: {images.map((file) => file.name).join(", ")}
               </p>
             )}
           </div>
@@ -170,37 +145,44 @@ const SignUpForm = () => {
           <div>
             <span className="font-medium">Country</span>
             <Input
-              value={input.country}
-              onChange={changeEventHandler}
               type="text"
-              name="country"
               placeholder="Enter country"
               className="focus-visible:ring-transparent my-2"
+              {...register("country", { required: "Country is required" })}
             />
+            {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
           </div>
 
           <div>
             <span className="font-medium">Gender</span>
-            <Select
-              onValueChange={(value) => setInput({ ...input, gender: value })}
-              value={input.gender}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="gender"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Gender is required" }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
           </div>
-          {/* {error && <p className='text-red-500 font-semibold mt-2'>{error}</p>} */}
+
           <Button
             className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit" disabled ={isLoading}
+            type="submit"
+            disabled={isLoading}
           >
-        {isLoading ? <Loader className="animate-spin mx-auto" size={24}/> :"Sign up" }
+            {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : "Sign up"}
           </Button>
+
           <span className="text-center text-sm">
             Already have an account?{" "}
             <Link to={"/login"} className="text-[#f67b24] font-medium">

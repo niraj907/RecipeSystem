@@ -6,13 +6,14 @@ import { IoClose } from "react-icons/io5";
 import { NavLink, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/components/store/authStore";
-import Swal from "sweetalert2";
+import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
 import EditProfile from "@/components/EditProfile"
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
    const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const dropdownRef = useRef(null);
@@ -48,25 +49,15 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleClick = async () => {
-    try {
-      const result = await Swal.fire({
-        title: "Do you want to logout?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#34A853",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Logout",
-      });
-
-      if (result.isConfirmed) {
-        await logout();
-        toast.success("Logged out successfully.");
-        navigate("/");
-      }
+  const handleLogout = async () => {
+      try {
+      await logout();
+      toast.success("Logged out successfully.");
+      navigate("/");
     } catch (error) {
       toast.error("Unsuccessful logout.");
     }
+    setShowModal(false);
   };
 
   const toggleMobileMenu = () => {
@@ -182,10 +173,11 @@ const Navbar = () => {
 
 
                 <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                   role="menuitem"
-                  onClick={handleClick}
+                  // onClick={handleClick}
+                  onClick={() => setShowModal(true)}
                 >
                   Log Out
                 </a>
@@ -267,6 +259,9 @@ const Navbar = () => {
        {isModalOpen && (
         <EditProfile user={selectedUser} onClose={closeModal} />
       )}
+
+ {/* Logout Confirmation Modal */}
+{showModal && <Confirm onClose={() => setShowModal(false)} onConfirm={handleLogout} />}
 
 
     </div>

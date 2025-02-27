@@ -1,90 +1,74 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import React, { useState } from 'react';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useAuthStore } from "../store/authStore";
 import { Loader } from "lucide-react";
-// import { FcGoogle } from "react-icons/fc";
 
-const LoginForm = () => {
+const LoginForm  = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const [input, setInput] = useState({
-    email: "",
-    password: ""
-  });
-
-const {login , isLoading , error} = useAuthStore();
-const navigate = useNavigate();
+  const { login, loading, error } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const changeEventHandler = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value });
-  };
-
-//   const handleClick = async () => {
-// alert("Google Login");
-//   }
-
-  const signupHandler = async (e) => {
-    e.preventDefault();
-
-    // Basic form validation
-    if (!input.email || !input.password) {
-      toast.error("All fields are required!");
-      return;
-    }
-
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(input.email)) {
-      toast.error("Please enter a valid email.");
-      return;
-    }
-
-    // Log the form data to the console
-    console.log("Form Data Submitted: ", input);
+  const onSubmit = async (data) => {
     try {
-      await login(input.email, input.password);
-      toast.success("Login successful!");
-      navigate("/");
+      await login(data.email, data.password);
+      toast.success("Login successful");
+      navigate("/"); // Redirect on successful login
     } catch (err) {
-      toast.error(error || "Login failed!");
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
-
 
   return (
     <div className="py-[3rem] px-[3rem] mt-[75px]">
       <div className="flex items-center justify-center">
-        <form onSubmit={signupHandler} className="w-[30rem] shadow-lg p-8 flex flex-col gap-4">
-          <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">Login</h1>
+        <form 
+          className="w-[30rem] shadow-lg p-8 flex flex-col gap-4" 
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">
+            Login
+          </h1>
 
           <div>
             <span className="font-medium">Email</span>
             <Input
               type="email"
-              name="email"
-              value={input.email}
-              onChange={changeEventHandler}
               placeholder="Enter email"
               className="focus-visible:ring-transparent my-2"
+              {...register("email", { 
+                required: "Email is required", 
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Enter a valid email address"
+                }
+              })}
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
           
           <div className="relative">
             <span className="font-medium">Password</span>
             <Input
               type={showPassword ? "text" : "password"}
-              name="password"
-              value={input.password}
-              onChange={changeEventHandler}
               placeholder="Enter password"
               className="focus-visible:ring-transparent my-2"
+              {...register("password", { 
+                required: "Password is required", 
+                minLength: {
+                  value: 4,
+                  message: "Password must be at least 4 characters long"
+                }
+              })}
             />
             <span
               className="absolute right-4 top-[65%] translate-y-[-50%] cursor-pointer text-gray-600"
@@ -92,25 +76,23 @@ const navigate = useNavigate();
             >
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </span>
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
 
-<div>
-  <Link to={'/forgot-password'} className='text-[#f67b24de]'>
-  Forgot Password ?
-  </Link>
-</div>
+          <div>
+            <Link to={'/forgot-password'} className='text-[#f67b24de]'>
+              Forgot Password ?
+            </Link>
+          </div>
 
-<Button
-        className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
-            type="submit" disabled = {isLoading}>
-            {isLoading ? <Loader className='w-6 h-6 animate-spin' /> : "Login"}
-</Button>
 
-{/* <p className='text-center'>- Or Sign in with - </p>
-<div  onClick={handleClick} className='text-center shadow-sm flex justify-center items-center space-x-2 bg-white border border-gray-300 text-gray-700 font-medium py-2 px-3 rounded-md focus:outline-none focus:ring focus:ring-offset-indigo-200 focus:ring-opacity-50 disabled:bg-gray-400 cursor-pointer'>
-<FcGoogle className='text-2xl'/> 
-<p className='text-[1rem] font-sans'> Login with Google</p>
-</div> */}
+          <Button
+            className="bg-[#F67A24] hover:bg-[#f67b24de] text-white px-6 py-2 rounded-md transition duration-300 ease-in-out"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? <Loader className='w-6 h-6 animate-spin' /> : "Login"}
+          </Button>
 
           <span className="text-center">
             Don't have an account? <Link to={'/Signup'} className="text-[#f67b24de]">Signup</Link>
@@ -121,4 +103,4 @@ const navigate = useNavigate();
   );
 };
 
-export default LoginForm;
+export default LoginForm ;
