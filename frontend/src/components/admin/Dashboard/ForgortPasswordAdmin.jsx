@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Loader, Mail } from 'lucide-react';
-import useAdminStore from '@/components/admin/adminStore';
+import { useAdminStore } from '../adminStore';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";

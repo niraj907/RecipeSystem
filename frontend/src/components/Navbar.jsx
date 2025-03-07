@@ -3,7 +3,7 @@ import logo from "@/assets/logo.png";
 import { Button } from "./ui/button";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/components/store/authStore";
 import Confirm from "@/components/admin/Dashboard/Confirm";
@@ -18,16 +18,16 @@ const Navbar = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const { isAuthenticated, logout, user } = useAuthStore();
+//console.log(isAuthenticated);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
   const handleEdit = () => {
-    setSelectedUser(user); // Set the logged-in user for editing
+    setSelectedUser(user); 
     setIsModalOpen(true);
   };
 
@@ -84,7 +84,6 @@ const Navbar = () => {
         </NavLink>
 
         {/* Desktop Menu */}
-        {location.pathname !== "/edit-profile" && (
           <ul className="hidden lg:flex gap-7 font-sans text-[18px] px-4">
             <li
               className="cursor-pointer hover:text-orange-600"
@@ -119,7 +118,6 @@ const Navbar = () => {
               </li>
             )}
           </ul>
-        )}
 
         {/* Authentication and User Dropdown */}
         {!isAuthenticated ? (
@@ -176,7 +174,6 @@ const Navbar = () => {
                   
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                   role="menuitem"
-                  // onClick={handleClick}
                   onClick={() => setShowModal(true)}
                 >
                   Log Out

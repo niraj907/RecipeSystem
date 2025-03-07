@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import useAdminStore from '@/components/admin/adminStore';
+import { useAdminStore } from '../adminStore';
 import { FaUserPen } from "react-icons/fa6";
 
 import { toast } from "sonner";

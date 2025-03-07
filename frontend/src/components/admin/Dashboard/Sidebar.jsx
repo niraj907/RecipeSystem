@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
-import useAdminStore from "@/components/admin/adminStore";
+import { useAdminStore } from "../adminStore";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);

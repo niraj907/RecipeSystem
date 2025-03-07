@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import useAdminStore from './adminStore';
+import { useAdminStore } from './adminStore';
 import { Loader } from "lucide-react";
 
 const AdminLoginForm = () => {

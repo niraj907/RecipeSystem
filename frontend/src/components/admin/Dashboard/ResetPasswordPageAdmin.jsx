@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
-import  useAdminStore  from '@/components/admin/adminStore'
+import { useAdminStore } from '../adminStore';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ResetPasswordPageAdmin = () => {

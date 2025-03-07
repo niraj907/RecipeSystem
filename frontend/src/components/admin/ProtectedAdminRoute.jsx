@@ -1,13 +1,9 @@
-import React from 'react'
 import { Navigate } from "react-router-dom";
-import useAdminStore from '@/components/admin/adminStore.js';
 
+const ProtectedAdminRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem("authToken"); // Check if user is authenticated
 
-const ProtectedAdminRoute = () => {
-    const { isAuthenticated } = useAdminStore();
-  
-    return isAuthenticated ? children : <Navigate to="/admin-login" />;
-  
-}
+  return isAuthenticated ? children : <Navigate to="/admin-login" replace />;
+};
 
-export default ProtectedAdminRoute
+export default ProtectedAdminRoute;

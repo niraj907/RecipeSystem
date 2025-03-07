@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import EditAdminProfile from "@/components/admin/Dashboard/EditAdminProfile";
-import useAdminStore from '@/components/admin/adminStore';
+import { useAdminStore } from "../adminStore";
 import { useCountStore } from "@/components/store/countStore";
 import Notification from "@/components/admin/Dashboard/Notification"; // Import Bell component
 
@@ -41,7 +41,7 @@ const Header = ({ setSidebarOpen }) => {
 
       <div className="flex items-center space-x-4 ml-auto">
         
-        {/* Notification Bell */}
+        {/* Notification Bell  */}
         <Notification totalUsers={totalUsers} />
 
         {/* Admin Profile Image */}
