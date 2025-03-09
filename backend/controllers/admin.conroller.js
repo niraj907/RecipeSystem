@@ -4,6 +4,7 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import crypto from 'crypto'; 
 import { sendPasswordResetEmail , sendResetSuccessEmail} from '../mailtrap/emails.js';
+import { generateToken } from '../utils/generateToken.js';
 dotenv.config();
 
 cloudinary.config({
@@ -43,6 +44,50 @@ createAdmin();
 
 
 // adminLogin
+// export const adminLogin = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     if (!email || !password) {
+//       return res.status(400).json({ message: "Email and password are required" });
+//     }
+
+//     const adminUser  = await admin.findOne({ email });
+
+//     if (!adminUser ) {
+//       return res.status(404).json({ message: "Admin not found" });
+//     }
+
+//     console.log("Stored Hash:", adminUser .password); // Debug log
+//     const isMatch = await bcryptjs.compare(password, adminUser .password);
+//     console.log("Password Match:", isMatch); // Debug log
+
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "The password you entered is incorrect. Please try again." });
+//     }
+
+//     // Update last login time
+//     adminUser .lastLogin = new Date();
+//     await adminUser .save();
+
+//     console.log("Cookies in response:", req.cookies);
+
+//     // Respond with success message and admin details (excluding password)
+//     res.status(200).json({
+//       message: "Login successful",
+//       admin: {
+//         id: adminUser ._id,
+//         name: adminUser .name,
+//         email: adminUser .email,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Login error:", error.message || error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,17 +102,26 @@ export const adminLogin = async (req, res) => {
       return res.status(404).json({ message: "Admin not found" });
     }
 
-    console.log("Stored Hash:", adminUser .password); // Debug log
     const isMatch = await bcryptjs.compare(password, adminUser .password);
-    console.log("Password Match:", isMatch); // Debug log
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "The password you entered is incorrect. Please try again." });
     }
 
     // Update last login time
     adminUser .lastLogin = new Date();
     await adminUser .save();
+
+    // Set the cookie with a real token
+    const admin_Token = generateToken(adminUser ._id); // Replace with your adminToken generation logic
+    res.cookie("adminToken", admin_Token, {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+    console.log("Request Cookies:", req.cookies);
+    // Log the cookies being sent in the response
+    console.log("Cookies after setting:", res.getHeaders()['set-cookie']);
 
     // Respond with success message and admin details (excluding password)
     res.status(200).json({
@@ -83,18 +137,6 @@ export const adminLogin = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
-
-// Get Admins
-// export const getAdmin = async (req, res) => {
-//   try {
-//        console.log("Fetching all admins");
-//        const admins = await admin.find();
-//        res.status(200).json(admins);
-//    } catch (error) {
-//      console.log("Error fetching admins", error);
-//      res.status(500).json({success: false, message: error.message});
-//    }
-// };
 
 export const getAdmin = async (req, res) => {
   try {
@@ -188,7 +230,7 @@ export const updateAdmin = async (req, res) => {
 
 //logout
 export const adminLogout = async (req, res) => { 
-  res.clearCookie("token");
+  res.clearCookie("adminToken");
   res.status(200).json({success: true, message: "Logged out successfully"});
   }
 

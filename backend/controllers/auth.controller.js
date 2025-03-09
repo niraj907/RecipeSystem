@@ -4,7 +4,6 @@ import crypto from "crypto";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { recipeModel } from "../models/recipe.model.js";
 
 
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
@@ -154,7 +153,7 @@ export const login = async (req, res) => {
     const isPasswordValid = await bcryptjs.compare(password , user.password);
 
     if(!isPasswordValid){
-      return res.status(400).json({success: false, message: "Invalid credentials"});
+      return res.status(400).json({success: false, message: "The password you entered is incorrect. Please try again."});
     }
 
     if (!user.isVerified) {
@@ -166,6 +165,11 @@ export const login = async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
+    console.log("Request Cookies:", req.cookies);
+    // Log the cookies being sent in the response
+    console.log("Cookies after setting:", res.getHeaders()['set-cookie']);
+
+    
     res.status(200).json({
       success: true,   
       message : "Logged in sucessfully",
@@ -189,6 +193,22 @@ export const logout = async (req, res) => {
 res.clearCookie("token");
 res.status(200).json({success: true, message: "Logged out successfully"});
 }
+
+// export const logout = async (req, res) => {
+//   try {
+//     res.cookie("token", "", {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       expires: new Date(0), // Expiring the cookie immediately
+//     });
+
+//     res.status(200).json({ success: true, message: "Logged out successfully" });
+//   } catch (error) {
+//     console.error("Logout error:", error.message);
+//     res.status(500).json({ success: false, message: "Logout failed" });
+//   }
+// };
+
 
 
 export const forgotPassword = async (req, res) => { 

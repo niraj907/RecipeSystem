@@ -8,5 +8,5 @@ router.get('/admin', getAdmin);
 router.put("/:id", updateAdmin);
 router.post("/adminlogout", adminLogout);
 router.post("/adminforgotPassword", adminforgotPassword);
-router.post("/adminResetPassword/:token", adminResetPassword);
+router.post("/reset-password-admin/:token", adminResetPassword);
 export default router;
