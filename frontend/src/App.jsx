@@ -35,15 +35,19 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />} />
         <Route path="/categories/:category" element={<><Navbar /><CategoryPage /><Footer /></>} />
-        <Route path="/view/:id" element={<> <Navbar /><View /><Footer />  </>} />
+        {/* <Route path="/view/:id" element={<> <Navbar /><View /><Footer />  </>} /> */}
         <Route path='/printer/:id' element={<> <RecipePrinter />  </>} />
         <Route path="/favourites" element={<><Navbar /><Favourites /><Footer /></>} />
         <Route path="/signup" element={<> <SignUpForm /></>} />
-        <Route path="/login" element={<><LoginForm /></>} />
         <Route path="/forgot-password" element= {  <ForgotPassword /> } />
         <Route path="/verify-email" element={<> <EmailVerificationPage />  </>} />
         <Route path='/reset-password/:token' element={<> <ResetPasswordPage />  </>} />
+        <Route path="/login" element={<><LoginForm /></>} />
  
+{/* <Route element={<ProtectedRoute/>}> */}
+<Route path="/view/:id" element={<> <ProtectedRoute> <Navbar /><View /><Footer />  </ProtectedRoute>  </>} />
+{/* </Route> */}
+
 
 {/* admin panel */}
         <Route path="/admin-login" element={<AdminLoginForm />} />

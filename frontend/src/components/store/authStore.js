@@ -151,6 +151,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const API_URL = "http://localhost:4000/api/a1/auth";
 
@@ -202,6 +203,9 @@ export const useAuthStore = create(
             { email, password },
             { withCredentials: true }
           );
+
+console.log("Response Headers: ", response.headers);
+console.log("Login successful:", response.data);
           set({
             isAuthenticated: true,
             user: response.data.user,
@@ -221,9 +225,11 @@ export const useAuthStore = create(
       logout: async () => {
         set({ isLoading: true, error: null });
         try {
-          await axios.post(`${API_URL}/logout`);
-          set({ user: null, isAuthenticated: false, error: null, isLoading: false });
+        const response =   await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
+        console.log("Logout response:", response); // Debugging
+        set({ user: null, isAuthenticated: false, error: null, isLoading: false });
         } catch (error) {
+          console.error("Logout error:", error.response?.data || error.message); // Debugging
           set({ error: "Error logging out", isLoading: false });
           throw error;
         }

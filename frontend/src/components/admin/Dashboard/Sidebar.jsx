@@ -5,6 +5,7 @@ import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
 import { useAdminStore } from "../adminStore";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -19,6 +20,7 @@ const Sidebar = () => {
     try {
       await logout();
       toast.success("Logged out successfully.");
+      Cookies.remove("adminToken");
       navigate("/");
     } catch (error) {
       toast.error("Unsuccessful logout.");

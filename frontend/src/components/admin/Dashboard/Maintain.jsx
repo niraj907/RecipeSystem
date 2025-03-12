@@ -7,6 +7,7 @@ import DeleteConfirm from "@/components/admin/Dashboard/DeleteConfirm";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+// import { HiMiniArrowsUpDown } from "react-icons/hi2";
 
 const Maintain = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +20,7 @@ const Maintain = () => {
   const dropdownRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  
   const { recipes, fetchAllRecipes , deleteRecipe} = useRecipeStore();
 console.log(recipes) 
 
@@ -85,6 +87,8 @@ console.log(recipes)
     recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
   recipe.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+ 
 
   // Calculate the number of pages
   const totalPages = Math.ceil(filteredRecipes.length / selectedItem);
@@ -156,7 +160,12 @@ console.log(recipes)
               <tr className="text-left">
                 <th className="px-6 py-2 border border-gray-300">ID</th>
                 <th className="px-6 py-2 border border-gray-300">Image</th>
-                <th className="px-6 py-2 border border-gray-300">Name</th>
+                <th className="px-6 py-2 border border-gray-300 flex items-center gap-2">
+  Name 
+   {/* <HiMiniArrowsUpDown className="w-4 h-4 cursor-pointer"  />  */}
+</th>
+
+
                 <th className="px-6 py-2 border border-gray-300">Category</th>
                 <th className="px-6 py-2 border border-gray-300">Action</th>
               </tr>

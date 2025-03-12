@@ -9,6 +9,7 @@ import { useAuthStore } from "@/components/store/authStore";
 import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
 import EditProfile from "@/components/EditProfile"
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -51,10 +52,12 @@ const Navbar = () => {
 
   const handleLogout = async () => {
       try {
-      await logout();
+      await logout();  // Call Zustand logout function
+      Cookies.remove("token");
       toast.success("Logged out successfully.");
       navigate("/");
     } catch (error) {
+      console.error("Logout failed:", error);
       toast.error("Unsuccessful logout.");
     }
     setShowModal(false);

@@ -219,34 +219,70 @@ export const useAdminStore = create(
       },
 
       // Update admin profile
-      updateAdmin: async (id, updatedData) => {
-        set({ loading: true, error: null });
-        try {
-          const formData = new FormData();
-          Object.keys(updatedData).forEach((key) => {
-            if (key === 'images' && Array.isArray(updatedData.images)) {
-              updatedData.images.forEach((image) => {
-                formData.append('images', image);
-              });
-            } else {
-              formData.append(key, updatedData[key]);
-            }
+      // updateAdmin: async (id, updatedData) => {
+      //   set({ loading: true, error: null });
+      //   try {
+      //     const formData = new FormData();
+      //     Object.keys(updatedData).forEach((key) => {
+      //       if (key === 'images' && Array.isArray(updatedData.images)) {
+      //         updatedData.images.forEach((image) => {
+      //           formData.append('images', image);
+      //         });
+      //       } else {
+      //         formData.append(key, updatedData[key]);
+      //       }
+      //     });
+
+      //     await axios.put(`${API_URL}/admin/${id}`, formData, {
+      //       headers: {
+      //         'Content-Type': 'multipart/form-data',
+      //       },
+      //     });
+
+      //     // Fetch updated admin details after update
+      //     await useAdminStore.getState().fetchAdmin();
+
+      //     return { success: true, message: "Admin updated successfully" };
+      //   } catch (error) {
+      //     set({ error: error.response?.data?.message || 'Update failed', loading: false });
+      //   }
+      // },
+
+
+
+
+  // Update admin profile 
+  updateAdmin: async (id, updatedData) => {
+    set({ loading: true, error: null });
+    try {
+      const formData = new FormData();
+      Object.keys(updatedData).forEach(key => {
+        if (key === 'images') {
+          updatedData.images.forEach(image => {
+            formData.append('images', image);
           });
-
-          await axios.put(`${API_URL}/admin/${id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-
-          // Fetch updated admin details after update
-          await useAdminStore.getState().fetchAdmin();
-
-          return { success: true, message: "Admin updated successfully" };
-        } catch (error) {
-          set({ error: error.response?.data?.message || 'Update failed', loading: false });
+        } else {
+          formData.append(key, updatedData[key]);
         }
-      },
+      });
+
+      await axios.put(`${API_URL}/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      // Fetch updated admin details after update
+      await useAdminStore.getState().fetchAdmin(id);
+
+      return { success: true, message: "Admin updated successfully" };
+    } catch (error) {
+      set({ error: error.response?.data?.message || 'Update failed', loading: false });
+    }
+  } ,
+
+
+
 
       forgotPassword: async (email) => {
         set({ loading: true, error: null });
