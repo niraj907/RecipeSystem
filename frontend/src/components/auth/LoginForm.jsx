@@ -57,27 +57,31 @@ const LoginForm  = () => {
           </div>
           
           <div className="relative">
-            <span className="font-medium">Password</span>
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter password"
-              className="focus-visible:ring-transparent my-2"
-              {...register("password", { 
-                required: "Password is required", 
-                minLength: {
-                  value: 4,
-                  message: "Password must be at least 4 characters long"
-                }
-              })}
-            />
-            <span
-              className="absolute right-4 top-[65%] translate-y-[-50%] cursor-pointer text-gray-600"
-              onClick={handleTogglePasswordVisibility}
-            >
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </span>
-            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-          </div>
+  <label className="font-medium">Password</label>
+  <div className="relative">
+    <Input
+      type={showPassword ? "text" : "password"}
+      placeholder="Enter password"
+      className="focus:ring-transparent my-2 border rounded-md px-3 py-2 w-full"
+      {...register("password", { 
+        required: "Password is required", 
+        minLength: {
+          value: 4,
+          message: "Password must be at least 4 characters long"
+        }
+      })}
+    />
+    {/* Eye Icon for Show/Hide Password */}
+    <span
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+      onClick={handleTogglePasswordVisibility}
+    >
+      {showPassword ? <FaEye /> : <FaEyeSlash />}
+    </span>
+  </div>
+  {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+</div>
+
 
           <div>
             <Link to={'/forgot-password'} className='text-[#f67b24de]'>

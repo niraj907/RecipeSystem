@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell as BellIcon } from "lucide-react";
 
-const Notification = ({ totalUsers }) => {
+const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -29,11 +29,11 @@ const Notification = ({ totalUsers }) => {
       <BellIcon size={26} className="cursor-pointer" />
 
       {/* Notification Counter */}
-      {totalUsers > 0 && (
+      {/* {totalUsers > 0 && (
         <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
           {totalUsers}
         </span>
-      )}
+      )} */}
 
       {/* Notification Dropdown */}
       {isDropdownOpen && (
@@ -50,9 +50,7 @@ const Notification = ({ totalUsers }) => {
             <a className="block text-sm text-gray-700 cursor-pointer px-2">
               Niraj Chaudhary logged successfully
             </a>
-            <div className="text-xs text-gray-500 px-2">
-              {new Date().toLocaleString()} {/* Shows current date & time */}
-            </div>
+
           </div>
         </div>
       )}

@@ -15,7 +15,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
+    // password: '',
     username: '',
   });
 
@@ -24,7 +24,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
       setFormData({
         name: admin.name || '',
         email: admin.email || '',
-        password: admin.password || '',
+        // password: admin.password || '',
         username: admin.username || '',
       });
     } else {
@@ -151,7 +151,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-gray-700 font-medium">
                   Password
                 </label>
@@ -161,7 +161,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
                   value={formData.password}
                   onChange={(e) => handleInputChange(e, "password")}
                 />
-              </div>
+              </div> */}
 
               <div>
                 <label className="block text-gray-700 font-medium">

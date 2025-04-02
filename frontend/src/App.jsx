@@ -44,8 +44,8 @@ const App = () => {
         <Route path='/reset-password/:token' element={<> <ResetPasswordPage />  </>} />
         <Route path="/login" element={<><LoginForm /></>} />
  
+<Route path="/view/:id" element={<> <Navbar /><View /><Footer />   </>} />
 {/* <Route element={<ProtectedRoute/>}> */}
-<Route path="/view/:id" element={<> <ProtectedRoute> <Navbar /><View /><Footer />  </ProtectedRoute>  </>} />
 {/* </Route> */}
 
 

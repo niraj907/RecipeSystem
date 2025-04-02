@@ -151,7 +151,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
-import Cookies from "js-cookie";
+
 
 const API_URL = "http://localhost:4000/api/a1/auth";
 
@@ -164,6 +164,11 @@ export const useAuthStore = create(
       isLoading: false,
       isCheckingAuth: true,
       message: null,
+
+     // New state variables for notifications
+    notifications: [], // Holds the list of notifications
+    notificationCount: 0, // Holds the count of unread notifications
+      
 
       // Signup function
       signup: async (name, email, password, username, images, country, gender) => {
@@ -255,7 +260,7 @@ console.log("Login successful:", response.data);
       checkAuth: async () => {
         set({ isCheckingAuth: true, error: null });
         try {
-          const response = await axios.get(`${API_URL}/check-auth`);
+          const response = await axios.get(`${API_URL}/check-auth`, {withCredentials : true});
           set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
         } catch (error) {
           set({ error: null, isCheckingAuth: false, isAuthenticated: false });
@@ -310,7 +315,72 @@ console.log("Login successful:", response.data);
           throw error;
         }
       },
+
+fetchAllNotification : async() => {
+  set({ isLoading: true, error: null });
+  try {
+    const response = await axios.get(`${API_URL}/notifications/all`);
+    set({ 
+      notifications: response.data.notifications, 
+      notificationCount: response.data.notificationCount, 
+      isLoading: false 
+    });
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error All the fetching notifications",
+      isLoading: false,
+    });
+    throw error;
+  }
+},
+
+        // New function to fetch notifications
+        fetchNotifications: async (userId) => {
+          set({ isLoading: true, error: null });
+          try {
+            const response = await axios.get(`${API_URL}/notifications/user/${userId}`);
+            // Update notifications and notification count in state
+            set({ 
+              notifications: response.data.notifications, 
+              notificationCount: response.data.notificationCount, 
+              isLoading: false 
+            });
+          } catch (error) {
+            set({
+              error: error.response?.data?.message || "Error fetching notifications",
+              isLoading: false,
+            });
+            throw error;
+          }
+        },
+  
+        // New function to mark notification as read
+        markNotificationAsRead: async (notificationId) => {
+          set({ isLoading: true, error: null });
+          try {
+            await axios.put(`${API_URL}/notifications/mark-read/${notificationId}`);
+            // Update the state to mark the notification as read
+            set((state) => ({
+              notifications: state.notifications.map((notification) =>
+                notification._id === notificationId ? { ...notification, isRead: true } : notification
+              ),
+              notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+              isLoading: false,
+            }));
+          } catch (error) {
+            set({
+              error: error.response?.data?.message || "Error marking notification as read",
+              isLoading: false,
+            });
+            throw error;
+          }
+        },
+      
     }),
+
+
+
+    
     {
       name: "auth-store", // Key for localStorage
       getStorage: () => localStorage, // Persist data in localStorage
