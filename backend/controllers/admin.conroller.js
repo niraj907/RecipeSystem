@@ -140,7 +140,7 @@ export const adminLogin = async (req, res) => {
 
 export const getAdmin = async (req, res) => {
   try {
-    console.log("Fetching admin details");
+   // console.log("Fetching admin details");
     const adminUser = await admin.findOne(); // Fetch the first admin user
 
     if (!adminUser) {

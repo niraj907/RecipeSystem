@@ -18,16 +18,16 @@ export const addRecipe = async (req, res) => {
 
     // field all required 
     if (!menuId || !name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !nepalPublishedName ||!hindi || !hindiPublishedName || !english || !englishPublishedName) {
-      console.log('All fields are required');
-      // throw new Error("All fields are required");
+    //  console.log('All fields are required');
+
       return res.status(400).json({ success: false, msg: "All fields are required" });
     }
 
 
     // Validate if files are uploaded
     if (!req.files || !req.files.images) {
-      console.log("Image is required");
-      console.log("Request files:", req.files); // Log for debugging
+      // console.log("Image is required");
+      // console.log("Request files:", req.files); // Log for debugging
       return res.status(400).json({ success: false, msg: "Image is required" });
     }
 
@@ -36,23 +36,23 @@ export const addRecipe = async (req, res) => {
     // Validate file type
     const allowedExtensions = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
     if (!allowedExtensions.includes(imageFile.mimetype)) {
-      console.log("Validation Error: Invalid file type");
+   //   console.log("Validation Error: Invalid file type");
       return res.status(400).json({ success: false, msg: "Invalid file type" });
     }
 
     // Upload the file to Cloudinary
-    console.log("Uploading image to Cloudinary...");
+  //  console.log("Uploading image to Cloudinary...");
     const cloudinaryResponse = await cloudinary.uploader.upload(imageFile.tempFilePath);
 
     if (!cloudinaryResponse || cloudinaryResponse.error) {
-      console.error("Cloudinary Error:", cloudinaryResponse.error || "Unknown error");
+    //  console.error("Cloudinary Error:", cloudinaryResponse.error || "Unknown error");
       return res.status(500).json({ success: false, msg: "Error uploading image" });
     }
 
     // Save the recipe to the database
-    console.log("Saving recipe to the database...");
+    //console.log("Saving recipe to the database...");
 
-    console.log("Body: ",req.body);
+    //console.log("Body: ",req.body);
 
     const recipes = new recipeModel({
       menuId,
@@ -81,11 +81,11 @@ export const addRecipe = async (req, res) => {
     
 
     const savedRecipe = await recipes.save();
-    console.log("recipe saved successfully:", savedRecipe);
+ //   console.log("recipe saved successfully:", savedRecipe);
 
     return res.status(200).json({success: true,msg: "recipe added successfully", data: savedRecipe, });
   } catch (error) {
-    console.error("Error in addRecipe:", error);
+ //   console.error("Error in addRecipe:", error);
     return res.status(500).json({ success: false, msg: "Internal server error" });
   }
 };
@@ -95,12 +95,12 @@ export const addRecipe = async (req, res) => {
 // get all recipes
 export const getAllRecipes = async (req, res) => { 
   try {
-    console.log("Fetching all recipes");
+   // console.log("Fetching all recipes");
     const recipes = await recipeModel.find();
-    console.log(recipes);
+  //  console.log(recipes);
     return res.status(200).json({ success: true, msg: "Fetched all recipes successfully", data: recipes });
 } catch (error) {
-  console.log("Error fetching recipes", error);
+ // console.log("Error fetching recipes", error);
   res.status(500).json({ success: false, msg: "Error fetching recipes", error: error.message });
 }
 }
