@@ -34,7 +34,7 @@ export const signup = async (req, res) => {
    //   console.log("User already exists");
       return res
         .status(400)
-        .json({ success: false, message: "User already exists" });
+        .json({ success: false, message: "User already exists" });        
     }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
@@ -105,7 +105,7 @@ export const signup = async (req, res) => {
     generateTokenAndSetCookie(res, user._id);
 
     // Send verification email
-    await sendVerificationEmail(email, verificationToken); // Fixed argument order
+    await sendVerificationEmail(email, verificationToken); 
 
 // Create a notification for the user
 const notification = new Notification({
@@ -133,14 +133,9 @@ console.log("Notification created:", notification);
 
 export const getAllNotifications = async (req, res) => {
   try {
-
     const { userId } = req.params;
-
-   
-
     // Fetch all notifications from the database
     const notifications = await Notification.find().sort({ createdAt: -1 });
- 
 
     // Fetch the user's notification count
     const user = await User.findById(userId);
@@ -160,7 +155,6 @@ export const getAllNotifications = async (req, res) => {
 
 export const markNotificationAsRead = async (req, res) => {
   const { notificationId } = req.params;
-
   try {
     const notification = await Notification.findById(notificationId);
     if (!notification) {
@@ -217,6 +211,18 @@ export const getNotifications = async (req, res) => {
 };
 
 
+
+//delete recipe
+export const deleteNotification = async (req, res) => {
+  try {
+    const result = await Notification.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(404).json({ success: false, msg: "Notification not found" });
+    console.log(result);
+    res.status(200).json({ success: true, msg: "Successfully deleted Notification" });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Error deleting Notification", error: error.message });
+  }
+};
 
 
 

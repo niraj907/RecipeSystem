@@ -57,6 +57,7 @@ import {
   deleteUserById,
   getAllNotifications,
   // getNotifications,
+  deleteNotification,
   markNotificationAsRead
 } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -83,5 +84,6 @@ router.delete('/:id', deleteUserById); // delete
 router.get("/notifications/all", getAllNotifications); // Get all notifications
 //router.get("/notifications/user/:userId", getNotifications); // Changed parameter name for clarity
 router.put("/notifications/mark-read/:notificationId", markNotificationAsRead); // More descriptive path
+router.delete("/notifications/:id", deleteNotification);
 
 export default router;

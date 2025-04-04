@@ -42,52 +42,6 @@ const createAdmin = async () => {
 createAdmin();
 
 
-
-// adminLogin
-// export const adminLogin = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   try {
-//     if (!email || !password) {
-//       return res.status(400).json({ message: "Email and password are required" });
-//     }
-
-//     const adminUser  = await admin.findOne({ email });
-
-//     if (!adminUser ) {
-//       return res.status(404).json({ message: "Admin not found" });
-//     }
-
-//     console.log("Stored Hash:", adminUser .password); // Debug log
-//     const isMatch = await bcryptjs.compare(password, adminUser .password);
-//     console.log("Password Match:", isMatch); // Debug log
-
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "The password you entered is incorrect. Please try again." });
-//     }
-
-//     // Update last login time
-//     adminUser .lastLogin = new Date();
-//     await adminUser .save();
-
-//     console.log("Cookies in response:", req.cookies);
-
-//     // Respond with success message and admin details (excluding password)
-//     res.status(200).json({
-//       message: "Login successful",
-//       admin: {
-//         id: adminUser ._id,
-//         name: adminUser .name,
-//         email: adminUser .email,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Login error:", error.message || error);
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// };
-
-
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
