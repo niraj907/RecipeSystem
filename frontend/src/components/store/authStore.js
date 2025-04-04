@@ -376,6 +376,25 @@ fetchAllNotification : async() => {
           }
         },
       
+
+          // Delete a recipe
+          deleteNotification: async (id) => {
+            set({ isLoading: true, error: null }); 
+            try {
+              await axios.delete(`${API_URL}/notifications/${id}`);
+              set((state) => ({
+                notifications: state.notifications.filter((n) => n._id !== id),
+                notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+                isLoading: false
+              }));
+              return { success: true, message: "Notification deleted successfully" };
+            } catch (error) {
+              set({ isLoading: false });
+              return { success: false, message: "Error deleting notification" }; // Fixed message
+            }
+          }
+          
+
     }),
 
 
