@@ -169,6 +169,7 @@ export const useAuthStore = create(
     notifications: [], // Holds the list of notifications
     notificationCount: 0, // Holds the count of unread notifications
       
+    adminRecipes:[],
 
       // Signup function
       signup: async (name, email, password, username, images, country, gender) => {
@@ -208,7 +209,6 @@ export const useAuthStore = create(
             { email, password },
             { withCredentials: true }
           );
-
 console.log("Response Headers: ", response.headers);
 console.log("Login successful:", response.data);
           set({
@@ -376,8 +376,7 @@ fetchAllNotification : async() => {
           }
         },
       
-
-          // Delete a recipe
+          // Delete a deleteNotification
           deleteNotification: async (id) => {
             set({ isLoading: true, error: null }); 
             try {
@@ -390,16 +389,48 @@ fetchAllNotification : async() => {
               return { success: true, message: "Notification deleted successfully" };
             } catch (error) {
               set({ isLoading: false });
-              return { success: false, message: "Error deleting notification" }; // Fixed message
+              return { success: false, message: "Error deleting notification" }; 
             }
-          }
-          
+           },
 
+          
+          fetchAlladminRecipe: async () => {
+            set({ isLoading: true, error: null });
+            try {
+              const response = await axios.get(`${API_URL}/getAlladminRecipe/save`);
+              set({ 
+                adminRecipes: response.data.data, 
+                isLoading: false 
+              });
+            } catch (error) {
+              set({
+                error: error.response?.data?.message || "Error fetching admin recipes",
+                isLoading: false,
+              });
+              throw error;
+            }
+          },
+
+
+          deleteadminRecipe: async (id) => {
+            set({ isLoading: true, error: null });
+            try {
+              const response = await axios.delete(`${API_URL}/deleteadminRecipe/save/${id}`);
+              set((state) => ({
+                adminRecipes: state.adminRecipes.filter((recipe) => recipe._id !== id), 
+                isLoading: false,
+              }));
+              return { success: true, message: response.data.message }; 
+            } catch (error) {
+              set({
+                error: error.response?.data?.message || "Error deleting admin recipe",
+                isLoading: false,
+              });
+              throw error;
+            }
+          },
     }),
 
-
-
-    
     {
       name: "auth-store", // Key for localStorage
       getStorage: () => localStorage, // Persist data in localStorage
