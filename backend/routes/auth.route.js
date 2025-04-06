@@ -58,7 +58,9 @@ import {
   getAllNotifications,
   // getNotifications,
   deleteNotification,
-  markNotificationAsRead
+  markNotificationAsRead,
+  getAlladminRecipe,
+  deleteadminRecipe
 } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
@@ -85,5 +87,6 @@ router.get("/notifications/all", getAllNotifications); // Get all notifications
 //router.get("/notifications/user/:userId", getNotifications); // Changed parameter name for clarity
 router.put("/notifications/mark-read/:notificationId", markNotificationAsRead); // More descriptive path
 router.delete("/notifications/:id", deleteNotification);
-
+router.get("/getAlladminRecipe/save",getAlladminRecipe)
+router.delete("/deleteadminRecipe/save/:id",deleteadminRecipe)
 export default router;

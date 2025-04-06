@@ -11,6 +11,8 @@ import {
   sendResetSuccessEmail,
   sendVerificationEmail,
 } from "../mailtrap/emails.js";
+import {AdminRecipe} from "../models/adminRecipe.model.js";
+import {recipeModel} from "../models/recipe.model.js";
 
 dotenv.config();
 
@@ -557,6 +559,7 @@ export const deleteUserById = async (req, res) => {
   }
 };
 
+
 //addToFavorites
 export const addToFavorites = async (req, res) => {
   try {
@@ -605,7 +608,7 @@ export const addToFavorites = async (req, res) => {
       console.error("🚨 Error: User not found!");
       return res
         .status(404)
-        .json({ success: false, message: "User not found." });
+        .json({ success: false, message: "User  not found." });
     }
 
     // Check if recipe is already in favorites
@@ -622,15 +625,44 @@ export const addToFavorites = async (req, res) => {
     user.favorites.push(recipeId);
     await user.save();
 
-    console.log("✅ Recipe added to favorites successfully!");
+    // Fetch the recipe details
+    const recipe = await recipeModel.findById(recipeId);
+    if (!recipe) {
+      console.error("🚨 Error: Recipe not found!");
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe not found." });
+    }
+
+    // Create AdminRecipe record
+    const adminRecipe = new AdminRecipe({
+      userId: user._id,
+      message: `${user.name} added ${recipe.name} to favorites`,
+      image: recipe.images[0]?.url || user.images[0]?.url,
+    });
+
+    await adminRecipe.save();
+
+    // Prepare response data
+    const responseData = {
+
+      userName: user.name,
+      userImage: user.images[0]?.url,
+      recipeName: recipe.name,
+      recipeImage: recipe.images[0]?.url,
+      timestamp: new Date()
+    };
+
+    console.log("✅ Recipe added to favorites successfully!",  responseData );
     res
       .status(200)
-      .json({ success: true, message: "Recipe added to favorites." });
+      .json({ success: true, message: "Recipe added to favorites.", data: responseData });
   } catch (error) {
     console.error("🚨 Server Error:", error);
     res.status(500).json({ success: false, message: "Server error", error });
   }
 };
+
 
 //removeFromFavorites
 export const removeFromFavorites = async (req, res) => {
@@ -735,3 +767,42 @@ export const getFavorites = async (req, res) => {
 
 
 
+// fetch getAlladminRecipe
+export const getAlladminRecipe = async (req, res) => {
+  try {
+    // Fetch all notifications from the database
+    const adminRecipe = await AdminRecipe.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      data: adminRecipe
+    });
+  } catch (error) {
+    console.error("Error fetching all adminRecipe:", error);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+
+
+//delete recipe
+export const deleteadminRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: "Invalid AdminRecipe ID format." });
+    }
+
+    const result = await AdminRecipe.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ success: false, message: "AdminRecipe not found." });
+    }
+
+    console.log(`Deleted AdminRecipe with ID: ${id}`, result);
+    res.status(200).json({ success: true, message: "Successfully deleted AdminRecipe." });
+  } catch (error) {
+    console.error(`Error deleting AdminRecipe with ID: ${req.params.id}`, error);
+    res.status(500).json({ success: false, message: "Error deleting AdminRecipe.", error: error.message });
+  }
+};
