@@ -13,6 +13,7 @@ import ErrorPage from "./components/ErrorPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import ProtectedRoute from "./ProtectedRoute";
 import RecipePrinter from "./components/RecipePrinter";
+import FavoriteSave from '@/components/admin/Dashboard/FavoriteSave'
 
 // admin
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
@@ -55,6 +56,7 @@ const App = () => {
         <Route path="/recipes/add" element={<><Sidebar/><Header/> <AddRecipe/> </> } />
         <Route path="/recipes/view/:id" element={<><Sidebar/><Header/> <ViewRecipe/> </> } />
         <Route path="/dashboard/maintenance" element={<> <Sidebar/><Header/> <Maintain/>  </> } />
+        <Route path="/dashboard/favorites" element={<> <Sidebar/><Header/> <FavoriteSave/>  </> } />
         <Route path="/forgot-password-admin" element={<><ForgortPasswordAdmin/> </> } />
         <Route path="/reset-password-admin/:token" element={<><ResetPasswordPageAdmin/> </> } />
 

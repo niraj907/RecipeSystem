@@ -108,7 +108,7 @@ const Sidebar = () => {
           </li>
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
-            // onClick={() => navigate("/favorites")}
+            onClick={() => navigate("/dashboard/favorites")}
           >
             <Star /> {!isCollapsed && "Favorite"}
           </li>

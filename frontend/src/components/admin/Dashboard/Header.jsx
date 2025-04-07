@@ -35,6 +35,8 @@ const Header = ({ setSidebarOpen }) => {
     fetchAdmin();
   }, [fetchAdmin]);
 
+  console.log("Notifications: ",notifications)
+
   const handleEdit = () => {
     setSelectedAdmin(admin);
     setIsModalOpen(true);
