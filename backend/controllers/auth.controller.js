@@ -637,7 +637,7 @@ export const addToFavorites = async (req, res) => {
     // Create AdminRecipe record
     const adminRecipe = new AdminRecipe({
       userId: user._id,
-      message: `${user.name} added ${recipe.name} to favorites`,
+      message: `${user.name} added ${recipe.name} to saves`,
       image: recipe.images[0]?.url || user.images[0]?.url,
     });
 

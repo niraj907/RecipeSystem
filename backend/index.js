@@ -9,7 +9,9 @@ import recipeRoutes from './routes/recipe.route.js'
 import authRoutes from './routes/auth.route.js';
 import countRoutes from './routes/count.route.js';
 import userRoutes from "./routes/user.routes.js";
-import adminRoutes from "./routes/admin.routes.js"
+import adminRoutes from "./routes/admin.routes.js";
+import userFeedback from "./routes/feedback.routes.js";
+
 
 dotenv.config();
 
@@ -53,7 +55,7 @@ app.use('/api/a1/auth',authRoutes); // user route
 app.use('/api/a2/auth',adminRoutes); //admin route
 app.use("/api/count",countRoutes);
 app.use("/api/users", userRoutes); // favourite router
-
+app.use("/api/users/message",userFeedback);
 
 
 app.use((req, res, next) => {
