@@ -56,7 +56,7 @@ import {
   updateUserById,
   deleteUserById,
   getAllNotifications,
-  // getNotifications,
+  getNotifications,
   deleteNotification,
   markNotificationAsRead,
   getAlladminRecipe,
@@ -84,7 +84,7 @@ router.delete('/:id', deleteUserById); // delete
 
 // Notification routes - specific routes first
 router.get("/notifications/all", getAllNotifications); // Get all notifications
-//router.get("/notifications/user/:userId", getNotifications); // Changed parameter name for clarity
+router.get("/notifications/user/:userId", getNotifications); // Changed parameter name for clarity
 router.put("/notifications/mark-read/:notificationId", markNotificationAsRead); // More descriptive path
 router.delete("/notifications/:id", deleteNotification);
 router.get("/getAlladminRecipe/save",getAlladminRecipe)

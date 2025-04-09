@@ -50,6 +50,7 @@ export const createFeedback = async (req, res) => {
 
 
 
+
 // Get all feedback for a specific recipe
 export const getRecipeFeedback = async (req, res) => {
   const { recipeId } = req.params;
@@ -61,35 +62,33 @@ export const getRecipeFeedback = async (req, res) => {
       return res.status(404).json({ message: "Recipe not found" });
     }
 
-    // Fetch all feedback for the recipe
-    const feedback = await FeedbackMessage.find({ recipeId }).populate("userId", "name images");
+    // Find all feedback messages for the recipe
+    const feedbackMessages = await FeedbackMessage.find({ recipeId });
 
-    // Return feedback
-    res.status(200).json({ feedback });
+    // Return the feedback messages
+    res.status(200).json({ recipeId, feedbackMessages });
   } catch (error) {
     console.error("Error fetching feedback:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
 
 
-
+// Get total rating count for a specific recipe
 export const getRecipeRatingCount = async (req, res) => {
-    const { recipeId } = req.params;
-  
-    try {
-      // Aggregate to calculate the total rating count
-      const result = await FeedbackMessage.aggregate([
-        { $match: { recipeId: mongoose.Types.ObjectId(recipeId) } }, // Match feedback for the specific recipe
-        { $group: { _id: null, totalRating: { $sum: "$rating" } } }, // Sum all ratings
-      ]);
-  
-      // If no feedback exists, return 0
-      const totalRating = result.length > 0 ? result[0].totalRating : 0;
-  
-      res.status(200).json({ recipeId, totalRating });
-    } catch (error) {
-      console.error("Error calculating rating count:", error);
-      res.status(500).json({ message: "Internal server error", error: error.message });
+  const { recipeId } = req.params;
+
+  try {
+    // Check if the recipe exists
+    const recipe = await recipeModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
     }
-  };
+
+    // Return the ratingCount
+    res.status(200).json({ recipeId, totalRating: recipe.ratingCount });
+  } catch (error) {
+    console.error("Error calculating rating count:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};

@@ -23,6 +23,7 @@ const recipeSchema = new Schema({
   hindiPublishedName: { type: String, required: true },
   english: { type: String, required: true },
   englishPublishedName: { type: String, required: true },
+  ratingCount: { type: Number, default: 0 }, 
   createdAt: { type: Date, default: () => Date.now() },
 });
 

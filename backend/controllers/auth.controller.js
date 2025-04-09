@@ -195,7 +195,7 @@ export const getNotifications = async (req, res) => {
     }
 
     // Fetch notifications for the user
-    const notifications = await Notification.find({ userId });
+    const notifications = await Notification.find({ userId }).sort({ createdAt: -1 });
 
     // Fetch the user's notification count
     const user = await User.findById(userId);
