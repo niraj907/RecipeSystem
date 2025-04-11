@@ -103,7 +103,7 @@ const AddRecipe = () => {
       images,
     };
     console.log("Images before submitting:", images);
-
+console.log("RecipeData: ", recipeData);
     setIsSubmitting(true);
     try {
     const response = await createRecipe(recipeData);

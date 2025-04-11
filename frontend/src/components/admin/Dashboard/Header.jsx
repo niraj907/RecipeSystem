@@ -35,7 +35,7 @@ const Header = ({ setSidebarOpen }) => {
     fetchAdmin();
   }, [fetchAdmin]);
 
-  console.log("Notifications: ",notifications)
+
 
   const handleEdit = () => {
     setSelectedAdmin(admin);
@@ -87,6 +87,15 @@ const Header = ({ setSidebarOpen }) => {
       toast.error("Error deleting notification.");
     }
   };
+
+ let notificationCounts = 0 ;
+
+  const notificationArrays = notifications.map((notification)=>{
+      if( notification.isRead === false){
+        notificationCounts++;
+      }
+  })
+
   
 
   return (
@@ -103,9 +112,9 @@ const Header = ({ setSidebarOpen }) => {
         <div className="relative" ref={notificationRef}>
           <div onClick={toggleNotificationDropdown} className="cursor-pointer relative">
             <BellIcon size={26} />
-            {notificationCount > 0 && (
+            {notifications.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {notificationCount}
+                {notificationCounts}
               </span>
             )}
           </div>

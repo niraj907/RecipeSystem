@@ -67,11 +67,11 @@ const { error, isLoading , verifyEmail} = useAuthStore();
 
 
   // auto submit when all field are filled
-  useEffect(()=>{
-    if(code.every(digit => digit !== "")){
-      handleSubmit(new Event('submit'));
-    }
-  },[code]);
+  // useEffect(()=>{
+  //   if(code.every(digit => digit !== "")){
+  //     handleSubmit(new Event('submit'));
+  //   }
+  // },[code]);
 
   return (
     <div className="flex items-center w-screen h-screen justify-center px-[1rem]">

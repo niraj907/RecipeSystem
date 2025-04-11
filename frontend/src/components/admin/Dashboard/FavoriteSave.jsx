@@ -87,7 +87,7 @@ const FavoriteSave = () => {
                   <img
                     src={recipe.image || '/default-image.jpg'}
                     alt="Recipe"
-                    className="w-24 h-24 rounded-md object-cover"
+                    className="w-12 h-12 rounded-md object-cover"
                   />
                 </td>
                 <td className="px-6 py-3">{recipe.message}</td>

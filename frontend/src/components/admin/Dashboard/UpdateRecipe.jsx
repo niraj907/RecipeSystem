@@ -51,10 +51,14 @@ const UpdateRecipe = ({ recipe, onClose }) => {
     }
   };
 
+
   // In UpdateRecipe component's handleUpdateRecipe function
 const handleUpdateRecipe = async () => {
   try {
     const updatedRecipe = { ...formData };
+    console.log("updatedRecipe ingredients: ", updatedRecipe.ingredients);
+    console.log("Type of ingredients: ", typeof updatedRecipe.ingredients);
+    
     if (image) {
       updatedRecipe.images = [image]; // Send as array under 'images' key
     }
