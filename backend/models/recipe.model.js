@@ -10,8 +10,6 @@ const recipeSchema = new Schema({
   name: {type: String, required: true,},
   category: { type: String, required: true, enum: ['breakfast', 'lunch','dinner','snacks'] },
   description: { type: String, required: true, },
-  // ingredients: { type: Array, required: true, },
-  // instructions: { type: Array, required: true,},
   ingredients: { type: [String], required: true },
   instructions: { type: [String], required: true },
   tot_time: { type: String, required: true },

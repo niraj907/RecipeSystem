@@ -60,6 +60,7 @@ export const signup = async (req, res) => {
       "image/jpg",
       "image/webp",
     ];
+    
     if (!allowedExtensions.includes(imageFile.mimetype)) {
       console.log("Validation Error: Invalid file type");
       return res.status(400).json({ success: false, msg: "Invalid file type" });
@@ -154,7 +155,6 @@ export const getAllNotifications = async (req, res) => {
   }
 };
 
-
 export const markNotificationAsRead = async (req, res) => {
   const { notificationId } = req.params;
   try {
@@ -182,6 +182,9 @@ export const markNotificationAsRead = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
+
+
+
 
 
 

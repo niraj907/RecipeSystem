@@ -16,12 +16,35 @@ export const addRecipe = async (req, res) => {
   try {
     const { menuId, name , category , description , ingredients , instructions,tot_time ,prep_time, cook_time, nepal, nepalPublishedName,hindi, hindiPublishedName, english,englishPublishedName} = req.body;
 
-    // field all required 
-    if (!menuId || !name || !category || !description || !ingredients || !instructions || !tot_time || !prep_time ||  !cook_time || !nepal || !nepalPublishedName ||!hindi || !hindiPublishedName || !english || !englishPublishedName) {
-    //  console.log('All fields are required');
+    // List of required fields
+    const requiredFields = [
+      'menuId', 
+      'name', 
+      'category', 
+      'description', 
+      'ingredients', 
+      'instructions', 
+      'tot_time', 
+      'prep_time', 
+      'cook_time', 
+      'nepal', 
+      'nepalPublishedName', 
+      'hindi', 
+      'hindiPublishedName', 
+      'english', 
+      'englishPublishedName'
+    ];
 
-      return res.status(400).json({ success: false, msg: "All fields are required" });
+    // Check for missing fields
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+
+    if (missingFields.length > 0) {
+      return res.status(400).json({ 
+        success: false, 
+        msg: "Missing fields: " + missingFields.join(", ") 
+      });
     }
+
 
 
     // Validate if files are uploaded
@@ -96,7 +119,7 @@ export const addRecipe = async (req, res) => {
 export const getAllRecipes = async (req, res) => { 
   try {
    // console.log("Fetching all recipes");
-    const recipes = await recipeModel.find();
+    const recipes = await recipeModel.find().sort({ createdAt: -1 });
   //  console.log(recipes);
     return res.status(200).json({ success: true, msg: "Fetched all recipes successfully", data: recipes });
 } catch (error) {
