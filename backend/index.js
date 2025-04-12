@@ -11,6 +11,7 @@ import countRoutes from './routes/count.route.js';
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import userFeedback from "./routes/feedback.routes.js";
+import replyRoutes from "./routes/reply.router.js";
 
 
 dotenv.config();
@@ -56,7 +57,7 @@ app.use('/api/a2/auth',adminRoutes); //admin route
 app.use("/api/count",countRoutes);
 app.use("/api/users", userRoutes); // favourite router
 app.use("/api/users/message",userFeedback);
-
+app.use("/api/replyComment",replyRoutes)
 
 app.use((req, res, next) => {
   console.log("Received request body:", req.body);

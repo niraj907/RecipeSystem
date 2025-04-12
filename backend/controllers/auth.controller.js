@@ -60,7 +60,7 @@ export const signup = async (req, res) => {
       "image/jpg",
       "image/webp",
     ];
-    
+
     if (!allowedExtensions.includes(imageFile.mimetype)) {
       console.log("Validation Error: Invalid file type");
       return res.status(400).json({ success: false, msg: "Invalid file type" });
@@ -116,6 +116,7 @@ const notification = new Notification({
   message: `${name} have successfully signed up.`,
   image: user.images[0].url, // Use the user's profile image
 });
+
 await notification.save();
 console.log("Notification created:", notification);
 

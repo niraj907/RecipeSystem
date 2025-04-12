@@ -71,6 +71,27 @@ export const getRecipeFeedback = async (req, res) => {
   }
 };
 
+export const editFeedback = async (req, res) => {
+  try {
+    const updatedData = { ...req.body };
+    const updatedFeedback = await FeedbackMessage.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+    if (!updatedFeedback) return res.status(404).json({ success: false, msg: "Feedback not found" });
+    return res.status(200).json({ success: true, msg: "Feedback updated successfully", data: updatedFeedback });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Error updating feedback", error: error.message });
+  }
+};
+
+export const deleteFeedback = async (req, res) => {
+  try {
+    const result = await FeedbackMessage.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(404).json({ success: false, msg: "Feedback not found" });
+    res.status(200).json({ success: true, msg: "Successfully deleted Feedback" });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: "Error deleting feedback", error: error.message });
+  }
+};
+
 
 // Get total rating count for a specific recipe
 export const getRecipeRatingCount = async (req, res) => {
