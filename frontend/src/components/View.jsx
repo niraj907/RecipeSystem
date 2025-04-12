@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Share from "./Share";
 import { GoAlertFill } from "react-icons/go";
 import { IoPrintSharp } from "react-icons/io5";
+import Feedback from "./Feedback";
 const View = () => {
   const { id } = useParams();
   const { recipes, fetchRecipeById } = useRecipeStore();
@@ -109,6 +110,7 @@ const View = () => {
 
 <VideoCategory recipe={recipe} />
 
+<Feedback recipeId={recipe._id} />
           </div>
         </div>
       </div>

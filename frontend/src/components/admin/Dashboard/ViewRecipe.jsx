@@ -5,6 +5,7 @@ import { useRecipeStore } from "@/components/store/recipeStore";
 import { GoAlertFill } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import Share from "@/components/Share";
+import Feedback from "@/components/Feedback";
 
 const ViewRecipe = () => {
   const { id } = useParams();
@@ -72,6 +73,8 @@ const ViewRecipe = () => {
 
         {/* Video Category */}
         <VideoCategory recipe={recipe} />
+
+       
       </div>
     </div>
   );

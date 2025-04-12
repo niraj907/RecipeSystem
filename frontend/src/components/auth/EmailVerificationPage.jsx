@@ -46,7 +46,6 @@ const { error, isLoading , verifyEmail} = useAuthStore();
   };
 
 
-
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Check if all the fields are filled

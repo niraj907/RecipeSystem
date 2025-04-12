@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { useAuthStore } from "@/components/store/authStore";
 import { useFavoriteStore } from "@/components/store/favoriteStore";
+import { IoStar } from "react-icons/io5";
 
 const Recipe = () => {
   const [searchItem, setSearchItem] = useState("");
@@ -18,6 +19,7 @@ const Recipe = () => {
   const { favorites, addToFavorites, removeFromFavorites, fetchFavorites } = useFavoriteStore();
   const { isAuthenticated, user } = useAuthStore();
 
+  console.log(recipes)
   // Fetch recipes & favorites on login/logout change
   useEffect(() => {
     const fetchData = async () => {
@@ -153,12 +155,32 @@ const Recipe = () => {
                       </button>
                     )}
                   </div>
+
+
+                  <div className="flex justify-between items-center mt-2">
+  <div className="flex items-center">
+    {[...Array(5)].map((_, i) => (
+      <IoStar 
+        key={i}
+        className="text-orange-400 mr-1"
+      />
+    ))}
+  </div>
+  <p className="text-sm text-gray-500">
+    {recipe.ratingCount || 0} Ratings
+  </p>
+</div>
+
                   <div className="flex justify-between items-center mt-2">
                     <p className="text-sm text-gray-500">{recipe.category}</p>
                     <p className="text-sm text-gray-500 mt-2 flex items-center">
                       <LuAlarmClockCheck className="mr-1" /> {recipe.tot_time || "N/A"}
                     </p>
+      
                   </div>
+                  
+
+
                 </div>
               </div>
             ))

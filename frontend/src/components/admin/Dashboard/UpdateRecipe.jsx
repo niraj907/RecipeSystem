@@ -56,7 +56,7 @@ const UpdateRecipe = ({ recipe, onClose }) => {
 const handleUpdateRecipe = async () => {
   try {
     const updatedRecipe = { ...formData };
-    console.log("updatedRecipe ingredients: ", updatedRecipe.ingredients);
+       console.log("updatedRecipe ingredients: ", updatedRecipe.ingredients);
     console.log("Type of ingredients: ", typeof updatedRecipe.ingredients);
     
     if (image) {

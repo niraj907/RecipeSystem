@@ -28,6 +28,13 @@ console.log(recipes)
     fetchAllRecipes(); // Fetch recipes when component mounts
   }, []);
 
+
+// Check first recipe's ingredients type
+console.log("Type of ingredients:", typeof recipes[0]?.ingredients);
+console.log("Ingredients content:", recipes[0]?.ingredients);
+console.log("name content:", recipes[0]?.name);
+
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
