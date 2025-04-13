@@ -1,5 +1,5 @@
 import express from "express";
-import { createFeedback, getRecipeFeedback, getRecipeRatingCount , editFeedback, deleteFeedback} from "../controllers/feedback.controller.js";
+import { createFeedback, getRecipeFeedback, getRecipeRatingCount , editFeedback, deleteFeedback, likeFeedback, unlikeFeedback} from "../controllers/feedback.controller.js";
 
 const router = express.Router();
 
@@ -14,5 +14,9 @@ router.get("/rating-count/:recipeId", getRecipeRatingCount);
 
 router.put("/feedback/:id", editFeedback); // Edit feedback
 router.delete("/feedback/:id", deleteFeedback); // Delete feedback
+
+router.post("/feedback/like/:id", likeFeedback); // Like feedback
+router.post("/feedback/unlike/:id", unlikeFeedback); // Unlike feedback
+
 
 export default router;
