@@ -3,6 +3,7 @@ import { MdOutlineStarBorder, MdOutlineStar } from "react-icons/md";
 import Comment from './Comment';
 import { useFeedbackStore } from "@/components/store/feedbackStore";
 import { useAuthStore } from "@/components/store/authStore";
+import { toast } from "sonner";
 
 const Feedback = ({ recipeId }) => {
   const [rating, setRating] = useState(0);
@@ -32,17 +33,17 @@ const Feedback = ({ recipeId }) => {
 
   const handleSubmit = async () => {
     if (!recipeId) {
-      alert("Recipe ID is missing");
+       toast.error("Recipe ID is missing");
       return;
     }
 
     if (!user) {
-      alert("Please login to submit feedback");
+       toast.error("Please login to submit feedback");
       return;
     }
 
     if (rating === 0) {
-      alert("Please select a rating");
+       toast.error("Please select a rating");
       return;
     }
 
@@ -56,9 +57,12 @@ const Feedback = ({ recipeId }) => {
 
       if (editingId) {
         await editFeedback(editingId, feedbackData);
+        toast.success("Review has been successfully updated!");
         setEditingId(null);
       } else {
         await createFeedback(feedbackData);
+        toast.success("Your review has been submitted successfully!");
+
       }
 
       setRating(0);
@@ -66,7 +70,8 @@ const Feedback = ({ recipeId }) => {
       setDescription('');
     } catch (err) {
       console.error("Feedback submission failed:", err);
-      alert(err.response?.data?.message || "Failed to submit feedback");
+      toast.error(err.response?.data?.message || 
+        (editingId ? "Failed to update review" : "Failed to submit review"));
     }
   };
 
@@ -74,7 +79,6 @@ const Feedback = ({ recipeId }) => {
     setEditingId(item._id);
     setRating(item.rating);
     setDescription(item.comment);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const totalReviews = feedback.length;

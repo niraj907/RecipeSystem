@@ -3,28 +3,69 @@ import { FiMessageCircle } from "react-icons/fi";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { useFeedbackStore } from "@/components/store/feedbackStore";
+import DeleteComment from './DeleteComment';
+import { toast } from "sonner";
+
+const formatRelativeTime = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  if (diffInSeconds < 60) {
+    return 'just now';
+  }
+  
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} min ago`;
+  }
+  
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+  }
+  
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 7) {
+    return `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+  }
+  
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
 
 const Comment = ({ comment, currentUserId, onEdit }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(comment.likes || 0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [displayTime, setDisplayTime] = useState(formatRelativeTime(comment.createdAt));
   const dropdownRef = useRef(null);
-  
+
   const { deleteFeedback } = useFeedbackStore();
 
-  const toggleActionDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayTime(formatRelativeTime(comment.createdAt));
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, [comment.createdAt]);
+
+  const toggleActionDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
-      try {
-        await deleteFeedback(comment._id);
-      } catch (error) {
-        console.error("Failed to delete comment:", error);
-      }
+    try {
+      await deleteFeedback(comment._id);
+      toast.success("Comment deleted successfully.");
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+      toast.error("Failed to delete comment.");
     }
-    setDropdownOpen(false);
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -34,18 +75,8 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const formattedTime = new Date(comment.createdAt).toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -60,23 +91,25 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
         <img
           className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 flex-shrink-0"
           src={comment.image}
-          alt="User profile"
+          alt={`${comment.name}'s profile`}
         />
 
         <div className='flex-1'>
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-start'>
             <div>
               <h3 className='text-lg font-semibold text-gray-800'>{comment.name}</h3>
               <div className="flex mt-1">
-                {[...Array(comment.rating)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-lg">★</span>
-                ))}
-                {[...Array(5 - comment.rating)].map((_, i) => (
-                  <span key={i + comment.rating} className="text-gray-300 text-lg">★</span>
+                {[...Array(5)].map((_, i) => (
+                  <span 
+                    key={i} 
+                    className={i < comment.rating ? "text-yellow-400" : "text-gray-300"}
+                  >
+                    ★
+                  </span>
                 ))}
               </div>
             </div>
-            <p className='text-sm text-gray-500'>{formattedTime}</p>
+            <p className='text-sm text-gray-500'>{displayTime}</p>
           </div>
 
           <p className='text-gray-700 mt-3 mb-4'>{comment.comment}</p>
@@ -107,6 +140,7 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
                 <button
                   className="flex items-center gap-1 hover:text-gray-700 transition-colors"
                   onClick={toggleActionDropdown}
+                  aria-label="Comment actions"
                 >
                   <BsThreeDots className="text-lg" />
                 </button>
@@ -118,13 +152,16 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
                         onEdit();
                         setDropdownOpen(false);
                       }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-500 hover:text-white cursor-pointer rounded-t-md"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-500 hover:text-white transition-colors"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={handleDelete}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white cursor-pointer rounded-b-md"
+                      onClick={() => {
+                        setShowModal(true);
+                        setDropdownOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white transition-colors"
                     >
                       Delete
                     </button>
@@ -135,6 +172,13 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <DeleteComment 
+          onClose={() => setShowModal(false)} 
+          onConfirm={handleDelete} 
+        />
+      )}
     </div>
   );
 };

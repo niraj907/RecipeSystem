@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { IoPrintSharp } from "react-icons/io5";
 import logo from "@/assets/logo.png";
+import { MdOutlineArrowCircleLeft } from "react-icons/md";
 
 const RecipePrinter = () => {
   const { id } = useParams();
   const { recipes, fetchRecipeById } = useRecipeStore();
 
   useEffect(() => {
-    fetchRecipeById(id);
+    if (id) {
+      fetchRecipeById(id);
+    }
   }, [id, fetchRecipeById]);
 
   const recipe = recipes.find((r) => r._id === id);
@@ -24,14 +27,18 @@ const RecipePrinter = () => {
 
   return (
     <div className="flex flex-col items-center justify-center py-10 px-4 bg-gray-100 min-h-screen">
+      <Link to={`/view/${id}`} className="self-start mb-4">
+        <MdOutlineArrowCircleLeft className="text-4xl cursor-pointer" />
+      </Link>
+
       <button
         onClick={handlePrint}
-        className="bg-[#F67A24] text-white px-5 py-2 flex items-center rounded-md font-semibold hover:bg-orange-300 transition"
+        className="bg-[#F67A24] text-white px-5 py-2 flex items-center rounded-md font-semibold hover:bg-orange-300 transition mb-6"
       >
         <IoPrintSharp className="mr-2 text-xl" /> Print
       </button>
 
-      <div className="bg-white p-6 mt-5 rounded-lg shadow-md w-full md:w-[500px] text-gray-800">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-[500px] text-gray-800 print:shadow-none">
         <img src={logo} className="w-20 mx-auto" alt="TasteTrack Logo" />
         <h1 className="text-2xl md:text-3xl font-bold my-2">{recipe.name}</h1>
         <p className="text-gray-600 text-sm md:text-base text-justify">{recipe.description}</p>
