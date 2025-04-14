@@ -82,6 +82,39 @@ export const useFeedbackStore = create((set) => ({
     }
   },
 
+
+  likeFeedback: async (feedbackId, userId) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.post(`${API_URL}/feedback/like/${feedbackId}`, { userId });
+      set((state) => ({
+        feedback: state.feedback.map((item) =>
+          item._id === feedbackId ? response.data.data : item
+        ),
+        loading: false,
+      }));
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  unlikeFeedback: async (feedbackId, userId) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.post(`${API_URL}/feedback/unlike/${feedbackId}`, { userId });
+      set((state) => ({
+        feedback: state.feedback.map((item) =>
+          item._id === feedbackId ? response.data.data : item
+        ),
+        loading: false,
+      }));
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
   // Reset store
   resetFeedback: () => set({ feedback: [], loading: false, error: null }),
 }));

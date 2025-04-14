@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { FiMessageCircle } from "react-icons/fi";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { useFeedbackStore } from "@/components/store/feedbackStore";
 import DeleteComment from './DeleteComment';
 import { toast } from "sonner";
+import Reply from './Reply';
 
 const formatRelativeTime = (dateString) => {
   const date = new Date(dateString);
@@ -38,14 +38,16 @@ const formatRelativeTime = (dateString) => {
 };
 
 const Comment = ({ comment, currentUserId, onEdit }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(comment.likes || 0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [displayTime, setDisplayTime] = useState(formatRelativeTime(comment.createdAt));
   const dropdownRef = useRef(null);
 
-  const { deleteFeedback } = useFeedbackStore();
+  const { deleteFeedback, likeFeedback, unlikeFeedback } = useFeedbackStore();
+
+   // Derived state from comment data
+   const isLiked = comment.likedBy.includes(currentUserId);
+   const likeCount = comment.likes;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,9 +80,21 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+  const handleLike = async () => {
+    if (!currentUserId) {
+      toast.error("Please login to like comments");
+      return;
+    }
+
+    try {
+      if (isLiked) {
+        await unlikeFeedback(comment._id, currentUserId);
+      } else {
+        await likeFeedback(comment._id, currentUserId);
+      }
+    } catch (error) {
+      toast.error("Failed to update like");
+    }
   };
 
   const isCurrentUser = currentUserId === comment.userId;
@@ -115,25 +129,19 @@ const Comment = ({ comment, currentUserId, onEdit }) => {
           <p className='text-gray-700 mt-3 mb-4'>{comment.comment}</p>
 
           <div className='flex items-center gap-6 text-gray-500'>
-            <button
-              className="flex items-center gap-1 hover:text-orange-500 transition-colors"
-              onClick={() => console.log('Reply clicked')}
-            >
-              <FiMessageCircle className="text-lg" />
-              <span className="text-sm">Reply</span>
-            </button>
+          <Reply commentId={comment._id} />
 
-            <button
-              className="flex items-center gap-1 hover:text-orange-500 transition-colors"
-              onClick={handleLike}
-            >
-              {isLiked ? (
-                <FaHeart className="text-lg text-orange-500" />
-              ) : (
-                <FaRegHeart className="text-lg" />
-              )}
-              <span className="text-sm">{likeCount > 0 ? likeCount : ''}</span>
-            </button>
+ <button
+        className="flex items-center gap-1 hover:text-orange-500 transition-colors"
+        onClick={handleLike}
+      >
+        {isLiked ? (
+          <FaHeart className="text-lg text-orange-500" />
+        ) : (
+          <FaRegHeart className="text-lg" />
+        )}
+        <span className="text-sm">{likeCount > 0 ? likeCount : ''}</span>
+      </button>
 
             {isCurrentUser && (
               <div className="relative" ref={dropdownRef}>

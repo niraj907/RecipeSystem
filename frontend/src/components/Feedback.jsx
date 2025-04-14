@@ -17,7 +17,7 @@ const Feedback = ({ recipeId }) => {
     createFeedback, 
     editFeedback,
     fetchFeedback, 
-    loading, 
+    loading,
     error 
   } = useFeedbackStore();
 
