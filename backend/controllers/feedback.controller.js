@@ -113,28 +113,85 @@ export const getRecipeRatingCount = async (req, res) => {
 };
 
 
+// // Like a feedback comment
+// export const likeFeedback = async (req, res) => {
+//   try {
+//     const { userId } = req.body; // Get userId from the request body
+//     const feedbackId = req.params.id; // Get feedbackId from the URL
+
+//     const feedback = await FeedbackMessage.findById(feedbackId);
+//     if (!feedback) {
+//       return res.status(404).json({ success: false, msg: "Feedback not found" });
+//     }
+
+//     // Check if the user has already liked the comment
+//     if (feedback.likedBy.includes(userId)) {
+//       return res.status(400).json({ success: false, msg: "You have already liked this comment" });
+//     }
+
+//     // Add the user to the likedBy array and increment likes
+//     feedback.likedBy.push(userId);
+//     feedback.likes += 1;
+//     await feedback.save();
+
+//     res.status(200).json({ success: true, msg: "Feedback liked successfully", data: feedback });
+//   } catch (error) {
+//     res.status(500).json({ success: false, msg: "Error liking feedback", error: error.message });
+//   }
+// };
+
+// // Unlike a feedback comment
+// export const unlikeFeedback = async (req, res) => {
+//   try {
+//     const { userId } = req.body; // Get userId from the request body
+//     const feedbackId = req.params.id; // Get feedbackId from the URL
+
+//     const feedback = await FeedbackMessage.findById(feedbackId);
+//     if (!feedback) {
+//       return res.status(404).json({ success: false, msg: "Feedback not found" });
+//     }
+
+//     // Check if the user has liked the comment
+//     if (!feedback.likedBy.includes(userId)) {
+//       return res.status(400).json({ success: false, msg: "You have not liked this comment" });
+//     }
+
+//     // Remove the user from the likedBy array and decrement likes
+//     feedback.likedBy = feedback.likedBy.filter(id => id.toString() !== userId);
+//     feedback.likes -= 1;
+//     await feedback.save();
+
+//     res.status(200).json({ success: true, msg: "Feedback unliked successfully", data: feedback });
+//   } catch (error) {
+//     res.status(500).json({ success: false, msg: "Error unliking feedback", error: error.message });
+//   }
+// };
+
+
 // Like a feedback comment
 export const likeFeedback = async (req, res) => {
   try {
-    const { userId } = req.body; // Get userId from the request body
-    const feedbackId = req.params.id; // Get feedbackId from the URL
+    const { userId } = req.body;
+    const feedbackId = req.params.id;
 
     const feedback = await FeedbackMessage.findById(feedbackId);
     if (!feedback) {
       return res.status(404).json({ success: false, msg: "Feedback not found" });
     }
 
-    // Check if the user has already liked the comment
     if (feedback.likedBy.includes(userId)) {
-      return res.status(400).json({ success: false, msg: "You have already liked this comment" });
+      return res.status(400).json({ success: false, msg: "Already liked" });
     }
 
-    // Add the user to the likedBy array and increment likes
     feedback.likedBy.push(userId);
-    feedback.likes += 1;
+    feedback.likes = feedback.likedBy.length; // Update likes count based on array length
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback liked successfully", data: feedback });
+    res.status(200).json({ 
+      success: true, 
+      msg: "Feedback liked successfully", 
+      data: feedback 
+    });
   } catch (error) {
     res.status(500).json({ success: false, msg: "Error liking feedback", error: error.message });
   }
@@ -143,25 +200,27 @@ export const likeFeedback = async (req, res) => {
 // Unlike a feedback comment
 export const unlikeFeedback = async (req, res) => {
   try {
-    const { userId } = req.body; // Get userId from the request body
-    const feedbackId = req.params.id; // Get feedbackId from the URL
+    const { userId } = req.body;
+    const feedbackId = req.params.id;
 
     const feedback = await FeedbackMessage.findById(feedbackId);
     if (!feedback) {
       return res.status(404).json({ success: false, msg: "Feedback not found" });
     }
 
-    // Check if the user has liked the comment
     if (!feedback.likedBy.includes(userId)) {
-      return res.status(400).json({ success: false, msg: "You have not liked this comment" });
+      return res.status(400).json({ success: false, msg: "Not yet liked" });
     }
 
-    // Remove the user from the likedBy array and decrement likes
     feedback.likedBy = feedback.likedBy.filter(id => id.toString() !== userId);
-    feedback.likes -= 1;
+    feedback.likes = feedback.likedBy.length; // Update likes count based on array length
     await feedback.save();
 
-    res.status(200).json({ success: true, msg: "Feedback unliked successfully", data: feedback });
+    res.status(200).json({ 
+      success: true, 
+      msg: "Feedback unliked successfully", 
+      data: feedback 
+    });
   } catch (error) {
     res.status(500).json({ success: false, msg: "Error unliking feedback", error: error.message });
   }
