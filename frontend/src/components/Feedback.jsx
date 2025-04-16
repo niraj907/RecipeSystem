@@ -4,6 +4,7 @@ import Comment from './Comment';
 import { useFeedbackStore } from "@/components/store/feedbackStore";
 import { useAuthStore } from "@/components/store/authStore";
 import { toast } from "sonner";
+import { useReplyStore } from "@/components/store/replyStore";
 
 const Feedback = ({ recipeId }) => {
   const [rating, setRating] = useState(0);
@@ -22,6 +23,7 @@ const Feedback = ({ recipeId }) => {
   } = useFeedbackStore();
 
  
+  const { createReply,fetchReplies } = useReplyStore();
 
   useEffect(() => {
     if (!recipeId) {
@@ -83,6 +85,24 @@ const Feedback = ({ recipeId }) => {
 
   const totalReviews = feedback.length;
   const averageRating = feedback.reduce((sum, item) => sum + item.rating, 0) / totalReviews || 0;
+
+  const handleReplySubmit = async (feedbackId, replyText) => {
+    if (!user) {
+      toast.error("Please login to reply");
+      return;
+    }
+    try {
+      await createReply({
+        feedbackId,
+        recipeId,
+        userId: user._id,
+        comment: replyText
+      });
+      toast.success("Reply added successfully!");
+    } catch (error) {
+      toast.error(error.message || "Failed to add reply");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -174,12 +194,13 @@ const Feedback = ({ recipeId }) => {
 
       {/* Feedback List */}
       {feedback.map((item) => (
-        <Comment
-          key={item._id}
-          comment={item}
-          currentUserId={user?._id}
-          onEdit={() => handleEdit(item)}
-        />
+   <Comment
+   key={item._id}
+   comment={item}
+   currentUserId={user?._id}
+   onEdit={() => handleEdit(item)}
+   onReplySubmit={handleReplySubmit}
+ />
       ))}
     </div>
   );
