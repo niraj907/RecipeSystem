@@ -8,8 +8,8 @@ const replySchema = new mongoose.Schema(
     name: { type: String, required: true },
     image: { type: String, required: true }, 
     comment: { type: String, required: true },
-       likes: { type: Number, default: 0 }, // Number of likes
-        likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Users who liked the comment
+       likes: { type: Number, default: 0 },
+        likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], 
   },
   { timestamps: true } 
 );

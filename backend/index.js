@@ -57,7 +57,7 @@ app.use('/api/a2/auth',adminRoutes); //admin route
 app.use("/api/count",countRoutes);
 app.use("/api/users", userRoutes); // favourite router
 app.use("/api/users/message",userFeedback);
-app.use("/api/replyComment",replyRoutes)
+app.use("/api/reply",replyRoutes)
 
 app.use((req, res, next) => {
   console.log("Received request body:", req.body);
