@@ -43,7 +43,6 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
     deleteReply, 
     likeReply, 
     unlikeReply, 
-  
   } = useReplyStore();
 
   const isLiked = comment.likedBy?.includes(currentUserId) || false;
@@ -281,21 +280,26 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
                       </div>
                       <p className='text-gray-600 text-sm mt-1'>{reply.comment}</p>
 
-                      
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-4 mt-2">
+                        <button
+                          className="flex items-center gap-1 text-gray-500 hover:text-orange-500 text-xs"
+                          onClick={() => currentUserId ? setIsReplying(!isReplying) : toast.error("Please login to reply")}
+                        >
+                          <FiMessageCircle className="text-sm" />
+                          <span>Reply</span>
+                        </button>
+
                         <button
                           onClick={() => handleReplyLike(reply._id)}
-                          className="flex items-center gap-1 text-gray-500 hover:text-orange-500"
+                          className="flex items-center gap-1 text-gray-500 hover:text-orange-500 text-xs"
                           disabled={!currentUserId}
                         >
                           {isReplyLiked ? (
-                            <FaHeart className="text-orange-500" />
+                            <FaHeart className="text-orange-500 text-sm" />
                           ) : (
-                            <FaRegHeart />
+                            <FaRegHeart className="text-sm" />
                           )}
-                          <span className="text-xs">
-                            {replyLikeCount > 0 ? replyLikeCount : ''}
-                          </span>
+                          <span>{replyLikeCount > 0 ? replyLikeCount : ''}</span>
                         </button>
                       </div>
                     </div>
@@ -306,8 +310,6 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
           )}
         </div>
       </div>
-
-   
     </div>
   );
 };

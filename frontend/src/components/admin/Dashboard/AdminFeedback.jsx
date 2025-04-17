@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HiDotsHorizontal } from "react-icons/hi";
+import { FiFilter } from "react-icons/fi";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -11,32 +11,41 @@ import {
 } from "@/components/ui/pagination";
 import { useFeedbackStore } from "@/components/store/feedbackStore";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const AdminFeedback = () => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
-  const { 
-    feedback, 
-    fetchAllFeedback, 
+  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [appliedRatings, setAppliedRatings] = useState([]);
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
+  const {
+    feedback,
+    fetchAllFeedback,
     deleteFeedback,
     loading,
-    error 
+    error,
   } = useFeedbackStore();
-  console.log(fetchAllFeedback)
-  const dropdownRef = useRef(null);
 
-  // Pagination state
+  const dropdownRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchFeedbackData = async () => {
       try {
         await fetchAllFeedback();
       } catch (error) {
-        console.error("Error fetching admin Favourite Save:", error);
+        console.error("Error fetching feedback:", error);
       }
     };
-    fetchRecipes();
+    fetchFeedbackData();
   }, [fetchAllFeedback]);
 
   const toggleActionDropdown = (id) => {
@@ -46,11 +55,11 @@ const AdminFeedback = () => {
   const handleDelete = async (id) => {
     try {
       await deleteFeedback(id);
-      toast.success("Deleted successfully Favourite Save");
+      toast.success("Deleted successfully");
       setDropdownOpen(null);
     } catch (error) {
-      toast.error("Error deleting Favourite Save.");
-      console.error("Error deleting Favourite Save:", error);
+      toast.error("Error deleting feedback.");
+      console.error("Error deleting:", error);
     }
   };
 
@@ -60,27 +69,100 @@ const AdminFeedback = () => {
         setDropdownOpen(null);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  // Pagination logic
-  const totalPages = Math.ceil(feedback.length / itemsPerPage);
-  const paginatedData = feedback.slice(
+  const handleRatingChange = (star) => {
+    setSelectedRatings(prev =>
+      prev.includes(star)
+        ? prev.filter(s => s !== star)
+        : [...prev, star]
+    );
+  };
+
+  const filteredFeedback = feedback.filter((item) => {
+    if (appliedRatings.length === 0) return true;
+    return appliedRatings.some(r => item.rating >= r && item.rating < r + 1);
+  });
+
+  const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
+  const paginatedData = filteredFeedback.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedRatings]);
+
   return (
     <div className="px-4 py-4 sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[83rem] mx-auto">
+      <div className="flex justify-end mb-4">
+        <Dialog 
+          open={isFilterDialogOpen} 
+          onOpenChange={(isOpen) => {
+            setIsFilterDialogOpen(isOpen);
+            if (isOpen) setSelectedRatings(appliedRatings);
+          }}
+        >
+          <DialogTrigger asChild>
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition">
+              <FiFilter className="text-lg" />
+              <span className="font-medium">Filter</span>
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-bold">Filter Reviews</DialogTitle>
+            </DialogHeader>
+
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-gray-500 mb-2">BY RATING</p>
+              <div className="space-y-2">
+                {[5, 4, 3, 2, 1].map((star) => (
+                  <label key={star} className="flex items-center space-x-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      className="form-checkbox h-4 w-4" 
+                      checked={selectedRatings.includes(star)}
+                      onChange={() => handleRatingChange(star)}
+                    />
+                    <span>{star} star</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-4">
+              <button 
+                onClick={() => setIsFilterDialogOpen(false)}
+                className="text-gray-600 text-sm"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  setAppliedRatings(selectedRatings);
+                  setIsFilterDialogOpen(false);
+                }}
+                className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm font-semibold"
+              >
+                Apply
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <div className="border-y-2 border-gray-200">
         <table className="w-full text-sm text-gray-500">
-          <thead className="text-gray-700 uppercase text-center">
+          <thead className="text-gray-700 uppercase">
             <tr className="text-left">
-              <th className="px-6 py-2">Name</th>
-              <th className="px-6 py-2">Image</th>
+              <th className="px-6 py-2">User</th>
+              <th className="px-6 py-2">Recipe</th>
               <th className="px-6 py-2">Feedback</th>
               <th className="px-6 py-2">Rating</th>
               <th className="px-6 py-2">Date</th>
@@ -88,48 +170,67 @@ const AdminFeedback = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((recipe) => (
-              <tr key={recipe._id} className="bg-white border-t-2 border-gray-200 hover:bg-gray-50">
-                <td className="px-6 py-3">{recipe._id}</td>
-                <td className="px-6 py-3">
-                  <img
-                    src={recipe.image || '/default-image.jpg'}
-                    alt="Recipe"
-                    className="w-12 h-12 rounded-md object-cover"
-                  />
-                </td>
-                <td className="px-6 py-3">{recipe.message}</td>
-                <td className="px-6 py-3">{new Date(recipe.createdAt).toLocaleString()}</td>
-                <td className="px-6 py-3 relative">
-                  <HiDotsHorizontal
-                    className="text-gray-500 cursor-pointer text-xl"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleActionDropdown(recipe._id);
-                    }}
-                  />
-                  {dropdownOpen === recipe._id && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute mt-2 w-28 bg-white rounded-md shadow-lg z-50"
-                    >
-                      <div
-                        onClick={() => handleDelete(recipe._id)}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white cursor-pointer rounded-md"
-                      >
-                        Delete
-                      </div>
-                    </div>
-                  )}
+            {paginatedData.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="px-6 py-3 text-center">
+                  No feedback found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              paginatedData.map((recipe) => (
+                <tr key={recipe._id} className="bg-white border-t-2 border-gray-200 hover:bg-gray-50">
+                  {/* Table cells remain the same as before */}
+                  <td className="px-6 py-3">{recipe.name}</td>
+                  <td className="px-6 py-3">
+                    <img
+                      src={recipe.imagerecipe || '/default-image.jpg'}
+                      alt="Recipe"
+                      className="w-12 h-12 rounded-md object-cover"
+                    />
+                  </td>
+                  <td className="px-6 py-3">{recipe.comment}</td>
+                  <td className="px-6 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className="relative w-28 h-2 bg-gray-200 rounded-full">
+                        <div
+                          className="absolute h-2 bg-orange-400 rounded-full"
+                          style={{ width: `${(recipe.rating / 5) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-medium">{recipe.rating.toFixed(1)}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-3">{new Date(recipe.createdAt).toLocaleString()}</td>
+                  <td className="px-6 py-3 relative">
+                    <HiDotsHorizontal
+                      className="text-gray-500 cursor-pointer text-xl"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleActionDropdown(recipe._id);
+                      }}
+                    />
+                    {dropdownOpen === recipe._id && (
+                      <div
+                        ref={dropdownRef}
+                        className="absolute mt-2 w-28 bg-white rounded-md shadow-lg z-50"
+                      >
+                        <div
+                          onClick={() => handleDelete(recipe._id)}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white cursor-pointer rounded-md"
+                        >
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Show Pagination only if more than 5 items */}
-      {feedback.length > itemsPerPage && (
+      {filteredFeedback.length > itemsPerPage && (
         <Pagination className="mt-4">
           <PaginationContent>
             <PaginationItem>
