@@ -6,6 +6,7 @@ const feedbackSchema = new mongoose.Schema(
     recipeId: { type: mongoose.Schema.Types.ObjectId, ref: "Recipe", required: true },
     name: { type: String, required: true },
     image: { type: String, required: true }, 
+    imagerecipe: { type: String, required: true }, 
     rating: { type: Number, required: true, min: 1, max: 5 },
     comment: { type: String, required: true },
     likes: { type: Number, default: 0 }, // Number of likes

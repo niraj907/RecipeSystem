@@ -1,5 +1,5 @@
 import express from "express";
-import { createFeedback, getRecipeFeedback , editFeedback, deleteFeedback, likeFeedback, unlikeFeedback} from "../controllers/feedback.controller.js";
+import { createFeedback, getRecipeFeedback , getAllFeedback , editFeedback, deleteFeedback, likeFeedback, unlikeFeedback} from "../controllers/feedback.controller.js";
 
 const router = express.Router();
 
@@ -8,6 +8,8 @@ router.post("/feedback", createFeedback);
 
 // Route to get feedback for a specific recipe
 router.get("/feedback/:recipeId", getRecipeFeedback);
+
+router.get("/getAllFeedback", getAllFeedback);
 
 // // Route to get total rating count for a specific recipe
 // router.get("/rating-count/:recipeId", getRecipeRatingCount);

@@ -29,6 +29,7 @@ export const createFeedback = async (req, res) => {
         recipeId,
         name: user.name, 
         image: user.images[0]?.url || "", 
+        imagerecipe: recipe.images[0]?.url || "", 
         rating,
         comment,
       });
@@ -48,6 +49,23 @@ export const createFeedback = async (req, res) => {
     }
   };
 
+
+  export const getAllFeedback = async (req, res) => { 
+    try {
+      const feedbacks = await FeedbackMessage.find().sort({ createdAt: -1 });
+      return res.status(200).json({ 
+        success: true, 
+        message: "Fetched all feedback successfully", 
+        data: feedbacks 
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        message: "Error fetching feedback", 
+        error: error.message 
+      });
+    }
+  };
 
 // Get all feedback for a specific recipe
 export const getRecipeFeedback = async (req, res) => {
