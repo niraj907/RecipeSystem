@@ -39,6 +39,17 @@ export const useFeedbackStore = create((set) => ({
     }
   },
 
+
+  fetchAllFeedback: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}/getAllFeedback`);
+      set({ feedback: response.data.data, loading: false });
+    } catch (error) {
+      set({ error: error.response?.data?.msg || "Error fetching all feedback", loading: false });
+    }
+  },
+
   // Update existing feedback
   editFeedback: async (id, updatedData) => {
     set({ loading: true, error: null });
@@ -72,15 +83,15 @@ export const useFeedbackStore = create((set) => ({
   },
 
   // Get rating statistics
-  getRecipeRatingCount: async (recipeId) => {
-    try {
-      const response = await axios.get(`${API_URL}/rating-count/${recipeId}`);
-      return response.data.totalRating;
-    } catch (error) {
-      set({ error: error.message });
-      throw error;
-    }
-  },
+  // getRecipeRatingCount: async (recipeId) => {
+  //   try {
+  //     const response = await axios.get(`${API_URL}/rating-count/${recipeId}`);
+  //     return response.data.totalRating;
+  //   } catch (error) {
+  //     set({ error: error.message });
+  //     throw error;
+  //   }
+  // },
 
 
   likeFeedback: async (feedbackId, userId) => {

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings } from "lucide-react";
+import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
 import { useAdminStore } from "../adminStore";
 import Cookies from "js-cookie";
+
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -91,12 +92,7 @@ const Sidebar = () => {
               >
                 Add
               </li>
-              {/* <li
-                className="cursor-pointer p-2 hover:bg-orange-200 rounded-md"
-                onClick={() => navigate("/recipes/update")}
-              >
-                Update
-              </li> */}
+            
             </div>
           )}
 
@@ -106,12 +102,22 @@ const Sidebar = () => {
           >
             <Settings /> {!isCollapsed && "Maintenance"}
           </li>
+
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
             onClick={() => navigate("/dashboard/favorites")}
           >
             <Star /> {!isCollapsed && "Favorite"}
           </li>
+
+          <li
+            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
+            onClick={() => navigate("/dashboard/feedback")}
+          >
+           <MessageCircle /> {!isCollapsed && "Feedback"}
+          </li>
+
+
         </ul>
 
         {/* Logout Button */}
