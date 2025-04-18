@@ -191,14 +191,20 @@ const AdminFeedback = () => {
                   <td className="px-6 py-3">{recipe.comment}</td>
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="relative w-28 h-2 bg-gray-200 rounded-full">
-                        <div
-                          className="absolute h-2 bg-orange-400 rounded-full"
-                          style={{ width: `${(recipe.rating / 5) * 100}%` }}
-                        ></div>
-                      </div>
+<div className="flex mt-1">
+                {[...Array(5)].map((_, i) => (
+                  <span 
+                    key={i} 
+                    className={i < recipe.rating ? "text-orange-500" : "text-gray-300"}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+
                       <span className="text-sm font-medium">{recipe.rating.toFixed(1)}</span>
                     </div>
+
                   </td>
                   <td className="px-6 py-3">{new Date(recipe.createdAt).toLocaleString()}</td>
                   <td className="px-6 py-3 relative">

@@ -3,6 +3,9 @@ import Sidebar from "@/components/admin/Dashboard/Sidebar";
 import Header from "@/components/admin/Dashboard/Header";
 import RecipeCard from "@/components/admin/Dashboard/RecipeCard";
 import Counter from "@/components/admin/Dashboard/Counter";
+import Chart from "./Chart";
+
+
 
 
 const AdminDashboard = () => {
@@ -23,6 +26,7 @@ const AdminDashboard = () => {
         {/* Add top padding to avoid header overlap */}
         <div className="pt-20">
           <Counter />
+         <Chart/>
           <RecipeCard />
         </div>
       </div>

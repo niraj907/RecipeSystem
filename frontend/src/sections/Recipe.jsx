@@ -176,7 +176,6 @@ const Recipe = () => {
                     <p className="text-sm text-gray-500 mt-2 flex items-center">
                       <LuAlarmClockCheck className="mr-1" /> {recipe.tot_time || "N/A"}
                     </p>
-      
                   </div>
                   
 

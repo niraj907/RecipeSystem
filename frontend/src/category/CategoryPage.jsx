@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useAuthStore } from "@/components/store/authStore";
 import { useFavoriteStore } from "@/components/store/favoriteStore";
 import { GoAlertFill } from "react-icons/go";
+import { IoStar } from "react-icons/io5";
 
 const CategoryPage = () => {
   const { category } = useParams();
@@ -115,6 +116,20 @@ const CategoryPage = () => {
                     </button>
                   )}
                 </div>
+
+               <div className="flex justify-between items-center mt-2">
+  <div className="flex items-center">
+    {[...Array(5)].map((_, i) => (
+      <IoStar 
+        key={i}
+        className="text-orange-400 mr-1"
+      />
+    ))}
+  </div>
+  <p className="text-sm text-gray-500">
+    {recipe.ratingCount || 0} Ratings
+  </p>
+</div>
 
                 <div className="flex justify-between items-center mt-2 text-gray-500">
                   <p className="text-sm">{recipe.category}</p>
