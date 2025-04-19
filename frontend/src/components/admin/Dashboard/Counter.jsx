@@ -18,7 +18,7 @@ const Counter = () => {
       <div className="flex flex-col items-center justify-center bg-blue-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
         <FaRegUser className="text-blue-500 text-5xl" />
         <h1 className="text-lg font-semibold mt-3 text-gray-800">
-          Total Users: {loading ? "Loading..." : totalUsers}
+          Total Users: {totalUsers || 0} 
         </h1>
       </div>
 
@@ -26,7 +26,7 @@ const Counter = () => {
       <div className="flex flex-col items-center justify-center bg-pink-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
         <SlUserFemale className="text-pink-500 text-5xl" />
         <h1 className="text-lg font-semibold mt-3 text-gray-800">
-          Total Female: {loading ? "Loading..." : femaleUsers}
+          Total Female: {femaleUsers || 0}
         </h1>
       </div>
 
@@ -34,7 +34,7 @@ const Counter = () => {
       <div className="flex flex-col items-center justify-center bg-green-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
         <FaUserNinja className="text-green-500 text-5xl" />
         <h1 className="text-lg font-semibold mt-3 text-gray-800">
-          Total Male: {loading ? "Loading..." : maleUsers}
+          Total Male: { maleUsers || 0}
         </h1>
       </div>
 
@@ -42,7 +42,7 @@ const Counter = () => {
       <div className="flex flex-col items-center justify-center bg-yellow-100 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
         <MdOutlineReceiptLong className="text-yellow-500 text-5xl" />
         <h1 className="text-lg font-semibold mt-3 text-gray-800">
-          Total Recipes: {loading ? "Loading..." : totalRecipes}
+          Total Recipes: {totalRecipes || 0}
         </h1>
       </div>
     </div>

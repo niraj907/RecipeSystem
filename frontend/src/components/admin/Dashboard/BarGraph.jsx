@@ -1,45 +1,22 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BarChart, Bar, CartesianGrid, XAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useCountStore } from "@/components/store/countStore";
 
-// Define the chart configuration
-const chartConfig = {
-  rating: {
-    label: "Rating",
-    color: "#2563eb",
-  },
-  favourite: {
-    label: "Favourite",
-    color: "#60a5fa",
-  },
-};
-
-// Define the chart data
-const chartData = [
-  { month: "January", rating: 186, favourite: 80 },
-  { month: "February", rating: 305, favourite: 200 },
-  { month: "March", rating: 237, favourite: 120 },
-  { month: "April", rating: 73, favourite: 190 },
-  { month: "May", rating: 209, favourite: 130 },
-  { month: "June", rating: 214, favourite: 140 },
-];
-
-// Custom Tooltip Content Component
 const ChartTooltipContent = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-2 border rounded shadow">
         <p className="font-semibold">{label}</p>
-        <p className="text-sm">{`Rating: ${payload[0].value}`}</p>
-        <p className="text-sm">{`Favourite: ${payload[1].value}`}</p>
+        <p className="text-sm" style={{ color: '#2563eb' }}>{`Male: ${payload[0].value}`}</p>
+        <p className="text-sm" style={{ color: '#60a5fa' }}>{`Female: ${payload[1].value}`}</p>
       </div>
     );
   }
   return null;
 };
 
-// Custom Legend Content Component
 const ChartLegendContent = ({ payload }) => {
   return (
     <div className="flex items-center justify-center gap-4">
@@ -56,24 +33,55 @@ const ChartLegendContent = ({ payload }) => {
   );
 };
 
-// BarGraph Component
 const BarGraph = () => {
+  const { monthlyGenderData, fetchMonthlyGenderStats, loading } = useCountStore();
+
+  useEffect(() => {
+    fetchMonthlyGenderStats();
+  }, [fetchMonthlyGenderStats]);
+
+  // Transform data to match Recharts format
+  const transformedData = monthlyGenderData.map(item => ({
+    month: item.month,
+    male: item.males,
+    female: item.females
+  }));
+
+  if (loading) {
+    return (
+      <div className="h-[300px] w-full flex items-center justify-center">
+        <p>Loading gender distribution data...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-[300px] w-full">
+      <h2 className="text-xl font-semibold mb-4">Monthly User Gender Distribution</h2>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData}>
+        <BarChart data={transformedData}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => value.slice(0, 3)}
+            tickFormatter={(value) => value}
           />
           <Tooltip content={<ChartTooltipContent />} />
           <Legend content={<ChartLegendContent />} />
-          <Bar dataKey="rating" fill="#2563eb" radius={4} />
-          <Bar dataKey="favourite" fill="#60a5fa" radius={4} />
+          <Bar 
+            dataKey="male" 
+            name="Male Users"
+            fill="#2563eb" 
+            radius={[4, 4, 0, 0]} 
+          />
+          <Bar 
+            dataKey="female" 
+            name="Female Users"
+            fill="#60a5fa" 
+            radius={[4, 4, 0, 0]} 
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -8,6 +8,7 @@ export const useCountStore = create((set) => ({
   maleUsers: 0,
   femaleUsers: 0,
   totalRecipes: 0,
+  monthlyGenderData: [],
   loading: false,
 
   fetchCounts: async () => {
@@ -31,4 +32,22 @@ export const useCountStore = create((set) => ({
       set({ loading: false });
     }
   },
+
+
+    // Add this new function for monthly gender stats
+    fetchMonthlyGenderStats: async () => {
+      set({ loading: true });
+      try {
+        const response = await axios.get(`${API_URL}monthly-gender`);
+        set({ 
+          monthlyGenderData: response.data.data,
+          loading: false 
+        });
+      } catch (error) {
+        console.error("Error fetching monthly gender stats:", error);
+        set({ loading: false });
+      }
+    },
+
+    
 }));
