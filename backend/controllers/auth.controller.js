@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { Notification } from '../models/notification.model.js'; 
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+
 import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
@@ -615,7 +616,7 @@ export const addToFavorites = async (req, res) => {
         .json({ success: false, message: "User  not found." });
     }
 
-    // Check if recipe is already in favorites
+    //Check if recipe is already in favorites
     console.log("🔍 Checking if recipe is already in favorites...");
     if (user.favorites.includes(recipeId)) {
       console.error("🚨 Error: Recipe is already in favorites!");
@@ -629,6 +630,7 @@ export const addToFavorites = async (req, res) => {
     user.favorites.push(recipeId);
     await user.save();
 
+ 
     // Fetch the recipe details
     const recipe = await recipeModel.findById(recipeId);
     if (!recipe) {
@@ -732,7 +734,6 @@ export const removeFromFavorites = async (req, res) => {
     // Remove the recipe from the user's favorites
     console.log("🔍 Removing recipe from favorites...");
     user.favorites = user.favorites.filter((id) => id?.toString() !== recipeId);
-
     // Save updated user data
     await user.save();
 

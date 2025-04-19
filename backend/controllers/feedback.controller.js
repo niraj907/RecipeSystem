@@ -36,11 +36,11 @@ export const createFeedback = async (req, res) => {
   
       // Save feedback to the database
       await feedback.save();
-
           // Update the recipe's ratingCount
     recipe.ratingCount += rating;
     await recipe.save();
   
+
       // Return success response
       res.status(201).json({ message: "Feedback submitted successfully", feedback });
     } catch (error) {

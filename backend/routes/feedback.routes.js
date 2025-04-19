@@ -1,5 +1,5 @@
 import express from "express";
-import { createFeedback, getRecipeFeedback , getAllFeedback , editFeedback, deleteFeedback, likeFeedback, unlikeFeedback} from "../controllers/feedback.controller.js";
+import { createFeedback, getRecipeFeedback  ,getAllFeedback, editFeedback, deleteFeedback, likeFeedback, unlikeFeedback} from "../controllers/feedback.controller.js";
 
 const router = express.Router();
 
