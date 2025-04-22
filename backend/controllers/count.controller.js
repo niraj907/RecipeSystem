@@ -84,6 +84,12 @@ export const getMonthlyUserGenderStats = async (req, res) => {
                 { case: { $eq: ["$_id", 4] }, then: "Apr" },
                 { case: { $eq: ["$_id", 5] }, then: "May" },
                 { case: { $eq: ["$_id", 6] }, then: "Jun" },
+                { case: { $eq: ["$_id", 7] }, then: "Jul" },
+                { case: { $eq: ["$_id", 8] }, then: "Aug" },
+                { case: { $eq: ["$_id", 9] }, then: "Sep" },
+                { case: { $eq: ["$_id", 10] }, then: "Oct" },
+                { case: { $eq: ["$_id", 11] }, then: "Nov" },
+                { case: { $eq: ["$_id", 12] }, then: "Dec" },
               ],
               default: "Unknown"
             }

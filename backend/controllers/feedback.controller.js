@@ -40,7 +40,6 @@ export const createFeedback = async (req, res) => {
     recipe.ratingCount += rating;
     await recipe.save();
   
-
       // Return success response
       res.status(201).json({ message: "Feedback submitted successfully", feedback });
     } catch (error) {

@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { Notification } from '../models/notification.model.js'; 
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
-
 import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
