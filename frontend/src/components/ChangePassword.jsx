@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { IoClose, IoEyeOff, IoEye } from 'react-icons/io5';
 
 const ChangePassword = ({ user, onClose }) => {
-  const { changePassword } = useAuthStore();
+  const { updatePassword } = useAuthStore(); // Corrected function name
 
   const [passwords, setPasswords] = useState({
     currentPassword: '',
@@ -27,20 +27,25 @@ const ChangePassword = ({ user, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Client-side validation
     if (passwords.newPassword !== passwords.confirmPassword) {
       toast.error("New passwords don't match!");
       return;
     }
 
     try {
-      await changePassword(user._id, {
-        currentPassword: passwords.currentPassword,
-        newPassword: passwords.newPassword
-      });
+      // Call updatePassword with all required fields
+      await updatePassword(
+        passwords.currentPassword,
+        passwords.newPassword,
+        passwords.confirmPassword
+      );
+      
       toast.success("Password changed successfully!");
       onClose();
     } catch (error) {
-      toast.error(error.message || "Failed to change password");
+      toast.error(error.error || "Failed to change password");
     }
   };
 
@@ -77,7 +82,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('current')}
-                className="absolute top-3 right-2 text-gray-600"
+                className="absolute top-3 right-2 text-gray-500"
               >
                 {showPassword.current ? <IoEyeOff /> : <IoEye />}
               </button>
@@ -99,7 +104,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('new')}
-                className="absolute top-3 right-2 text-gray-600"
+                className="absolute top-3 right-2 text-gray-500"
               >
                 {showPassword.new ? <IoEyeOff /> : <IoEye />}
               </button>
@@ -121,7 +126,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('confirm')}
-                className="absolute top-3 right-2 text-gray-600"
+                className="absolute top-3 right-2 text-gray-500"
               >
                 {showPassword.confirm ? <IoEyeOff /> : <IoEye />}
               </button>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAdminStore } from '../adminStore';
 import { FaUserPen } from "react-icons/fa6";
-
+import { IoClose } from "react-icons/io5";
 import { toast } from "sonner";
+import { LuLockKeyhole } from "react-icons/lu";
 
 const EditAdminProfile = ({ admin, onClose }) => {
 
@@ -10,13 +11,14 @@ const EditAdminProfile = ({ admin, onClose }) => {
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const { updateAdmin,fetchAdmin } = useAdminStore();
-
+console.log(updateAdmin);
   // State to hold form data
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    // password: '',
     username: '',
+    country: '',
+    phonenumber: '',
   });
 
   useEffect(() => {
@@ -24,8 +26,10 @@ const EditAdminProfile = ({ admin, onClose }) => {
       setFormData({
         name: admin.name || '',
         email: admin.email || '',
-        // password: admin.password || '',
         username: admin.username || '',
+        country: admin.country || '',
+        phonenumber: admin.phonenumber || '',
+
       });
     } else {
       // Fetch updated admin details if not available
@@ -81,51 +85,35 @@ const EditAdminProfile = ({ admin, onClose }) => {
         id="static-modal"
         className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 "
       >
-        <div className="relative p-6 w-full max-w-lg">
-          <div className="relative bg-white rounded-lg overflow-y-auto">
-            <div className="flex items-center justify-between p-4">
+        <div className="bg-white w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg">
+            <div className="flex items-center justify-between">
               <h3 className="text-xl font-semibold text-gray-900">
                 Update Profile
               </h3>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:bg-gray-200 rounded-lg text-sm w-8 h-8 flex justify-center items-center"
-              >
-                <svg
-                  className="w-3 h-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Close modal</span>
-              </button>
+                       <button onClick={onClose} className="text-gray-400 hover:bg-gray-200 p-2 rounded-lg">
+                         <IoClose className="text-lg" />
+                       </button>
             </div>
-            <div className="p-4 space-y-4">
+
+
+
+            <div className="py-4 space-y-4">
 
           
 <div className="flex flex-col items-center mt-4">
           <div onClick={handleImageClick} className="cursor-pointer relative">
             {image ? (
-              <img src={URL.createObjectURL(image)} className="w-24 h-24 rounded-full object-cover" alt="Preview" />
+              <img src={URL.createObjectURL(image)} className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover" alt="Preview" />
             ) : admin?.images?.[0]?.url ? (
-              <img src={admin.images[0].url} className="w-24 h-24 rounded-full object-cover" alt="Profile" />
+              <img src={admin.images[0].url} className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover" alt="Profile" />
             ) : (
-              <FaUserPen className="w-24 h-24 text-gray-400 border p-4 rounded-full" />
+              <FaUserPen className="w-20 h-20 sm:w-24 sm:h-24 text-gray-400 border p-4 rounded-full" />
             )}
             <input type="file" ref={inputRef} accept="image/*" className="hidden" onChange={handleImageChange} />
           </div>
         </div>
 
-          
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-700 font-medium">
                   Name
@@ -151,17 +139,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
                 />
               </div>
 
-              {/* <div>
-                <label className="block text-gray-700 font-medium">
-                  Password
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded mt-1"
-                  value={formData.password}
-                  onChange={(e) => handleInputChange(e, "password")}
-                />
-              </div> */}
+       
 
               <div>
                 <label className="block text-gray-700 font-medium">
@@ -174,21 +152,61 @@ const EditAdminProfile = ({ admin, onClose }) => {
                   onChange={(e) => handleInputChange(e, "username")}
                 />
               </div>
+
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Country
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded mt-1"
+                  value={formData.country}
+                  onChange={(e) => handleInputChange(e, "country")}
+                />
+              </div>
+
+
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  className="w-full p-2 border rounded mt-1"
+                  value={formData.phonenumber}
+                  onChange={(e) => handleInputChange(e, "phonenumber")}
+                />
+              </div>
+
+
+ <div>
+              <label className="block text-gray-700 font-medium">Password</label>
+              <button 
               
+                className="flex items-center gap-2 px-4 py-2 border border-green-300 rounded-md hover:bg-green-100 transition w-full"
+              >
+                <LuLockKeyhole className="text-lg" />
+                <span className="font-medium">Change Password</span>
+              </button>
+            </div>
+
+
+              
+              </div>
 
             </div>
-            <div className="flex items-center p-4">
+            <div className="flex justify-start gap-3 mt-4">
               <button
                 type="button"
                 onClick={handleUpdateProfile}
-                className="text-white bg-orange-500 hover:bg-orange-300 rounded-lg text-sm px-5 py-2.5"
+                className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition"
               >
                 Save Changes
               </button>
               <button
                 onClick={onClose}
                 type="button"
-                className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100"
+                className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition"
               >
                 Cancel
               </button>
@@ -196,7 +214,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+
   );
 };
 

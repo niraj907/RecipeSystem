@@ -89,6 +89,7 @@ const EditProfile = ({ user, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
       <div className="bg-white w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg" style={{ maxHeight: "90vh" }}>
+      
         <div className="flex justify-between items-center">
           <h3 className="text-lg sm:text-xl font-semibold">Update Profile</h3>
           <button onClick={onClose} className="text-gray-400 hover:bg-gray-200 p-2 rounded-lg">

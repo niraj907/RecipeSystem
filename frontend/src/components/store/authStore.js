@@ -226,6 +226,33 @@ console.log("Login successful:", response.data);
         }
       },
 
+
+      // updatePassword
+  updatePassword: async (currentPassword, newPassword, confirmPassword) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.put(
+        `${API_URL}/update-password`,
+        { currentPassword, newPassword, confirmPassword },
+        { withCredentials: true }
+      );
+
+      // Handle success response
+      set({ 
+        message: response.data.message, 
+        isLoading: false 
+      });
+      return response.data; // Return the response for further handling if needed
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error updating password",
+        isLoading: false,
+      });
+      throw error; // Rethrow the error for further handling if needed
+    }
+  },
+
+
       // Logout function
       logout: async () => {
         set({ isLoading: true, error: null });
