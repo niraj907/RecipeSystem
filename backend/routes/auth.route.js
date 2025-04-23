@@ -1,7 +1,8 @@
-import express from "express";
+ import express from "express";
 import {
   login,
   logout,
+  updatePassword,
   signup,
   verifyEmail,
   forgotPassword,
@@ -27,6 +28,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 
+router.put("/update-password", verifyToken, updatePassword);
 router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
 
@@ -45,4 +47,5 @@ router.put("/notifications/mark-read/:notificationId", markNotificationAsRead); 
 router.delete("/notifications/:id", deleteNotification);
 router.get("/getAlladminRecipe/save",getAlladminRecipe)
 router.delete("/deleteadminRecipe/save/:id",deleteadminRecipe)
+
 export default router;

@@ -135,6 +135,120 @@ console.log("Notification created:", notification);
 };
 
 
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  console.log("📥 Raw Request Body:", req.body);
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "The password you entered is incorrect. Please try again.",
+        });
+    }
+
+    if (!user.isVerified) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Please verify your email before logging in.",
+        });
+    }
+
+    // Generate JWT and set cookie
+    const token = generateTokenAndSetCookie(res, user._id);
+    console.log("Generated Token:", token); // Log the generated token
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    console.log("Request Cookies:", req.cookies);
+    // Log the cookies being sent in the response
+    console.log("Cookies after setting:", res.getHeaders()["set-cookie"]);
+
+    res.status(200).json({
+      success: true,
+      message: "Logged in sucessfully",
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.error("login error:", error.message);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    console.log("Request Body:", req.body);
+    // 1. Check if passwords are provided
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Please provide both current and new password" 
+      });
+    }
+
+    // 2. Get user from database (including password field)
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "User  not found" 
+      });
+    }
+
+    // 3. Check if current password is correct
+    const isPasswordValid = await bcryptjs.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "Current password is incorrect" 
+      });
+    }
+
+    // 4. Hash the new password
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+
+    // 5. Update password and save
+    user.password = hashedPassword;
+    await user.save();
+
+    // 6. Optionally, generate a new token and set it in a cookie
+    // generateTokenAndSetCookie(res, user._id); // Uncomment if you want to set a new token
+
+    // 7. Send success response
+    return res.status(200).json({ 
+      success: true, 
+      message: "Password updated successfully" 
+    });
+
+  } catch (error) {
+    console.error("Error in updatePassword:", error.message);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Internal server error" 
+    });
+  }
+};
+
+
+
 export const getAllNotifications = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -183,8 +297,6 @@ export const markNotificationAsRead = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
-
-
 
 
 
@@ -271,62 +383,8 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
-  const { email, password } = req.body;
-  console.log("📥 Raw Request Body:", req.body);
 
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User not found" });
-    }
 
-    const isPasswordValid = await bcryptjs.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "The password you entered is incorrect. Please try again.",
-        });
-    }
-
-    if (!user.isVerified) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Please verify your email before logging in.",
-        });
-    }
-
-    // Generate JWT and set cookie
-    const token = generateTokenAndSetCookie(res, user._id);
-    console.log("Generated Token:", token); // Log the generated token
-
-    user.lastLogin = new Date();
-    await user.save();
-
-    console.log("Request Cookies:", req.cookies);
-    // Log the cookies being sent in the response
-    console.log("Cookies after setting:", res.getHeaders()["set-cookie"]);
-
-    res.status(200).json({
-      success: true,
-      message: "Logged in sucessfully",
-      user: {
-        ...user._doc,
-        password: undefined,
-      },
-    });
-  } catch (error) {
-    console.error("login error:", error.message);
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
 
 export const logout = async (req, res) => {
   res.clearCookie("token");
@@ -810,3 +868,6 @@ export const deleteadminRecipe = async (req, res) => {
     res.status(500).json({ success: false, message: "Error deleting AdminRecipe.", error: error.message });
   }
 };
+
+
+
