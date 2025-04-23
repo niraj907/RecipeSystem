@@ -9,8 +9,8 @@ const feedbackSchema = new mongoose.Schema(
     imagerecipe: { type: String, required: true }, 
     rating: { type: Number, required: true, min: 1, max: 5 },
     comment: { type: String, required: true },
-    likes: { type: Number, default: 0 }, // Number of likes
-    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Users who liked the comment
+    likes: { type: Number, default: 0 }, 
+    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true } 
 );

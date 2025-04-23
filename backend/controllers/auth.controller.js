@@ -192,12 +192,14 @@ export const login = async (req, res) => {
   }
 };
 
+
 export const updatePassword = async (req, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
     console.log("Request Body:", req.body);
+
     // 1. Check if passwords are provided
-    if (!currentPassword || !newPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({ 
         success: false, 
         message: "Please provide both current and new password" 
@@ -221,16 +223,21 @@ export const updatePassword = async (req, res) => {
         message: "Current password is incorrect" 
       });
     }
+    
+    // 4. Check if new passwords match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "New passwords don't match!" 
+      });
+    }
 
-    // 4. Hash the new password
+    // 5. Hash the new password
     const hashedPassword = await bcryptjs.hash(newPassword, 10);
 
-    // 5. Update password and save
+    // 6. Update password and save
     user.password = hashedPassword;
     await user.save();
-
-    // 6. Optionally, generate a new token and set it in a cookie
-    // generateTokenAndSetCookie(res, user._id); // Uncomment if you want to set a new token
 
     // 7. Send success response
     return res.status(200).json({ 
@@ -281,7 +288,7 @@ export const markNotificationAsRead = async (req, res) => {
     // Mark the notification as read
     if (!notification.isRead) {
       notification.isRead = true;
-      await notification.save();
+      await notification.save();   
 
       // Decrement the user's notification count
       const user = await User.findById(notification.userId);

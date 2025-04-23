@@ -29,6 +29,8 @@ router.post("/login", login);
 router.post("/logout", logout);
 
 router.put("/update-password", verifyToken, updatePassword);
+
+
 router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
 
