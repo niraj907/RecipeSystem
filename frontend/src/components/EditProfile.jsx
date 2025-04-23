@@ -3,11 +3,14 @@ import { useAuthStore } from "./store/authStore";
 import { toast } from "sonner";
 import { FaUserPen } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
+import { LuLockKeyhole } from "react-icons/lu";
+import ChangePassword from "./ChangePassword";
 
 const EditProfile = ({ user, onClose }) => {
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const { updateProfile } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -75,6 +78,14 @@ const EditProfile = ({ user, onClose }) => {
     }
   };
 
+  const handleChangePassword = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
       <div className="bg-white w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg" style={{ maxHeight: "90vh" }}>
@@ -119,26 +130,49 @@ const EditProfile = ({ user, onClose }) => {
               <label className="block text-gray-700 font-medium">Username</label>
               <input type="text" className="w-full p-2 border rounded mt-1" value={formData.username} onChange={(e) => handleInputChange(e, "username")} />
             </div>
-          </div>
 
-          <div>
-            <label className="block text-gray-700 font-medium">Gender</label>
-            <select name="gender" id="gender" value={formData.gender} onChange={(e) => handleInputChange(e, "gender")} className="w-full p-2 border rounded mt-1">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+            <div>
+              <label className="block text-gray-700 font-medium">Gender</label>
+              <select 
+                name="gender" 
+                id="gender" 
+                value={formData.gender} 
+                onChange={(e) => handleInputChange(e, "gender")} 
+                className="w-full p-2 border rounded mt-1"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium">Password</label>
+              <button 
+                onClick={handleChangePassword} 
+                className="flex items-center gap-2 px-4 py-2 border border-green-300 rounded-md hover:bg-green-100 transition w-full"
+              >
+                <LuLockKeyhole className="text-lg" />
+                <span className="font-medium">Change Password</span>
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="flex justify-end gap-3 mt-4">
-          <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-300 rounded-lg text-sm px-5 py-2.5">
+          <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
             Save Changes
           </button>
-          <button onClick={onClose} className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100">
+          <button onClick={onClose} className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition">
             Cancel
           </button>
         </div>
       </div>
+
+      {isModalOpen && (
+        <ChangePassword user={user} onClose={closeModal} />
+      )}
     </div>
   );
 };
