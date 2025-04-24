@@ -66,13 +66,16 @@ export const adminLogin = async (req, res) => {
     adminUser .lastLogin = new Date();
     await adminUser .save();
 
-    // Set the cookie with a real token
-    const admin_Token = generateToken(adminUser ._id); // Replace with your adminToken generation logic
-    res.cookie("adminToken", admin_Token, {
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-    });
+    // Generate token with correct payload
+const admin_Token = generateToken(adminUser._id);
+
+// Set cookie with correct name
+res.cookie("adminToken", admin_Token, { 
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+});
+
     console.log("Request Cookies:", req.cookies);
     // Log the cookies being sent in the response
     console.log("Cookies after setting:", res.getHeaders()['set-cookie']);
@@ -91,6 +94,65 @@ export const adminLogin = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
+export const adminUpdatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    // Validate input fields
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "All password fields are required" 
+      });
+    }
+
+    // Find admin using different variable name
+    const adminUser = await admin.findById(req.adminId);
+    if (!adminUser) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Admin not found" 
+      });
+    }
+
+    // Verify current password
+    const isPasswordValid = await bcryptjs.compare(currentPassword, adminUser.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "Current password is incorrect" 
+      });
+    }
+
+    // Validate new passwords match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "New passwords do not match" 
+      });
+    }
+
+    // Hash and save new password
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+    adminUser.password = hashedPassword;
+    await adminUser.save();
+
+    return res.status(200).json({ 
+      success: true, 
+      message: "Password updated successfully" 
+    });
+
+  } catch (error) {
+    console.error("Password update error:", error.message);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Internal server error" 
+    });
+  }
+};
+
 
 export const getAdmin = async (req, res) => {
   try {

@@ -1,8 +1,10 @@
 import express from "express";
-import {adminLogin,getAdmin, updateAdmin,adminLogout,adminforgotPassword,adminResetPassword} from "../controllers/admin.conroller.js";
+import {adminLogin,getAdmin,adminUpdatePassword, updateAdmin,adminLogout,adminforgotPassword,adminResetPassword} from "../controllers/admin.conroller.js";
+import { adminVerifyToken } from "../middleware/adminVerifyToken.js";
 const router = express.Router();
 
 router.post("/adminlogin", adminLogin);
+router.put("/adminupdate-password", adminVerifyToken, adminUpdatePassword);
 
 router.get('/admin', getAdmin);
 router.put("/:id", updateAdmin);
