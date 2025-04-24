@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { IoClose, IoEyeOff, IoEye } from 'react-icons/io5';
 
 const ChangePassword = ({ user, onClose }) => {
-  const { updatePassword } = useAuthStore(); // Corrected function name
+  const { updatePassword } = useAuthStore(); 
 
   const [passwords, setPasswords] = useState({
     currentPassword: '',
@@ -82,7 +82,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('current')}
-                className="absolute top-3 right-2 text-gray-500"
+                className="absolute top-3 right-2 text-gray-400"
               >
                 {showPassword.current ? <IoEyeOff /> : <IoEye />}
               </button>
@@ -104,7 +104,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('new')}
-                className="absolute top-3 right-2 text-gray-500"
+                className="absolute top-3 right-2 text-gray-400"
               >
                 {showPassword.new ? <IoEyeOff /> : <IoEye />}
               </button>
@@ -126,7 +126,7 @@ const ChangePassword = ({ user, onClose }) => {
               <button
                 type="button"
                 onClick={() => toggleVisibility('confirm')}
-                className="absolute top-3 right-2 text-gray-500"
+                className="absolute top-3 right-2 text-gray-400"
               >
                 {showPassword.confirm ? <IoEyeOff /> : <IoEye />}
               </button>
@@ -136,14 +136,14 @@ const ChangePassword = ({ user, onClose }) => {
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="submit"
-              className="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition"
+              className="font-medium border rounded-[8px] border-orange-500 bg-orange-100 text-lg text-orange-500   px-4 py-2  transition"
             >
               Change Password
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition"
+              className="font-medium bg-white border border-gray-200 hover:bg-gray-100  px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -155,3 +155,5 @@ const ChangePassword = ({ user, onClose }) => {
 };
 
 export default ChangePassword;
+
+

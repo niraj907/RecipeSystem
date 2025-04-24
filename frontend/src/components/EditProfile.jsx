@@ -148,20 +148,23 @@ const EditProfile = ({ user, onClose }) => {
               </select>
             </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium">Password</label>
-              <button 
-                onClick={handleChangePassword} 
-                className="flex items-center gap-2 px-4 py-2 border border-green-300 rounded-md hover:bg-green-100 transition w-full"
-              >
-                <LuLockKeyhole className="text-lg" />
-                <span className="font-medium">Change Password</span>
-              </button>
-            </div>
+{/* 
+            Password */}
+           
           </div>
         </div>
-
-        <div className="flex justify-end gap-3 mt-4">
+  <div className="w-full flex justify-between items-center  mt-4">
+ 
+             
+              <button 
+                onClick={handleChangePassword} 
+                className="flex items-center w-fit gap-2 px-4 py-2 border rounded-[8px] border-orange-500 bg-orange-100 transition"
+              >
+                <LuLockKeyhole className="text-lg text-orange-500" />
+                <span className="font-medium text-orange-500">Change Password</span>
+              </button>
+           
+        <div className="flex justify-end gap-3">
           <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
             Save Changes
           </button>
@@ -169,6 +172,7 @@ const EditProfile = ({ user, onClose }) => {
             Cancel
           </button>
         </div>
+      </div>
       </div>
 
       {isModalOpen && (
