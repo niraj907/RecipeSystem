@@ -158,6 +158,7 @@ const API_URL = "http://localhost:4000/api/a1/auth";
 export const useAuthStore = create(
   persist(
     (set) => ({
+      users: [],
       user: null,
       isAuthenticated: false,
       error: null,
@@ -170,6 +171,20 @@ export const useAuthStore = create(
     notificationCount: 0, // Holds the count of unread notifications
       
     adminRecipes:[],
+
+
+   // Get all users
+   fetchUsers: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}/users`);
+      console.log("Fetched users:", response.data); // Debugging
+      set({ users: response.data, isLoading: false });
+    } catch (error) {
+      console.error("Fetch users error:", error); // Debugging
+      set({ error: error.message, isLoading: false });
+    }
+  },
 
       // Signup function
       signup: async (name, email, password, username, images, country, gender) => {

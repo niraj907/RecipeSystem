@@ -4,6 +4,7 @@ import { FaUserPen } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { toast } from "sonner";
 import { LuLockKeyhole } from "react-icons/lu";
+import AdminChangePassword from './AdminChangePassword';
 
 const EditAdminProfile = ({ admin, onClose }) => {
 
@@ -11,6 +12,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const { updateAdmin,fetchAdmin } = useAdminStore();
+   const [isModalOpen, setIsModalOpen] = useState(false);
 console.log(updateAdmin);
   // State to hold form data
   const [formData, setFormData] = useState({
@@ -77,7 +79,13 @@ console.log(updateAdmin);
     }
   };
 
+  const handleChangePassword = () => {
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div>
@@ -179,40 +187,46 @@ console.log(updateAdmin);
               </div>
 
 
- <div>
-              <label className="block text-gray-700 font-medium">Password</label>
-              <button 
-              
-                className="flex items-center gap-2 px-4 py-2 border border-green-300 rounded-md hover:bg-green-100 transition w-full"
-              >
-                <LuLockKeyhole className="text-lg" />
-                <span className="font-medium">Change Password</span>
-              </button>
-            </div>
+
 
 
               
               </div>
 
             </div>
-            <div className="flex justify-start gap-3 mt-4">
+
+            <div className="w-full flex justify-between items-center  mt-4">
+
+<button 
+  onClick={handleChangePassword} 
+     className="flex items-center w-fit gap-2 px-4 py-2 border rounded-[8px] border-orange-500 bg-orange-100 transition"
+>
+  <LuLockKeyhole className="text-lg text-orange-500" />
+        <span className="font-medium text-orange-500">Change Password</span></button>
+
+
+            <div className="flex justify-end gap-3">
               <button
                 type="button"
                 onClick={handleUpdateProfile}
-                className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition"
-              >
+                className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
                 Save Changes
               </button>
               <button
                 onClick={onClose}
                 type="button"
-                className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition"
-              >
+                className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition">
                 Cancel
               </button>
             </div>
+            </div>
           </div>
         </div>
+
+        {isModalOpen && (
+        <AdminChangePassword admin={admin} onClose={closeModal} />
+      )}
+
       </div>
 
   );

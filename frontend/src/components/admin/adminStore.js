@@ -208,6 +208,34 @@ export const useAdminStore = create(
         }
       },
 
+
+
+            // updatePassword
+            adminUpdatePassword: async (currentPassword, newPassword, confirmPassword) => {
+          set({ isLoading: true, error: null });
+          try {
+            const response = await axios.put(
+              `${API_URL}/adminupdate-password`,
+              { currentPassword, newPassword, confirmPassword },
+              { withCredentials: true }
+            );
+      
+            // Handle success response
+            set({ 
+              message: response.data.message, 
+              isLoading: false 
+            });
+            return response.data; // Return the response for further handling if needed
+          } catch (error) {
+            set({
+              error: error.response?.data?.message || "Error updating password",
+              isLoading: false,
+            });
+            throw error; // Rethrow the error for further handling if needed
+          }
+        },
+
+
       logout: async () => {
         set({ loading: true, error: null });
         try {

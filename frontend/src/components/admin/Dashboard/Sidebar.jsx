@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings, MessageCircle } from "lucide-react";
+import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings, MessageCircle , User2} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
@@ -98,9 +98,9 @@ const Sidebar = () => {
 
           <li
             className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
-            onClick={() => navigate("/dashboard/maintenance")}
+            onClick={() => navigate("/dashboard/dishes")}
           >
-            <Settings /> {!isCollapsed && "Maintenance"}
+            <Settings /> {!isCollapsed && "Dishes"}
           </li>
 
           <li
@@ -115,6 +115,13 @@ const Sidebar = () => {
             onClick={() => navigate("/dashboard/feedback")}
           >
            <MessageCircle /> {!isCollapsed && "Feedback"}
+          </li>
+
+          <li
+            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
+            onClick={() => navigate("/dashboard/user")}
+          >
+           <User2 /> {!isCollapsed && "User"}
           </li>
 
 
