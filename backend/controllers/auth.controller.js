@@ -193,6 +193,58 @@ export const login = async (req, res) => {
 };
 
 
+
+export const genderUser = async (req, res) => {
+  try {
+    let genders = req.query.gender;
+    
+    // Convert to array if it's a string
+    if (typeof genders === 'string') {
+      genders = genders.split(',');
+    }
+
+    // Validate gender parameters
+    if (!genders || !Array.isArray(genders)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide valid gender parameters",
+      });
+    }
+
+    // Clean and validate genders
+    const validGenders = ['male', 'female'];
+    const filteredGenders = genders
+      .map(g => g.toLowerCase())
+      .filter(g => validGenders.includes(g));
+
+    if (filteredGenders.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide at least one valid gender (male/female)",
+      });
+    }
+
+    // Find users by gender(s)
+    const users = await User.find({ 
+      gender: { $in: filteredGenders }
+    }).select('-password -resetPasswordToken -verificationToken -resetPasswordExpiresAt -verificationTokenExpiresAt');
+
+    res.status(200).json({
+      success: true,
+      users,
+    });
+
+  } catch (error) {
+    console.error("Error getting users:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error fetching users",
+      error: error.message 
+    });
+  }
+};
+
+
 export const updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;

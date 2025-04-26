@@ -9,6 +9,7 @@ import {
   resetPassword,
   checkAuth,
   getAllUsers,
+  genderUser,
   getUserById,
   updateUserById,
   deleteUserById,
@@ -37,7 +38,9 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 // User routes
-router.get('/allUser', getAllUsers); // get all user
+router.get('/users', getAllUsers); // get all user
+router.get('/gender', genderUser);
+
 router.get('/:id', getUserById); //get user by id
 router.put('/:id', updateUserById); // update 
 router.delete('/:id', deleteUserById); // delete
