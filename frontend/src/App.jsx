@@ -17,6 +17,8 @@ import FavoriteSave from '@/components/admin/Dashboard/FavoriteSave'
 import AdminFeedback from "./components/admin/Dashboard/AdminFeedback";
 import User from "./components/admin/Dashboard/User";
 
+import MainYoutube from "@/components/admin/Dashboard/MainYoutube"
+
 // admin
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
 import AdminDashboard from "./components/admin/Dashboard/AdminDashboard";
@@ -61,6 +63,7 @@ const App = () => {
         <Route path="/dashboard/favorites" element={<> <Sidebar/><Header/> <FavoriteSave/>  </> } />
         <Route path="/dashboard/feedback" element={<> <Sidebar/><Header/> <AdminFeedback/>  </> } />
         <Route path="/dashboard/user" element={<> <Sidebar/><Header/> <User/>  </> } />
+        <Route path="/dashboard/youtube" element={<> <Sidebar/><Header/> <MainYoutube/>  </> } />
         <Route path="/forgot-password-admin" element={<><ForgortPasswordAdmin/> </> } />
         <Route path="/reset-password-admin/:token" element={<><ResetPasswordPageAdmin/> </> } />
     

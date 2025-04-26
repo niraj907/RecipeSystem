@@ -180,7 +180,7 @@ const AdminFeedback = () => {
               paginatedData.map((recipe) => (
                 <tr key={recipe._id} className="bg-white border-t-2 border-gray-200 hover:bg-gray-50">
                   {/* Table cells remain the same as before */}
-                  <td className="px-6 py-3">{recipe.name}</td>
+                  <td className="px-6 py-3 font-medium text-gray-900">{recipe.name}</td>
                   <td className="px-6 py-3">
                     <img
                       src={recipe.imagerecipe || '/default-image.jpg'}

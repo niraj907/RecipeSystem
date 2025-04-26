@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Menu, Home, Book, Star, LogOut, ChevronDown,Settings, MessageCircle , User2} from "lucide-react";
+import { 
+  Menu, Home, Book, Star, LogOut, ChevronDown, 
+  Settings, MessageCircle, User2, Youtube 
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 import Confirm from "@/components/admin/Dashboard/Confirm";
 import { toast } from "sonner";
 import { useAdminStore } from "../adminStore";
 import Cookies from "js-cookie";
+import { FaYoutube } from 'react-icons/fa';
 
 
 const Sidebar = () => {
@@ -122,6 +126,13 @@ const Sidebar = () => {
             onClick={() => navigate("/dashboard/user")}
           >
            <User2 /> {!isCollapsed && "User"}
+          </li>
+
+          <li
+            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-orange-200 rounded"
+            onClick={() => navigate("/dashboard/youtube")}
+          >
+           <Youtube /> {!isCollapsed && "YouTube"}
           </li>
 
 
