@@ -3,7 +3,6 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
