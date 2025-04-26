@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from "@/components/store/authStore";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FiFilter } from "react-icons/fi";
-import { RiErrorWarningLine } from "react-icons/ri";
+import { GoAlertFill } from "react-icons/go";
 import {
   Pagination,
   PaginationContent,
@@ -11,21 +11,40 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import UserView from './UserView';
 
 const User = () => {
-  const { users: allUsers, fetchUsers } = useAuthStore();
+  const { users: allUsers, fetchUsers, genderUser } = useAuthStore();
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGender, setSelectedGender] = useState([]);
+  const [appliedGender, setAppliedGender] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const dropdownRef = useRef(null);
   const itemsPerPage = 5;
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  useEffect(() => {
+    if (appliedGender.length > 0) {
+      genderUser(appliedGender);
+    } else {
+      fetchUsers();
+    }
+  }, [appliedGender, fetchUsers, genderUser]);
 
   const filteredUsers = allUsers.filter(user =>
     user.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -39,7 +58,7 @@ const User = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, appliedGender]);
 
   const toggleActionDropdown = (id) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
@@ -65,6 +84,15 @@ const User = () => {
     setSelectedUser(null);
   };
 
+  const handleGenderChange = (gender) => {
+    setSelectedGender(prev => {
+      if (prev.includes(gender)) {
+        return prev.filter(g => g !== gender);
+      }
+      return [...prev, gender];
+    });
+  };
+
   return (
     <div className="px-4 py-4 sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[83rem] mx-auto">
       <div className="flex justify-end mb-4 gap-4">
@@ -78,10 +106,64 @@ const User = () => {
             aria-label="Search users"
           />
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition duration-200">
-          <FiFilter className="text-lg" />
-          <span className="font-medium">Filter</span>
-        </button>
+
+        <Dialog 
+          open={isFilterDialogOpen} 
+          onOpenChange={(isOpen) => {
+            setIsFilterDialogOpen(isOpen);
+            if (isOpen) setSelectedGender(appliedGender);
+          }}
+        >
+          <DialogTrigger asChild>
+            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition">
+              <FiFilter className="text-lg" />
+              <span className="font-medium">Filter</span>
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-bold">Filter Users by Gender</DialogTitle>
+            </DialogHeader>
+
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-gray-500 mb-2">BY GENDER</p>
+              <div className="space-y-2">
+                {["male", "female"].map((gender) => (
+                  <label key={gender} className="flex items-center space-x-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      className="form-checkbox h-4 w-4" 
+                      checked={selectedGender.includes(gender)}
+                      onChange={() => handleGenderChange(gender)}
+                    />
+                    <span className="text-sm text-gray-700 capitalize">{gender}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-4">
+              <button 
+                onClick={() => {
+                  setSelectedGender([]);
+                  setIsFilterDialogOpen(false);
+                }}
+                className="text-gray-600 text-sm"
+              >
+                Clear
+              </button>
+              <button 
+                onClick={() => {
+                  setAppliedGender([...selectedGender]);
+                  setIsFilterDialogOpen(false);
+                }}
+                className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm font-semibold"
+              >
+                Apply
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="border-y-2 border-gray-200">
@@ -107,10 +189,8 @@ const User = () => {
                       </div>
                     ) : (
                       <>
-                        <RiErrorWarningLine className="text-3xl text-gray-400 mb-2 animate-pulse" />
-                        <div className="text-gray-600 font-medium text-sm">
-                          No users found
-                        </div>
+              <GoAlertFill className="text-orange-500 text-6xl mb-4" />
+              <p className="text-lg text-gray-600 font-medium">No Users found</p>
                       </>
                     )}
                   </div>
@@ -130,11 +210,7 @@ const User = () => {
                   <td className="px-6 py-3 text-gray-600">{user.email}</td>
                   <td className="px-6 py-3 text-gray-600">{user.country || 'N/A'}</td>
                   <td className="px-6 py-3 text-gray-600">
-                    {new Date(user.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
+                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-3 relative">
                     <HiDotsHorizontal
@@ -154,9 +230,6 @@ const User = () => {
                           onClick={() => handleView(user)}
                         >
                           View
-                        </div>
-                        <div className="px-4 py-2.5 text-sm text-red-600 hover:bg-gray-50 cursor-pointer transition-colors">
-                          Delete
                         </div>
                       </div>
                     )}

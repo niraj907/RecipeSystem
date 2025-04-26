@@ -159,7 +159,7 @@ const AdminFeedback = () => {
 
       <div className="border-y-2 border-gray-200">
         <table className="w-full text-sm text-gray-500">
-          <thead className="text-gray-700 uppercase">
+          <thead className="text-gray-700 uppercase bg-gray-50">
             <tr className="text-left">
               <th className="px-6 py-2">User</th>
               <th className="px-6 py-2">Recipe</th>

@@ -69,7 +69,7 @@ const FavoriteSave = () => {
     <div className="px-4 py-4 sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[83rem] mx-auto">
       <div className="border-y-2 border-gray-200">
         <table className="w-full text-sm text-gray-500">
-          <thead className="text-gray-700 uppercase text-center">
+          <thead className="text-gray-700 uppercase text-center bg-gray-50">
             <tr className="text-left">
               <th className="px-6 py-2">Recipe ID</th>
               <th className="px-6 py-2">Image</th>

@@ -186,6 +186,33 @@ export const useAuthStore = create(
     }
   },
 
+
+  
+
+  genderUser: async (genders) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}/gender`, {
+        params: {
+          gender: genders.join(',') // Send as comma-separated string
+        }
+      });
+      
+      set({ 
+        users: response.data.users, 
+        isLoading: false 
+      });
+  
+    } catch (error) {
+      console.error("Fetch users by gender error:", error);
+      set({ 
+        error: error.response?.data?.message || error.message,
+        isLoading: false 
+      });
+    }
+  },
+
+
       // Signup function
       signup: async (name, email, password, username, images, country, gender) => {
         set({ isLoading: true, error: null });
