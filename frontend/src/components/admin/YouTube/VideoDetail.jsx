@@ -3,7 +3,7 @@ import React from "react";
 const VideoDetail = ({ video }) => {
   if (!video) {
     return (
-      <div className="rounded-xl shadow-lg p-8 ml-[15rem] text-center bg-white max-w-[80rem]">
+      <div className="rounded-xl shadow-lg p-8 my-[4.1rem] text-center bg-white max-w-[38rem]">
         <div>
           <svg
             className="mx-auto h-24 w-24 text-gray-400"
@@ -42,7 +42,7 @@ const VideoDetail = ({ video }) => {
   const videoSrc = `https://www.youtube.com/embed/${getVideoId()}`;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden max-w-[80rem] p-8 ml-[15rem]">
+    <div className="bg-white my-[4.1rem] rounded-xl shadow-lg overflow-hidden max-w-[80rem] p-8 ">
       <div className="aspect-video bg-gray-900">
         <iframe
           src={videoSrc}

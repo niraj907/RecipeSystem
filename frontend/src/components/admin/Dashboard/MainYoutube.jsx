@@ -42,10 +42,10 @@ class MainYoutube extends React.Component {
         const { videos, selectedVideo, isLoading, error } = this.state;
 
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="w-[68.6rem] mx-[15.8rem] bg-gray-100 py-[4rem]">
                 <SearchBar handleFormSubmit={this.handleSubmit} />
                 
-                <div className="px-4 sm:px-6 lg:px-8 py-8 my-[10rem]">
+                <div className="px-4 sm:px-6 lg:px-8 py-8 my-[10rem">
                     {error && (
                         <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg">
                             {error}
@@ -65,7 +65,7 @@ class MainYoutube extends React.Component {
                             </div>
 
                             {/* Video List */}
-                            <div className="lg:w-1/3">
+                            <div className="lg:w-1/3 my-[4.1rem]">
                                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                                     <div className="p-4 bg-red-600">
                                         <h2 className="text-white text-lg font-semibold">
