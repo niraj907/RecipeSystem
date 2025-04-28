@@ -42,7 +42,7 @@ class MainYoutube extends React.Component {
         const { videos, selectedVideo, isLoading, error } = this.state;
 
         return (
-            <div className="w-[68.6rem] mx-[15.8rem] bg-gray-100 py-[4rem]">
+            <div className="w-[68.6rem] mx-[15.8rem] bg-gray-100 py-[5rem]">
                 <SearchBar handleFormSubmit={this.handleSubmit} />
                 
                 <div className="px-4 sm:px-6 lg:px-8 py-8 my-[10rem">

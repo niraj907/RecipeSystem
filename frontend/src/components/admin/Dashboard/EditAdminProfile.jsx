@@ -88,12 +88,13 @@ console.log(updateAdmin);
   };
 
   return (
-    <div>
+
+    <div className='z-[50]'>
       <div
         id="static-modal"
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 "
+        className="fixed inset-0 z-[50] flex items-center justify-center bg-black bg-opacity-50 "
       >
-        <div className="bg-white w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg">
+        <div className="bg-white z-[50] w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-semibold text-gray-900">
                 Update Profile

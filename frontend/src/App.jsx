@@ -11,7 +11,6 @@ import ForgotPassword from "./components/auth/ForgotPassword";
 import EmailVerificationPage from "./components/auth/EmailVerificationPage";
 import ErrorPage from "./components/ErrorPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
-import ProtectedRoute from "./ProtectedRoute";
 import RecipePrinter from "./components/RecipePrinter";
 import FavoriteSave from '@/components/admin/Dashboard/FavoriteSave'
 import AdminFeedback from "./components/admin/Dashboard/AdminFeedback";
@@ -26,11 +25,11 @@ import Sidebar from "@/components/admin/Dashboard/Sidebar";
 import Header from "@/components/admin/Dashboard/Header";
 import AddRecipe from "@/components/admin/Dashboard/AddRecipe";
 import ViewRecipe from "./components/admin/Dashboard/ViewRecipe";
-// import UpdateRecipe from "./components/admin/Dashboard/UpdateRecipe";
+
 import Maintain from "./components/admin/Dashboard/Maintain";
 import ForgortPasswordAdmin from "./components/admin/Dashboard/ForgortPasswordAdmin";
 import ResetPasswordPageAdmin from "./components/admin/Dashboard/ResetPasswordPageAdmin";
-import ProtectedAdminRoute from "./components/admin/ProtectedAdminRoute";
+
 
 // import EditProfile from "./components/EditProfile";
 import Favourites from "./components/Favourites";
@@ -40,7 +39,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />} />
         <Route path="/categories/:category" element={<><Navbar /><CategoryPage /><Footer /></>} />
-        {/* <Route path="/view/:id" element={<> <Navbar /><View /><Footer />  </>} /> */}
         <Route path='/printer/:id' element={<> <RecipePrinter />  </>} />
         <Route path="/favourites" element={<><Navbar /><Favourites /><Footer /></>} />
         <Route path="/signup" element={<> <SignUpForm /></>} />
@@ -50,8 +48,8 @@ const App = () => {
         <Route path="/login" element={<><LoginForm /></>} />
  
 <Route path="/view/:id" element={<> <Navbar /><View /><Footer />   </>} />
-{/* <Route element={<ProtectedRoute/>}> */}
-{/* </Route> */}
+{/* <Route element={<ProtectedRoute/>}>
+</Route> */}
 
 
 {/* admin panel */}
