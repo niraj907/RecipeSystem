@@ -71,10 +71,13 @@
 //     }
 //   },
   
-import { create } from "zustand";
-import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/recipe";
+
+
+import { create } from "zustand"
+import axios from "axios"
+
+const API_URL = "http://localhost:4000/api/recipe"
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
@@ -85,57 +88,103 @@ export const useRecipeStore = create((set) => ({
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
 
-  createRecipe: async (newRecipe) => {
+  createRecipe: async (formData) => {
     try {
-      const formData = new FormData();
-      
-      // Append basic fields
-      formData.append('name', newRecipe.recipeName);
-      formData.append('menuId', newRecipe.menuId);
-      formData.append('category', newRecipe.category);
-      formData.append('description', newRecipe.description);
-      formData.append('tot_time', newRecipe.totalTime);
-      formData.append('prep_time', newRecipe.preparationTime);
-      formData.append('cook_time', newRecipe.cookingTime);
-      
-      // Video fields
-      formData.append('nepal', newRecipe.nepaliVideoLink);
-      formData.append('nepalPublishedName', newRecipe.nepaliVideoName);
-      formData.append('hindi', newRecipe.hindiVideoLink);
-      formData.append('hindiPublishedName', newRecipe.hindiVideoName);
-      formData.append('english', newRecipe.englishVideoLink);
-      formData.append('englishPublishedName', newRecipe.englishVideoName);
+      // Create a new FormData object for the API request
+      const apiFormData = new FormData()
 
-      // Append array fields correctly
-      newRecipe.ingredients.forEach((ingredient) => {
-        formData.append('ingredients', ingredient);
-      });
+      // Map frontend field names to backend field names
+      const fieldMapping = {
+        recipeName: "name",
+        menuId: "menuId",
+        category: "category",
+        description: "description",
+        totalTime: "tot_time",
+        preparationTime: "prep_time",
+        cookingTime: "cook_time",
+      }
 
-      newRecipe.instructions.forEach((instruction) => {
-        formData.append('instructions', instruction);
-      });
-
-      // Append images
-      newRecipe.images.forEach((image) => {
-        formData.append('images', image);
-      });
-
-      const response = await axios.post(API_URL, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      // Add basic text fields with proper field names
+      Object.keys(fieldMapping).forEach((frontendField) => {
+        const backendField = fieldMapping[frontendField]
+        const value = formData.get(frontendField)
+        if (value) {
+          apiFormData.append(backendField, value)
         }
-      });
+      })
 
-      set((state) => ({ recipes: [...state.recipes, response.data.data] }));
-      return { success: true, message: "Recipe added successfully" };
+      // Handle ingredients and instructions
+      const ingredients = formData.get("ingredients")
+      const instructions = formData.get("instructions")
+
+      if (ingredients) {
+        apiFormData.append("ingredients", ingredients)
+      }
+
+      if (instructions) {
+        apiFormData.append("instructions", instructions)
+      }
+
+      // Handle image file - backend expects a field named 'images'
+      const imageFile = formData.get("image-0")
+      if (imageFile) {
+        apiFormData.append("images", imageFile)
+      }
+
+      // Handle video files - backend expects fields named 'nepalVideo', 'hindiVideo', 'englishVideo'
+      const nepalVideo = formData.get("nepalVideo")
+      const hindiVideo = formData.get("hindiVideo")
+      const englishVideo = formData.get("englishVideo")
+
+      if (nepalVideo) {
+        apiFormData.append("nepalVideo", nepalVideo)
+      }
+
+      if (hindiVideo) {
+        apiFormData.append("hindiVideo", hindiVideo)
+      }
+
+      if (englishVideo) {
+        apiFormData.append("englishVideo", englishVideo)
+      }
+
+      // Log the form data for debugging
+      console.log("Sending form data to API:", {
+        fields: Array.from(apiFormData.entries()).map(([key]) => key),
+        hasNepalVideo: apiFormData.has("nepalVideo"),
+        hasHindiVideo: apiFormData.has("hindiVideo"),
+        hasEnglishVideo: apiFormData.has("englishVideo"),
+        hasImages: apiFormData.has("images"),
+      })
+
+      // Make the API request
+      const response = await axios.post(API_URL, apiFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
+      // Update the store with the new recipe
+      set((state) => ({ recipes: [...state.recipes, response.data.data] }))
+
+      return {
+        success: true,
+        message: "Recipe added successfully",
+      }
     } catch (error) {
-      console.error("API Error:", error);
+      console.error("API Error:", error)
+
+      // Extract the error message from the response if available
+      const errorMessage = error.response?.data?.msg || error.message || "Error adding recipe"
+
       return {
         success: false,
-        message: error.response?.data?.msg || error.message || "Error adding recipe"
-      };
+        message: errorMessage,
+      }
     }
   },
+
+
 
 
   // Fetch all recipes
@@ -172,15 +221,37 @@ export const useRecipeStore = create((set) => ({
   },
 
    // Fetch a single recipe by ID
+  // fetchRecipeById: async (id) => {
+  //   set({ loading: true, error: null }); // Set loading to true before fetching
+  //   try {
+  //     const response = await axios.get(`${API_URL}/${id}`);
+  //     const recipe = response.data.data;
+  //     set((state) => ({ recipes: [...state.recipes, recipe], loading: false })); // Update the store
+  //   } catch (error) {
+  //     set({ error: "Failed to fetch recipe", loading: false });
+  //     console.error("Error fetching recipe by ID:", error);
+  //   }
+  // },
+
+
   fetchRecipeById: async (id) => {
-    set({ loading: true, error: null }); // Set loading to true before fetching
+    set({ loading: true, error: null }) // Set loading to true before fetching
     try {
-      const response = await axios.get(`${API_URL}/${id}`);
-      const recipe = response.data.data;
-      set((state) => ({ recipes: [...state.recipes, recipe], loading: false })); // Update the store
+      const response = await axios.get(`${API_URL}/${id}`)
+      const recipe = response.data.data
+
+      // Check if recipe already exists in the store
+      set((state) => {
+        const exists = state.recipes.some((r) => r._id === recipe._id)
+        return {
+          // If recipe exists, replace it; otherwise add it
+          recipes: exists ? state.recipes.map((r) => (r._id === recipe._id ? recipe : r)) : [...state.recipes, recipe],
+          loading: false,
+        }
+      })
     } catch (error) {
-      set({ error: "Failed to fetch recipe", loading: false });
-      console.error("Error fetching recipe by ID:", error);
+      set({ error: "Failed to fetch recipe", loading: false })
+      console.error("Error fetching recipe by ID:", error)
     }
   },
   
@@ -260,48 +331,123 @@ export const useRecipeStore = create((set) => ({
 // },
 
 
-updateRecipe: async (id, updatedRecipe) => {
-  try {
-    const formData = new FormData();
+// updateRecipe: async (id, updatedRecipe) => {
+//   try {
+//     const formData = new FormData();
     
-    Object.keys(updatedRecipe).forEach(key => {
-      if (key === 'images') {
-        // Handle image array
-        updatedRecipe.images.forEach(image => {
-          formData.append('images', image);
-        });
-      } else if (key === 'ingredients') {
-        // Handle ingredients array properly
-        updatedRecipe.ingredients.forEach(ingredient => {
-          formData.append('ingredients', ingredient);
-        });
-      } else if (key === 'instructions') {
-        // Handle instructions array properly
-        updatedRecipe.instructions.forEach(instruction => {
-          formData.append('instructions', instruction);
-        });
+//     Object.keys(updatedRecipe).forEach(key => {
+//       if (key === 'images') {
+//         // Handle image array
+//         updatedRecipe.images.forEach(image => {
+//           formData.append('images', image);
+//         });
+//       } else if (key === 'ingredients') {
+//         // Handle ingredients array properly
+//         updatedRecipe.ingredients.forEach(ingredient => {
+//           formData.append('ingredients', ingredient);
+//         });
+//       } else if (key === 'instructions') {
+//         // Handle instructions array properly
+//         updatedRecipe.instructions.forEach(instruction => {
+//           formData.append('instructions', instruction);
+//         });
+//       }  else if (key === 'ingredients') {
+//         // Handle ingredients array properly
+//         updatedRecipe.ingredients.forEach(ingredient => {
+//           formData.append('ingredients', ingredient);
+//         });
+//       } else if (key === 'instructions') {
+//         // Handle instructions array properly
+//         updatedRecipe.instructions.forEach(instruction => {
+//           formData.append('instructions', instruction);
+//         });
+//       } else {
+//         formData.append(key, updatedRecipe[key]);
+//       }
+//     });
+
+//     const response = await axios.put(`${API_URL}/${id}`, formData, {
+//       headers: {
+//         'Content-Type': 'multipart/form-data'
+//       }
+//     });
+
+//     set((state) => ({
+//       recipes: state.recipes.map((recipe) =>
+//         recipe._id === id ? response.data.data : recipe
+//       ),
+//     }));
+//     return { success: true, message: "Recipe updated successfully" };
+//   } catch (error) {
+//     return { 
+//       success: false, 
+//       message: error.response?.data?.msg || "Error updating recipe" 
+//     };
+//   }
+// },
+
+updateRecipe: async (id, formData) => {
+  try {
+    console.log("Updating recipe with ID:", id)
+    console.log("Form data keys:", Array.from(formData.keys()))
+
+    // Create a new FormData object for the API request
+    const apiFormData = new FormData()
+
+    // Directly append all form fields
+    for (const [key, value] of formData.entries()) {
+      // Special handling for ingredients and instructions to ensure they're sent as JSON strings
+      if (key === "ingredients" || key === "instructions") {
+        // Check if already a string (likely JSON)
+        if (typeof value === "string") {
+          apiFormData.append(key, value)
+        } else {
+          // Convert to JSON string if it's not already
+          apiFormData.append(key, JSON.stringify(value))
+        }
       } else {
-        formData.append(key, updatedRecipe[key]);
+        // For all other fields, just append directly
+        apiFormData.append(key, value)
       }
-    });
+    }
 
-    const response = await axios.put(`${API_URL}/${id}`, formData, {
+    // Log what we're sending for debugging
+    console.log("Sending to API:", {
+      endpoint: `${API_URL}/${id}`,
+      fields: Array.from(apiFormData.entries()).map(([key]) => key),
+      hasImages: apiFormData.has("images"),
+      hasNepalVideo: apiFormData.has("nepalVideo"),
+      hasHindiVideo: apiFormData.has("hindiVideo"),
+      hasEnglishVideo: apiFormData.has("englishVideo"),
+    })
+
+    // Make the API request
+    const response = await axios.put(`${API_URL}/${id}`, apiFormData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+        "Content-Type": "multipart/form-data",
+      },
+    })
 
+    // Update the store with the updated recipe
     set((state) => ({
-      recipes: state.recipes.map((recipe) =>
-        recipe._id === id ? response.data.data : recipe
-      ),
-    }));
-    return { success: true, message: "Recipe updated successfully" };
+      recipes: state.recipes.map((recipe) => (recipe._id === id ? response.data.data : recipe)),
+    }))
+
+    return {
+      success: true,
+      message: "Recipe updated successfully",
+      data: response.data.data,
+    }
   } catch (error) {
-    return { 
-      success: false, 
-      message: error.response?.data?.msg || "Error updating recipe" 
-    };
+    console.error("API Error:", error)
+
+    // Extract the error message from the response if available
+    const errorMessage = error.response?.data?.msg || error.message || "Error updating recipe"
+
+    return {
+      success: false,
+      message: errorMessage,
+    }
   }
 },
 

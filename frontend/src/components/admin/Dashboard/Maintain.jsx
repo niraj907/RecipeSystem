@@ -7,7 +7,7 @@ import DeleteConfirm from "@/components/admin/Dashboard/DeleteConfirm";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-// import { HiMiniArrowsUpDown } from "react-icons/hi2";
+
 
 const Maintain = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,7 +22,7 @@ const Maintain = () => {
 
   
   const { recipes, fetchAllRecipes , deleteRecipe} = useRecipeStore();
-console.log(recipes) 
+console.log("Complete Data Recipe: ",recipes) 
 
   useEffect(() => {
     fetchAllRecipes(); // Fetch recipes when component mounts

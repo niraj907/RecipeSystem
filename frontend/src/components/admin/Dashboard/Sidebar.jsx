@@ -16,7 +16,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { logout } = useAdminStore();
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Overlay */}
       <div
-        className={`fixed inset-0 z-[10] bg-black opacity-50 transition-opacity sm:hidden ${
+        className={`fixed inset-0 z-[50] bg-black opacity-50 transition-opacity sm:hidden ${
           sidebarOpen ? "block" : "hidden"
         }`}
         onClick={() => setSidebarOpen(false)}
@@ -45,14 +45,14 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed z-[10] h-screen p-5 flex flex-col gap-5 bg-[#FEF5EC] transition-all duration-300 ${
+        className={`fixed z-[50] h-screen p-5 flex flex-col gap-5 bg-[#FEF5EC] transition-all duration-300 ${
           isCollapsed ? "w-20" : "w-64"
         } 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
         sm:translate-x-0`}
       >
         {/* Logo and Menu Toggle */}
-        <div className="flex items-center gap-3 p-2">
+        <div className="flex items-center gap-3 p-2 ">
           <Menu
             className="cursor-pointer"
             onClick={() => {
@@ -75,7 +75,7 @@ const Sidebar = () => {
           </li>
 
           {/* Recipes Dropdown */}
-          {/* <div
+          <div
             className="p-2 flex items-center rounded-md cursor-pointer hover:bg-orange-200"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
@@ -98,7 +98,7 @@ const Sidebar = () => {
               </li>
             
             </div>
-          )} */}
+          )}
 
 
 
@@ -157,3 +157,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

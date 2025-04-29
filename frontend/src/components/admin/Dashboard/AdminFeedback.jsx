@@ -22,8 +22,8 @@ import {
 
 const AdminFeedback = () => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
-  const [selectedRatings, setSelectedRatings] = useState([]);
-  const [appliedRatings, setAppliedRatings] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null);
+  const [appliedRating, setAppliedRating] = useState(null);
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const {
     feedback,
@@ -75,17 +75,9 @@ const AdminFeedback = () => {
     };
   }, []);
 
-  const handleRatingChange = (star) => {
-    setSelectedRatings(prev =>
-      prev.includes(star)
-        ? prev.filter(s => s !== star)
-        : [...prev, star]
-    );
-  };
-
   const filteredFeedback = feedback.filter((item) => {
-    if (appliedRatings.length === 0) return true;
-    return appliedRatings.some(r => item.rating >= r && item.rating < r + 1);
+    if (appliedRating === null) return true;
+    return item.rating >= appliedRating && item.rating < appliedRating + 1;
   });
 
   const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
@@ -96,7 +88,7 @@ const AdminFeedback = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [appliedRatings]);
+  }, [appliedRating]);
 
   return (
     <div className="px-4 py-4 sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[83rem] mx-auto">
@@ -105,7 +97,7 @@ const AdminFeedback = () => {
           open={isFilterDialogOpen} 
           onOpenChange={(isOpen) => {
             setIsFilterDialogOpen(isOpen);
-            if (isOpen) setSelectedRatings(appliedRatings);
+            if (isOpen) setSelectedRating(appliedRating);
           }}
         >
           <DialogTrigger asChild>
@@ -122,15 +114,28 @@ const AdminFeedback = () => {
             <div className="mt-4">
               <p className="text-xs font-semibold text-gray-500 mb-2">BY RATING</p>
               <div className="space-y-2">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input 
+                    type="radio"
+                    name="ratingFilter"
+                    className="form-radio h-4 w-4 text-orange-600 focus:ring-orange-500"
+                    checked={selectedRating === null}
+                    onChange={() => setSelectedRating(null)}
+                  />
+                  <span className="text-gray-700">All Ratings</span>
+                </label>
                 {[5, 4, 3, 2, 1].map((star) => (
                   <label key={star} className="flex items-center space-x-2 cursor-pointer">
                     <input 
-                      type="checkbox" 
-                      className="form-checkbox h-4 w-4" 
-                      checked={selectedRatings.includes(star)}
-                      onChange={() => handleRatingChange(star)}
+                      type="radio"
+                      name="ratingFilter"
+                      className="form-radio h-4 w-4 text-orange-600 focus:ring-orange-500"
+                      checked={selectedRating === star}
+                      onChange={() => setSelectedRating(star)}
                     />
-                    <span>{star} star</span>
+                    <span className="text-gray-700">
+                      {star} star{star !== 1 && 's'}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -145,7 +150,7 @@ const AdminFeedback = () => {
               </button>
               <button 
                 onClick={() => {
-                  setAppliedRatings(selectedRatings);
+                  setAppliedRating(selectedRating);
                   setIsFilterDialogOpen(false);
                 }}
                 className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm font-semibold"
@@ -177,51 +182,48 @@ const AdminFeedback = () => {
                 </td>
               </tr>
             ) : (
-              paginatedData.map((recipe) => (
-                <tr key={recipe._id} className="bg-white border-t-2 border-gray-200 hover:bg-gray-50">
-                  {/* Table cells remain the same as before */}
-                  <td className="px-6 py-3 font-medium text-gray-900">{recipe.name}</td>
+              paginatedData.map((item) => (
+                <tr key={item._id} className="bg-white border-t-2 border-gray-200 hover:bg-gray-50">
+                  <td className="px-6 py-3 font-medium text-gray-900">{item.name}</td>
                   <td className="px-6 py-3">
                     <img
-                      src={recipe.imagerecipe || '/default-image.jpg'}
+                      src={item.imagerecipe || '/default-image.jpg'}
                       alt="Recipe"
                       className="w-12 h-12 rounded-md object-cover"
                     />
                   </td>
-                  <td className="px-6 py-3">{recipe.comment}</td>
+                  <td className="px-6 py-3">{item.comment}</td>
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-2">
-<div className="flex mt-1">
-                {[...Array(5)].map((_, i) => (
-                  <span 
-                    key={i} 
-                    className={i < recipe.rating ? "text-orange-500" : "text-gray-300"}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-
-                      <span className="text-sm font-medium">{recipe.rating.toFixed(1)}</span>
+                      <div className="flex mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <span 
+                            key={i} 
+                            className={i < item.rating ? "text-orange-500" : "text-gray-300"}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium">{item.rating.toFixed(1)}</span>
                     </div>
-
                   </td>
-                  <td className="px-6 py-3">{new Date(recipe.createdAt).toLocaleString()}</td>
+                  <td className="px-6 py-3">{new Date(item.createdAt).toLocaleString()}</td>
                   <td className="px-6 py-3 relative">
                     <HiDotsHorizontal
                       className="text-gray-500 cursor-pointer text-xl"
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleActionDropdown(recipe._id);
+                        toggleActionDropdown(item._id);
                       }}
                     />
-                    {dropdownOpen === recipe._id && (
+                    {dropdownOpen === item._id && (
                       <div
                         ref={dropdownRef}
                         className="absolute mt-2 w-28 bg-white rounded-md shadow-lg z-50"
                       >
                         <div
-                          onClick={() => handleDelete(recipe._id)}
+                          onClick={() => handleDelete(item._id)}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-white cursor-pointer rounded-md"
                         >
                           Delete

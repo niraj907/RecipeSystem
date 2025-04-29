@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import KitchenGuide from "./recipe/KitchenGuide";
 import VideoCategory from "./recipe/VideoCategory";
-import { useRecipeStore } from "@/components/store/recipeStore";
+import { useRecipeStore } from "./store/recipeStore";
 import { Loader } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Share from "./Share";
@@ -11,6 +11,10 @@ import Feedback from "./Feedback";
 const View = () => {
   const { id } = useParams();
   const { recipes, fetchRecipeById } = useRecipeStore();
+
+  console.log("Hindi Video Array:", recipes[0]?.hindiVideo);
+
+
     const navigate = useNavigate();
   useEffect(() => {
     fetchRecipeById(id);

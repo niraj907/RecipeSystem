@@ -7,12 +7,11 @@ import { useAuthStore } from "@/components/store/authStore";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { toast } from "sonner";
 import { FaBell } from "react-icons/fa";
-import AddRecipe from "./AddRecipe";
+
 
 const Header = ({ setSidebarOpen }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
   const [activeDropdownId, setActiveDropdownId] = useState(null);
 
@@ -48,7 +47,7 @@ const Header = ({ setSidebarOpen }) => {
 
   const closeModals = () => {
     setIsProfileModalOpen(false);
-    setShowRecipeModal(false);
+
     setSelectedAdmin(null);
   };
 
@@ -70,7 +69,7 @@ const Header = ({ setSidebarOpen }) => {
   };
 
   return (
-    <div className="bg-white  z-[5] shadow py-4 px-4 flex items-center justify-between fixed top-0 left-0 right-0 ">
+    <div className="bg-white z-[5] shadow py-4 px-4 flex items-center justify-between fixed top-0 left-0 right-0 ">
       <div className="flex items-center">
         <div className="md:hidden mr-4">
           <Menu 
@@ -82,13 +81,6 @@ const Header = ({ setSidebarOpen }) => {
       </div>
 
       <div className="flex items-center space-x-4 ml-auto">
-        <button
-          className="mt-auto bg-orange-400 text-white py-3 px-5 rounded-xl text-center cursor-pointer flex items-center justify-center hover:bg-orange-500 transition-colors"
-          onClick={() => setShowRecipeModal(true)}
-        >
-          <FaPlus className="text-sm" />
-          <span className="ml-2">Create recipe</span>
-        </button>
 
         {/* Notification Bell */}
         <div className="relative" ref={notificationRef}>
@@ -176,12 +168,10 @@ const Header = ({ setSidebarOpen }) => {
       {isProfileModalOpen && (
         <EditAdminProfile admin={selectedAdmin} onClose={closeModals} />
       )}
-      
-      {showRecipeModal && (
-        <AddRecipe onClose={() => setShowRecipeModal(false)} />
-      )}
     </div>
   );
 };
 
 export default Header;
+
+
