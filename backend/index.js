@@ -26,11 +26,18 @@ if (!process.env.CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.C
 }
 
 // Middleware
-app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
+// app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
+
 app.use(express.json({ limit: '50mb' })); // Support larger payloads
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
+  debug: true
+}));
 
 // CORS configuration
 const corsOptions = {
