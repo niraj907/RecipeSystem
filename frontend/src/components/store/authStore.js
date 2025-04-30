@@ -385,83 +385,171 @@ console.log("Login successful:", response.data);
         }
       },
 
-fetchAllNotification : async() => {
-  set({ isLoading: true, error: null });
+// fetchAllNotification : async() => {
+//   set({ isLoading: true, error: null });
+//   try {
+//     const response = await axios.get(`${API_URL}/notifications/all`);
+//     set({ 
+//       notifications: response.data.notifications, 
+//       notificationCount: response.data.notificationCount, 
+//       isLoading: false 
+//     });
+//   } catch (error) {
+//     set({
+//       error: error.response?.data?.message || "Error All the fetching notifications",
+//       isLoading: false,
+//     });
+//     throw error;
+//   }
+// },
+
+//         // New function to fetch notifications
+//         fetchNotifications: async (userId) => {
+//           set({ isLoading: true, error: null });
+//           try {
+//             const response = await axios.get(`${API_URL}/notifications/user/${userId}`);
+//             // Update notifications and notification count in state
+//             set({ 
+//               notifications: response.data.notifications, 
+//               notificationCount: response.data.notificationCount, 
+//               isLoading: false 
+//             });
+//           } catch (error) {
+//             set({
+//               error: error.response?.data?.message || "Error fetching notifications",
+//               isLoading: false,
+//             });
+//             throw error;
+//           }
+//         },
+  
+//         // New function to mark notification as read
+//         markNotificationAsRead: async (notificationId) => {
+//           set({ isLoading: true, error: null });
+//           try {
+//             await axios.put(`${API_URL}/notifications/mark-read/${notificationId}`);
+//             // Update the state to mark the notification as read
+//             set((state) => ({
+//               notifications: state.notifications.map((notification) =>
+//                 notification._id === notificationId ? { ...notification, isRead: true } : notification
+//               ),
+//               notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+//               isLoading: false,
+//             }));
+//           } catch (error) {
+//             set({
+//               error: error.response?.data?.message || "Error marking notification as read",
+//               isLoading: false,
+//             });
+//             throw error;
+//           }
+//         },
+      
+//           // Delete a deleteNotification
+//           deleteNotification: async (id) => {
+//             set({ isLoading: true, error: null }); 
+//             try {
+//               await axios.delete(`${API_URL}/notifications/${id}`);
+//               set((state) => ({
+//                 notifications: state.notifications.filter((n) => n._id !== id),
+//                 notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+//                 isLoading: false
+//               }));
+//               return { success: true, message: "Notification deleted successfully" };
+//             } catch (error) {
+//               set({ isLoading: false });
+//               return { success: false, message: "Error deleting notification" }; 
+//             }
+//            },
+
+
+
+
+// Fetch all notifications (no userId required)
+fetchAllNotification: async () => {
+  set({ isLoading: true, error: null })
   try {
-    const response = await axios.get(`${API_URL}/notifications/all`);
-    set({ 
-      notifications: response.data.notifications, 
-      notificationCount: response.data.notificationCount, 
-      isLoading: false 
-    });
+    const response = await axios.get(`${API_URL}/notifications/all`)
+    set({
+      notifications: response.data.notifications,
+      notificationCount: response.data.notificationCount,
+      isLoading: false,
+    })
+    return response.data
   } catch (error) {
     set({
-      error: error.response?.data?.message || "Error All the fetching notifications",
+      error: error.response?.data?.message || "Error fetching all notifications",
       isLoading: false,
-    });
-    throw error;
+    })
+    throw error
   }
 },
 
-        // New function to fetch notifications
-        fetchNotifications: async (userId) => {
-          set({ isLoading: true, error: null });
-          try {
-            const response = await axios.get(`${API_URL}/notifications/user/${userId}`);
-            // Update notifications and notification count in state
-            set({ 
-              notifications: response.data.notifications, 
-              notificationCount: response.data.notificationCount, 
-              isLoading: false 
-            });
-          } catch (error) {
-            set({
-              error: error.response?.data?.message || "Error fetching notifications",
-              isLoading: false,
-            });
-            throw error;
-          }
-        },
-  
-        // New function to mark notification as read
-        markNotificationAsRead: async (notificationId) => {
-          set({ isLoading: true, error: null });
-          try {
-            await axios.put(`${API_URL}/notifications/mark-read/${notificationId}`);
-            // Update the state to mark the notification as read
-            set((state) => ({
-              notifications: state.notifications.map((notification) =>
-                notification._id === notificationId ? { ...notification, isRead: true } : notification
-              ),
-              notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
-              isLoading: false,
-            }));
-          } catch (error) {
-            set({
-              error: error.response?.data?.message || "Error marking notification as read",
-              isLoading: false,
-            });
-            throw error;
-          }
-        },
-      
-          // Delete a deleteNotification
-          deleteNotification: async (id) => {
-            set({ isLoading: true, error: null }); 
-            try {
-              await axios.delete(`${API_URL}/notifications/${id}`);
-              set((state) => ({
-                notifications: state.notifications.filter((n) => n._id !== id),
-                notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
-                isLoading: false
-              }));
-              return { success: true, message: "Notification deleted successfully" };
-            } catch (error) {
-              set({ isLoading: false });
-              return { success: false, message: "Error deleting notification" }; 
-            }
-           },
+// Fetch notifications for a specific user
+fetchNotifications: async (userId) => {
+  if (!userId) {
+    console.error("fetchNotifications: userId is required")
+    return
+  }
 
+  set({ isLoading: true, error: null })
+  try {
+    const response = await axios.get(`${API_URL}/notifications/user/${userId}`)
+    set({
+      notifications: response.data.notifications,
+      notificationCount: response.data.notificationCount,
+      isLoading: false,
+    })
+    return response.data
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error fetching notifications",
+      isLoading: false,
+    })
+    throw error
+  }
+},
+
+// Mark notification as read
+markNotificationAsRead: async (notificationId) => {
+  set({ isLoading: true, error: null })
+  try {
+    await axios.put(`${API_URL}/notifications/mark-read/${notificationId}`)
+    set((state) => ({
+      notifications: state.notifications.map((notification) =>
+        notification._id === notificationId ? { ...notification, isRead: true } : notification,
+      ),
+      notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+      isLoading: false,
+    }))
+  } catch (error) {
+    set({
+      error: error.response?.data?.message || "Error marking notification as read",
+      isLoading: false,
+    })
+    throw error
+  }
+},
+
+// Delete a notification
+deleteNotification: async (id) => {
+  set({ isLoading: true, error: null })
+  try {
+    await axios.delete(`${API_URL}/notifications/${id}`)
+    set((state) => ({
+      notifications: state.notifications.filter((n) => n._id !== id),
+      notificationCount: state.notificationCount > 0 ? state.notificationCount - 1 : 0,
+      isLoading: false,
+    }))
+    return { success: true, message: "Notification deleted successfully" }
+  } catch (error) {
+    set({
+      isLoading: false,
+      error: error.response?.data?.message || "Error deleting notification",
+    })
+    return { success: false, message: "Error deleting notification" }
+  }
+},
           
           fetchAlladminRecipe: async () => {
             set({ isLoading: true, error: null });

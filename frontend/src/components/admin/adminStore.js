@@ -337,7 +337,7 @@ export const useAdminStore = create(
       },
     }),
     {
-      name: "admin-store", // Key for localStorage
+      name: "auth-store", // Key for localStorage
       getStorage: () => localStorage, // Persist data in localStorage
     }
   )

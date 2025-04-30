@@ -36,7 +36,7 @@ const AdminLoginForm = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">
-            Login
+            Admin
           </h1>
 
           <div>

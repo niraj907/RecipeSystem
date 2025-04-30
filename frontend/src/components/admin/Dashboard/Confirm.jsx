@@ -27,7 +27,7 @@ const Confirm = ({ onClose, onConfirm }) => {
         </p>
 
         {/* Buttons */}
-        <div className="mt-6 flex justify-between gap-4">
+        <div className="mt-6 flex justify-center gap-4">
           <button
             className="px-5 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 transition"
             onClick={onClose}

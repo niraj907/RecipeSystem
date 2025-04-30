@@ -26,6 +26,7 @@ const Sidebar = () => {
       await logout();
       toast.success("Logged out successfully.");
       Cookies.remove("adminToken");
+      localStorage.clear()
       navigate("/");
     } catch (error) {
       toast.error("Unsuccessful logout.");

@@ -178,8 +178,6 @@ const Recipe = () => {
                     </p>
                   </div>
                   
-
-
                 </div>
               </div>
             ))

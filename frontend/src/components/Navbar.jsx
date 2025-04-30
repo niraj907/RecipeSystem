@@ -55,6 +55,7 @@ const Navbar = () => {
       await logout();  // Call Zustand logout function
       Cookies.remove("token");
       toast.success("Logged out successfully.");
+      localStorage.clear()
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);

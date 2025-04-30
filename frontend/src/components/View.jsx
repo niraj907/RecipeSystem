@@ -8,11 +8,14 @@ import Share from "./Share";
 import { GoAlertFill } from "react-icons/go";
 import { IoPrintSharp } from "react-icons/io5";
 import Feedback from "./Feedback";
+import { MdOutlineArrowCircleLeft } from "react-icons/md";
 const View = () => {
   const { id } = useParams();
   const { recipes, fetchRecipeById } = useRecipeStore();
-
+console.log("Recipes: ", recipes);
   console.log("Hindi Video Array:", recipes[0]?.hindiVideo);
+  console.log("Nepal Video Array:", recipes[0]?.nepalVideo);
+  console.log("English Video Array:", recipes[0]?.englishVideo);
 
 
     const navigate = useNavigate();
@@ -27,16 +30,51 @@ const View = () => {
   };
   
 
+  // if (!recipe) {
+  //   return (
+  //      <div className="flex flex-col justify-center items-center h-screen"> 
+  //       <GoAlertFill className="text-orange-500 text-6xl mb-4" />
+  //       <p className="text-lg text-gray-600 font-medium">No View page</p>
+  //     </div>
+  //   );
+  // }
+
   if (!recipe) {
     return (
-      // <div className="col-span-full text-center py-12 flex flex-col items-center">
-       <div className="flex flex-col justify-center items-center h-screen"> 
-        <GoAlertFill className="text-orange-500 text-6xl mb-4" />
-        <p className="text-lg text-gray-600 font-medium">No View page</p>
-      </div>
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50 px-4 py-8">
+        <div className="max-w-md text-center bg-white p-8 rounded-xl shadow-lg transition-all hover:shadow-xl">
+          {/* Alert Icon */}
+          <div className="mb-6 animate-bounce">
+            <GoAlertFill className="text-6xl text-orange-500 mx-auto" />
+          </div>
   
-
-   
+          {/* Main Message */}
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            Recipe Unavailable 🥄
+          </h2>
+  
+          {/* Sub Message */}
+          <p className="text-gray-600 mb-6 text-lg">
+            We couldn't find the recipe you're looking for. It might have been 
+            removed or doesn't exist.
+          </p>
+  
+          {/* Action Button */}
+          <button
+            onClick={() => navigate('/')}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg 
+            transition-all flex items-center justify-center gap-2 mx-auto"
+          >
+            <MdOutlineArrowCircleLeft className="text-xl" />
+            Back to Recipes
+          </button>
+  
+          {/* Additional Help */}
+          <p className="mt-6 text-sm text-gray-500">
+            Need help? Contact support@tastetrack.com
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -87,9 +125,6 @@ const View = () => {
                 <p className="text-base font-medium"> {recipe.cook_time}</p>
               </div>
 
-
-
-
          {/* Social Media Share */}
               <div className="sm:px-4 border-r sm:border-gray-500 pr-4">
                 <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
@@ -105,8 +140,6 @@ const View = () => {
                 </h2>
                 <IoPrintSharp className="text-3xl flex justify-center cursor-pointer" onClick={printerOnclick} />
               </div>
-          
-
             </div>
 
         {/* Kitchen Guide */}
