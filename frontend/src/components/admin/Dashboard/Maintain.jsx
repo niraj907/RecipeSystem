@@ -104,8 +104,10 @@ console.log("name content:", recipes[0]?.name);
   const paginatedRecipes = filteredRecipes.slice(startIndex, endIndex);
 
   return (
-    <div className="px-4 py-4 sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[83rem] mx-auto">
+    <div className="mx-auto px-0 sm:px-6 lg:pl-[15rem] sm:py-[8rem] md:py-[6rem] max-w-[83rem]">
+      
       <div className="border border-gray-300">
+
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center p-4">
           <div className="relative inline-block text-left w-full sm:w-auto" ref={dropdownRef}>

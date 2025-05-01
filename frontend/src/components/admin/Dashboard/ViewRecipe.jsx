@@ -3,14 +3,15 @@ import KitchenGuide from "@/components/recipe/KitchenGuide";
 import VideoCategory from "@/components/recipe/VideoCategory";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { GoAlertFill } from "react-icons/go";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Share from "@/components/Share";
 import Feedback from "@/components/Feedback";
+import { MdOutlineArrowCircleLeft } from "react-icons/md";
 
 const ViewRecipe = () => {
   const { id } = useParams();
   const { recipes, fetchRecipeById } = useRecipeStore();
-
+const navigate = useNavigate();
   useEffect(() => {
     fetchRecipeById(id);
   }, [id, fetchRecipeById]);
@@ -19,16 +20,46 @@ const ViewRecipe = () => {
 
   if (!recipe) {
     return (
-      <div className="w-full h-screen flex flex-col items-center justify-center bg-white text-center p-6">
-        <GoAlertFill className="text-orange-500 text-6xl mb-4" />
-        <p className="text-lg text-gray-600 font-medium">Recipe View Not Found.</p>
-        <p className="text-sm text-gray-500">Sorry, we couldn't find recipes for this category.</p>
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50 px-4 py-8">
+        <div className="max-w-md text-center bg-white p-8 rounded-xl shadow-lg transition-all hover:shadow-xl">
+          {/* Alert Icon */}
+          <div className="mb-6 animate-bounce">
+            <GoAlertFill className="text-6xl text-orange-500 mx-auto" />
+          </div>
+  
+          {/* Main Message */}
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            Recipe Unavailable 🥄
+          </h2>
+  
+          {/* Sub Message */}
+          <p className="text-gray-600 mb-6 text-lg">
+            We couldn't find the recipe you're looking for. It might have been 
+            removed or doesn't exist.
+          </p>
+  
+          {/* Action Button */}
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg 
+            transition-all flex items-center justify-center gap-2 mx-auto"
+          >
+            <MdOutlineArrowCircleLeft className="text-xl" />
+            Back to Recipes
+          </button>
+  
+          {/* Additional Help */}
+          <p className="mt-6 text-sm text-gray-500">
+            Need help? Contact support@tastetrack.com
+          </p>
+        </div>
       </div>
     );
   }
 
+
   return (
-    <div className="px-4  sm:pl-[8rem] md:pl-[12rem] lg:pl-[18rem] pt-[5.5rem] lg:pt-[6rem] max-w-[81rem] mx-auto">
+    <div className="px-4  lg:pl-[16rem] py-[6rem] lg:py-[6rem] max-w-[81rem] mx-auto">
       {/* Image */}
       <img
         src={recipe.images[0]?.url || "https://via.placeholder.com/300"}

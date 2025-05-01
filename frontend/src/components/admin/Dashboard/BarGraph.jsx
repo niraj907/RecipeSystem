@@ -9,8 +9,8 @@ const ChartTooltipContent = ({ active, payload, label }) => {
     return (
       <div className="bg-white p-2 border rounded shadow">
         <p className="font-semibold">{label}</p>
-        <p className="text-sm" style={{ color: '#2563eb' }}>{`Male: ${payload[0].value}`}</p>
-        <p className="text-sm" style={{ color: '#60a5fa' }}>{`Female: ${payload[1].value}`}</p>
+        <p className="text-sm" style={{ color: '#FFA52C' }}>{`Male: ${payload[0].value}`}</p>
+        <p className="text-sm" style={{ color: '#FBBC05' }}>{`Female: ${payload[1].value}`}</p>
       </div>
     );
   }
@@ -56,7 +56,7 @@ const BarGraph = () => {
   }
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-[300px] w-full pb-10">
       <h2 className="text-xl font-semibold mb-4">Monthly User Gender Distribution</h2>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={transformedData}>
@@ -73,13 +73,13 @@ const BarGraph = () => {
           <Bar 
             dataKey="male" 
             name="Male Users"
-            fill="#2563eb" 
+            fill="#FFA52C" 
             radius={[4, 4, 0, 0]} 
           />
           <Bar 
             dataKey="female" 
             name="Female Users"
-            fill="#60a5fa" 
+            fill="#FBBC05" 
             radius={[4, 4, 0, 0]} 
           />
         </BarChart>

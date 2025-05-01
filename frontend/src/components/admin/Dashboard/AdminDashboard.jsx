@@ -5,32 +5,32 @@ import RecipeCard from "@/components/admin/Dashboard/RecipeCard";
 import Counter from "@/components/admin/Dashboard/Counter";
 import Chart from "./Chart";
 
-
-
-
 const AdminDashboard = () => {
-  // Control sidebar open state for mobile devices
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    
     <div className="flex">
-      
-      {/* Sidebar receives open state and toggle function */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Sidebar 
+        isMobileOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
-      {/* Main content area */}
-      <div className="flex-1 min-h-screen transition-all duration-300 ml-0 sm:ml-64">
-        <Header setSidebarOpen={setSidebarOpen} />
+      <div className="flex-1 min-h-screen transition-all duration-300 ml-0 lg:ml-60">
+        <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-        {/* Add top padding to avoid header overlap */}
-        <div className="pt-20">
-          <Counter />
-         <Chart/>
-          <RecipeCard />
+        <div className="pt-20 px-4">
+            <Counter/>
+              <Chart />
+         
+            <RecipeCard 
+          
+          />
+          </div>
+            
+          
         </div>
       </div>
-    </div>
+  
   );
 };
 
