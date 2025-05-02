@@ -4,7 +4,7 @@ import { MdLogout } from "react-icons/md";
 
 const Confirm = ({ onClose, onConfirm }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[70]">
       <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-96 relative">
         {/* Close button */}
         <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={onClose}>

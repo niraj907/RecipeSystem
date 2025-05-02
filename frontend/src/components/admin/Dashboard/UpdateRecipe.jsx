@@ -1352,8 +1352,8 @@ const UpdateRecipe = ({ recipe, onClose }) => {
   if (!recipe) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
-      <div className="relative p-4 w-full max-w-5xl max-h-[90vh]">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
+      <div className="relative p-4 w-full max-w-5xl max-h-[100vh]">
         <div className="relative bg-white rounded-lg shadow-xl overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between p-4 md:p-5 border-b">

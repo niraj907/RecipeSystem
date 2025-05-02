@@ -104,8 +104,7 @@ console.log("name content:", recipes[0]?.name);
   const paginatedRecipes = filteredRecipes.slice(startIndex, endIndex);
 
   return (
-    <div className="mx-auto px-0 sm:px-6 lg:pl-[15rem] sm:py-[8rem] md:py-[6rem] max-w-[83rem]">
-      
+    <div className="mx-auto px-8 py-24 sm:px-6 sm:py-[8rem] md:py-[6rem] lg:pl-[16rem] max-w-[83rem]">
       <div className="border border-gray-300">
 
         {/* Header Section */}
@@ -169,7 +168,7 @@ console.log("name content:", recipes[0]?.name);
               <tr className="text-left">
                 <th className="px-6 py-2 border border-gray-300">ID</th>
                 <th className="px-6 py-2 border border-gray-300">Image</th>
-                <th className="px-6 py-2 border border-gray-300 flex items-center gap-2">
+                <th className="px-6 py-2 border border-gray-300">
   Name 
    {/* <HiMiniArrowsUpDown className="w-4 h-4 cursor-pointer"  />  */}
 </th>

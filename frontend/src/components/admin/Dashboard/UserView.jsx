@@ -3,7 +3,7 @@ import { IoClose } from 'react-icons/io5';
 
 const UserView = ({ user, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
       <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Detailed Information</h3>

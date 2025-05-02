@@ -50,7 +50,7 @@ const Header = ({ toggleSidebar }) => {
   };
 
   return (
-    <header className="bg-white shadow-sm fixed top-0 left-0 right-0 lg:left-64 z-30">
+    <header className="bg-white shadow-sm fixed top-0 left-0 right-0 lg:left-64 z-[50]">
       <div className="flex items-center justify-between h-16 px-4">
         <button
           onClick={toggleSidebar}
@@ -189,9 +189,3 @@ const useClickOutside = (ref, handler) => {
 };
 
 export default Header;
-
-
-
-
-
-
