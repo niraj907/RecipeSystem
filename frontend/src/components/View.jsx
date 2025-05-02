@@ -30,14 +30,6 @@ console.log("Recipes: ", recipes);
   };
   
 
-  // if (!recipe) {
-  //   return (
-  //      <div className="flex flex-col justify-center items-center h-screen"> 
-  //       <GoAlertFill className="text-orange-500 text-6xl mb-4" />
-  //       <p className="text-lg text-gray-600 font-medium">No View page</p>
-  //     </div>
-  //   );
-  // }
 
   if (!recipe) {
     return (

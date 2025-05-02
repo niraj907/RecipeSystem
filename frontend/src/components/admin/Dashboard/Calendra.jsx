@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  // Initialize currentDate to May 2025 for demonstration
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 4, 1)); // May 1, 2025
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
 
@@ -15,12 +16,10 @@ export default function Calendar() {
   ];
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // Disable previous month button if current month is current real month
+  // Disable previous month button if current month is May 2025 (demo constraint)
   useEffect(() => {
-    const current = new Date();
     setIsPrevDisabled(
-      currentDate.getMonth() === current.getMonth() &&
-      currentDate.getFullYear() === current.getFullYear()
+      currentYear === 2025 && currentMonth === 4 // May is month 4 in JS
     );
   }, [currentDate]);
 
@@ -36,7 +35,8 @@ export default function Calendar() {
   };
 
   const goToToday = () => {
-    const now = new Date();
+    // Set to May 2, 2025 for demonstration
+    const now = new Date(2025, 4, 2);
     setCurrentDate(now);
     setSelectedDate(now);
   };
@@ -75,10 +75,10 @@ export default function Calendar() {
   // Create individual day element
   const createDayElement = (date, isPrevMonth = false, isNextMonth = false) => {
     const day = date.getDate();
-    const today = new Date();
+    const today = new Date(2025, 4, 2); // Fixed to May 2, 2025
     const isToday = date.toDateString() === today.toDateString();
     const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
-    const isDisabled = !isToday; // Only enable today's date
+    const isDisabled = !isToday;
 
     const handleClick = () => {
       if (isDisabled) return;

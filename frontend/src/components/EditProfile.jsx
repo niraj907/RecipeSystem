@@ -153,26 +153,27 @@ const EditProfile = ({ user, onClose }) => {
            
           </div>
         </div>
-  <div className="w-full flex justify-between items-center  mt-4">
  
-             
-              <button 
+        <div className="w-full flex flex-col sm:flex-col md:flex-row justify-between items-center gap-4 mt-4">
+        <button 
                 onClick={handleChangePassword} 
                 className="flex items-center w-fit gap-2 px-4 py-2 border rounded-[8px] border-orange-500 bg-orange-100 transition"
               >
                 <LuLockKeyhole className="text-lg text-orange-500" />
                 <span className="font-medium text-orange-500">Change Password</span>
               </button>
-           
-        <div className="flex justify-end gap-3">
-          <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
-            Save Changes
-          </button>
-          <button onClick={onClose} className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition">
-            Cancel
-          </button>
-        </div>
-      </div>
+
+  <div className="flex justify-end gap-3">
+    <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
+      Save Changes
+    </button>
+    <button onClick={onClose} className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition">
+      Cancel
+    </button>
+  </div>
+</div>
+
+
       </div>
 
       {isModalOpen && (
