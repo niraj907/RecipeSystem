@@ -66,7 +66,7 @@ const FavoriteSave = () => {
   return (
     <div className="px-2 py-4 md:pl-[2rem] lg:pl-[18rem] pt-[6rem] max-w-[83rem] mx-auto">
       <div className="border-y-2 border-gray-200">
-        <div className="overflow-x-auto">
+        <div className="">
           <table className="w-full text-sm text-gray-500">
             <thead className="text-gray-700 uppercase text-center bg-gray-50">
               <tr className="text-left">
@@ -89,7 +89,13 @@ const FavoriteSave = () => {
                     />
                   </td>
                   <td className="px-6 py-3">{recipe.message}</td>
-                  <td className="px-6 py-3">{new Date(recipe.createdAt).toLocaleString()}</td>
+                  <td className="px-6 py-3">
+                  {new Date(recipe.createdAt).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
+                  </td>
                   <td className="px-6 py-3 relative">
                     <HiDotsHorizontal
                       className="text-gray-500 cursor-pointer text-xl"

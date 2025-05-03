@@ -25,7 +25,7 @@ class SearchBar extends React.Component {
     render() {
         return (
             <div className="bg-red-600 px-4 py-4">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center space-x-4">
                         <FaYoutube className="text-white text-4xl" />
                         <h1 className="text-white text-2xl font-bold hidden sm:block">

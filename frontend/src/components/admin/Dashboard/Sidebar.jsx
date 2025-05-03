@@ -136,7 +136,3 @@ const Sidebar = ({ isMobileOpen, onClose }) => {
 };
 
 export default Sidebar;
-
-
-
-

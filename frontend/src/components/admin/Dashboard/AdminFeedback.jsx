@@ -163,7 +163,7 @@ const AdminFeedback = () => {
         </Dialog>
       </div>
 
-      <div className="border-y-2 border-gray-200 overflow-x-auto">
+      <div className="border-y-2 border-gray-200">
         <table className="w-full text-sm md:text-base text-gray-500 min-w-[600px]">
           <thead className="text-gray-700 uppercase bg-gray-50">
             <tr className="text-left">

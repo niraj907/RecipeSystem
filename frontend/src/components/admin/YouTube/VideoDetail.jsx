@@ -3,7 +3,7 @@ import React from "react";
 const VideoDetail = ({ video }) => {
   if (!video) {
     return (
-      <div className="rounded-xl shadow-lg p-8 my-[4.1rem] text-center bg-white max-w-[38rem]">
+      <div className="rounded-xl shadow-lg p-8 my-10 lg:my-[5rem] text-center bg-white max-w-[38rem]">
         <div>
           <svg
             className="mx-auto h-24 w-24 text-gray-400"
