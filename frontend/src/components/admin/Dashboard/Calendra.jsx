@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
 
   // Current month/year calculations
@@ -38,7 +37,6 @@ export default function Calendar() {
   const goToToday = () => {
     const now = new Date();
     setCurrentDate(now);
-    setSelectedDate(now);
   };
 
   // Generate calendar grid
@@ -77,30 +75,31 @@ export default function Calendar() {
     const day = date.getDate();
     const today = new Date();
     const isToday = date.toDateString() === today.toDateString();
-    const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
+    // const isToday = date.toDateString() === 'Wed May 07 2025';
     const isDisabled = !isToday; // Only enable today's date
 
     const handleClick = () => {
       if (isDisabled) return;
       if (isPrevMonth) goToPrevMonth();
       if (isNextMonth) goToNextMonth();
-      setSelectedDate(date);
     };
 
     return (
       <div
-        key={date.toISOString()}
-        onClick={handleClick}
-        className={`h-10 border border-gray-100 flex items-center justify-center
-          ${isPrevMonth || isNextMonth ? 'text-gray-400' : ''}
-          ${isToday ? 'bg-orange-50' : ''}
-          ${isSelected ? 'ring-2 ring-orange-400' : ''}
-          ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}
-      >
-        <span className={`${isToday ? 'font-bold text-[#FBBC05]' : ''}`}>
-          {day}
-        </span>
-      </div>
+      key={date.toISOString()}
+      onClick={handleClick}
+      className={`h-10 border border-gray-100 flex items-center justify-center
+        transition-all duration-300 ease-in-out 
+        ${isPrevMonth || isNextMonth ? 'text-white' : ''}
+        ${isToday ? 'bg-orange-50' : ''}
+        ${isDisabled ? 
+          'cursor-not-allowed opacity-50' : 
+          'cursor-pointer hover:bg-gray-50 hover:ring-2 hover:ring-orange-400 hover:ring-inset'}`}
+    >
+      <span className={`${isToday ? 'font-bold text-[#FBBC05]' : ''}`}>
+        {day}
+      </span>
+    </div>
     );
   };
 
@@ -146,14 +145,6 @@ export default function Calendar() {
           ))}
           {generateDays()}
         </div>
-
-        {selectedDate && (
-          <div className="mt-4 border-t pt-3">
-            <h3 className="font-medium">
-              {selectedDate.toDateString()}
-            </h3>
-          </div>
-        )}
       </div>
     </div>
   );
