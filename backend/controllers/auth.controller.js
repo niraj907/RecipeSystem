@@ -387,8 +387,6 @@ export const getNotifications = async (req, res) => {
   }
 };
 
-
-
 //delete recipe
 export const deleteNotification = async (req, res) => {
   try {

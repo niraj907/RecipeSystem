@@ -63,10 +63,11 @@ const SignUpForm = () => {
   return (
     <div className="w-full py-10 px-4">
       <div className="flex items-center justify-center">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-[30rem] md:max-w-[25rem] lg:max-w-[30rem] shadow-lg p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-md"
-        >
+      <form
+  data-testid="signup-form"
+  onSubmit={handleSubmit(onSubmit)}
+  className="w-full max-w-[30rem] md:max-w-[25rem] lg:max-w-[30rem] shadow-lg p-6 sm:p-8 flex flex-col gap-5 bg-white rounded-md"
+>
           <h1 className="text-center font-bold text-2xl sm:text-3xl font-serif text-[#F67A24]">
             Sign up
           </h1>
