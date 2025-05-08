@@ -123,6 +123,8 @@ const Feedback = ({ recipeId }) => {
               <h3 className='text-lg font-semibold text-gray-700'>{user.name}</h3>
             </div>
 
+
+            {/* Rating */}
             <div className='mb-6'>
               <h3 className='text-lg font-medium text-gray-700 mb-2'>My Rating</h3>
               <div className="flex items-center">
@@ -150,6 +152,8 @@ const Feedback = ({ recipeId }) => {
               </div>
             </div>
 
+
+            {/* Description */}
             <div>
               <h3 className='text-lg font-medium text-gray-700 mb-2'>Description</h3>
               <textarea
