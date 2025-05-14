@@ -90,7 +90,7 @@ export default function Calendar() {
       onClick={handleClick}
       className={`h-10 border border-gray-100 flex items-center justify-center
         transition-all duration-300 ease-in-out 
-        ${isPrevMonth || isNextMonth ? 'text-white' : ''}
+        ${isPrevMonth || isNextMonth ? 'text-gray-500' : ''}
         ${isToday ? 'bg-orange-50' : ''}
         ${isDisabled ? 
           'cursor-not-allowed opacity-50' : 

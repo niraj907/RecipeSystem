@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { FaUserPen } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { LuLockKeyhole } from "react-icons/lu";
+import { Loader } from "lucide-react";
 import ChangePassword from "./ChangePassword";
 
 const EditProfile = ({ user, onClose }) => {
@@ -11,7 +12,8 @@ const EditProfile = ({ user, onClose }) => {
   const [image, setImage] = useState(null);
   const { updateProfile } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,14 +59,18 @@ const EditProfile = ({ user, onClose }) => {
   };
 
   const handleUpdateProfile = async () => {
+    setIsLoading(true);
     try {
+      // Add 1000ms delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const updatedProfile = new FormData();
       updatedProfile.append("name", formData.name);
       updatedProfile.append("email", formData.email);
       updatedProfile.append("username", formData.username);
       updatedProfile.append("country", formData.country);
       updatedProfile.append("gender", formData.gender);
-      
+
       if (image) {
         updatedProfile.append("images", image);
       }
@@ -75,6 +81,8 @@ const EditProfile = ({ user, onClose }) => {
     } catch (error) {
       toast.error("Failed to update profile.");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +97,6 @@ const EditProfile = ({ user, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
       <div className="bg-white w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 overflow-y-auto rounded-lg shadow-lg" style={{ maxHeight: "90vh" }}>
-      
         <div className="flex justify-between items-center">
           <h3 className="text-lg sm:text-xl font-semibold">Update Profile</h3>
           <button onClick={onClose} className="text-gray-400 hover:bg-gray-200 p-2 rounded-lg">
@@ -134,11 +141,11 @@ const EditProfile = ({ user, onClose }) => {
 
             <div>
               <label className="block text-gray-700 font-medium">Gender</label>
-              <select 
-                name="gender" 
-                id="gender" 
-                value={formData.gender} 
-                onChange={(e) => handleInputChange(e, "gender")} 
+              <select
+                name="gender"
+                id="gender"
+                value={formData.gender}
+                onChange={(e) => handleInputChange(e, "gender")}
                 className="w-full p-2 border rounded mt-1"
               >
                 <option value="">Select Gender</option>
@@ -147,38 +154,38 @@ const EditProfile = ({ user, onClose }) => {
                 <option value="other">Other</option>
               </select>
             </div>
-
-{/* 
-            Password */}
-           
           </div>
         </div>
- 
+
         <div className="w-full flex flex-col sm:flex-col md:flex-row justify-between items-center gap-4 mt-4">
-        <button 
-                onClick={handleChangePassword} 
-                className="flex items-center w-fit gap-2 px-4 py-2 border rounded-[8px] border-orange-500 bg-orange-100 transition"
-              >
-                <LuLockKeyhole className="text-lg text-orange-500" />
-                <span className="font-medium text-orange-500">Change Password</span>
-              </button>
+          <button
+            onClick={handleChangePassword}
+            className="flex items-center w-fit gap-2 px-4 py-2 border rounded-[8px] border-orange-500 bg-orange-100 transition"
+          >
+            <LuLockKeyhole className="text-lg text-orange-500" />
+            <span className="font-medium text-orange-500">Change Password</span>
+          </button>
 
-  <div className="flex justify-end gap-3">
-    <button onClick={handleUpdateProfile} className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition">
-      Save Changes
-    </button>
-    <button onClick={onClose} className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition">
-      Cancel
-    </button>
-  </div>
-</div>
-
-
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={handleUpdateProfile}
+              className="flex items-center text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition disabled:opacity-50"
+              disabled={isLoading}
+            >
+              {isLoading && <Loader className="animate-spin w-4 h-4 mr-2" />}
+              Save Changes
+            </button>
+            <button
+              onClick={onClose}
+              className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
 
-      {isModalOpen && (
-        <ChangePassword user={user} onClose={closeModal} />
-      )}
+      {isModalOpen && <ChangePassword user={user} onClose={closeModal} />}
     </div>
   );
 };

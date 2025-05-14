@@ -1,4 +1,3 @@
-// LoginForm.test.jsx
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import LoginForm from '@/components/auth/LoginForm';
