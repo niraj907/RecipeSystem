@@ -25,7 +25,7 @@ const ForgotPasswordAdmin = () => {
       toast.success("Password reset link sent to your email!");
       setIsSubmitted(true); // Set submitted state to true after successful submission
     } else {
-      toast.error("Email not found. Please enter a registered email.");
+      toast.error("Email not found");
     }
   };
 

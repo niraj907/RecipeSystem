@@ -70,7 +70,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
   return (
     <>
       <div className="fixed inset-0 z-[60] flex justify-center items-start overflow-y-auto bg-black bg-opacity-50">
-        <div className="bg-white z-[50] w-full mx-4 my-4 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 rounded-lg shadow-lg max-h-[90dvh] overflow-y-auto">
+        <div className="bg-white z-[50] w-full mx-4 my-12 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl p-6 rounded-lg shadow-lg max-h-fit overflow-y-auto">
           
           {/* Header */}
           <div className="flex items-center justify-between">
