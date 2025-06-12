@@ -45,6 +45,7 @@ const Favourites = () => {
   return (
     <section id="favourites" className="w-full py-20">
       <div className="max-w-[1200px] mx-auto px-8 md:px-12 pt-4">
+        <h1 className="text-2xl"> Favourite Recipes</h1>
        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-[2.5rem]">
         

@@ -12,6 +12,10 @@ const Counter = () => {
     fetchCounts();
   }, []);
 
+  console.log("totalUser: ",totalUsers)
+  console.log("Male",maleUsers)
+  console.log("female:",femaleUsers)
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
       {/** Card 1 - Users **/}

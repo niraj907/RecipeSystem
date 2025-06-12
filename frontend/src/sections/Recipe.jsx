@@ -19,7 +19,7 @@ const Recipe = () => {
   const { favorites, addToFavorites, removeFromFavorites, fetchFavorites } = useFavoriteStore();
   const { isAuthenticated, user } = useAuthStore();
 
-  console.log(recipes)
+  console.log("Recipes: ",recipes)
   // Fetch recipes & favorites on login/logout change
   useEffect(() => {
     const fetchData = async () => {

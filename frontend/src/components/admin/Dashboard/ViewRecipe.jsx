@@ -4,7 +4,7 @@ import VideoCategory from "@/components/recipe/VideoCategory";
 import { useRecipeStore } from "@/components/store/recipeStore";
 import { GoAlertFill } from "react-icons/go";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import Share from "@/components/Share";
+// import Share from "@/components/Share";
 import Feedback from "@/components/Feedback";
 import { MdOutlineArrowCircleLeft } from "react-icons/md";
 
@@ -87,16 +87,16 @@ const navigate = useNavigate();
             <h2 className="text-sm sm:text-base font-semibold text-gray-500 opacity-80">PREP TIME</h2>
             <p className="text-sm sm:text-base font-medium">{recipe.prep_time}</p>
           </div>
-          <div className="border-r sm:border-gray-500 px-2 sm:px-4 ">
+          <div className="px-2 sm:px-4 ">
             <h2 className="text-sm sm:text-base font-semibold text-gray-500 opacity-80">COOK TIME</h2>
             <p className="text-sm sm:text-base font-medium">{recipe.cook_time}</p>
           </div>
 
           {/* Social Media Share */}
-          <div className="px-2 sm:px-4 ">
+          {/* <div className="px-2 sm:px-4 ">
             <h2 className="text-sm sm:text-base font-semibold text-gray-500 opacity-80">Social Media</h2>
             <Share className="text-2xl sm:text-3xl flex justify-center cursor-pointer" />
-          </div>
+          </div> */}
         </div>
 
         {/* Kitchen Guide */}

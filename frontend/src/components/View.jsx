@@ -4,7 +4,7 @@ import VideoCategory from "./recipe/VideoCategory";
 import { useRecipeStore } from "./store/recipeStore";
 import { Loader } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import Share from "./Share";
+// import Share from "./Share";
 import { GoAlertFill } from "react-icons/go";
 import { IoPrintSharp } from "react-icons/io5";
 import Feedback from "./Feedback";
@@ -118,12 +118,12 @@ console.log("Recipes: ", recipes);
               </div>
 
          {/* Social Media Share */}
-              <div className="sm:px-4 border-r sm:border-gray-500 pr-4">
+              {/* <div className="sm:px-4 border-r sm:border-gray-500 pr-4">
                 <h2 className="text-sm sm:text-lg font-semibold text-gray-500 opacity-80">
                   Social Media
                 </h2>
                 <Share className="text-3xl flex justify-center cursor-pointer" />
-              </div>
+              </div> */}
 
          {/* Printer Share */}
               <div className="sm:px-4 ">

@@ -4,6 +4,7 @@ import { FaUserPen } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import { toast } from "sonner";
 import { LuLockKeyhole } from "react-icons/lu";
+import { Loader } from "lucide-react";
 import AdminChangePassword from './AdminChangePassword';
 
 const EditAdminProfile = ({ admin, onClose }) => {
@@ -11,7 +12,7 @@ const EditAdminProfile = ({ admin, onClose }) => {
   const [image, setImage] = useState(null);
   const { updateAdmin, fetchAdmin } = useAdminStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+ const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -52,7 +53,10 @@ const EditAdminProfile = ({ admin, onClose }) => {
   };
 
   const handleUpdateProfile = async () => {
+     setIsLoading(true);
     try {
+            // Add 1000ms delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const updatedAdmin = { ...formData };
       if (image) updatedAdmin.images = [image];
       await updateAdmin(admin._id, updatedAdmin);
@@ -61,6 +65,8 @@ const EditAdminProfile = ({ admin, onClose }) => {
     } catch (error) {
       toast.error("Failed to update admin.");
       console.error(error);
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -158,9 +164,11 @@ const EditAdminProfile = ({ admin, onClose }) => {
               <div className="flex justify-end gap-3">
                 <button 
                   onClick={handleUpdateProfile} 
-                  className="text-white bg-orange-500 hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition"
-                >
-                  Save Changes
+                  className="text-white bg-orange-500 flex hover:bg-orange-600 rounded-lg text-sm px-5 py-2.5 transition"
+                  disabled={isLoading}
+               >
+                           {isLoading && <Loader className="animate-spin w-4 h-4 mr-2" />} 
+                           Save Changes
                 </button>
                 <button 
                   onClick={onClose} 

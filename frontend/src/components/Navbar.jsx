@@ -21,7 +21,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, logout, user } = useAuthStore();
-//console.log(isAuthenticated);
+console.log("isAuthenticated: ",isAuthenticated);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -76,7 +76,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 bg-white w-full z-50 shadow-md">
+    <div className="fixed top-0 bg-white w-full z-50 shadow-md ">
       <div className="max-w-[1200px] mx-auto flex justify-between items-center py-4 px-8 lg:px-10">
         {/* Logo */}
         <NavLink to="/" onClick={() => scrollToSection("home")}>

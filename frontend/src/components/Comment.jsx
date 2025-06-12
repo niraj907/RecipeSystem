@@ -6,6 +6,7 @@ import { useFeedbackStore } from "@/components/store/feedbackStore";
 import { useAuthStore } from "@/components/store/authStore";
 import { useReplyStore } from "@/components/store/replyStore";
 import { toast } from "sonner";
+import Feedback from './Feedback';
 
 const formatRelativeTime = (dateString) => {
   const date = new Date(dateString);
@@ -130,6 +131,7 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
   };
 
   return (
+    // fetch the Feedback
     <div className='w-full max-w-6xl p-6 bg-white rounded-lg shadow-sm border border-gray-100 mb-4 relative'>
       <div className='flex gap-4 items-start'>
         <img
@@ -195,7 +197,7 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
                         onClick={() => { onEdit(); setDropdownOpen(false); }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-500 hover:text-white"
                       >
-                        Edit
+                        Edit 
                       </button>
                       <button
                         onClick={() => { handleDelete(); setDropdownOpen(false); }}
@@ -210,6 +212,7 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
             </div>
           </div>
 
+{/* create the reply */}
           {isReplying && (
             <div className="mt-4 pl-4 border-l-2 border-gray-200">
               <form onSubmit={handleReplySubmit} className="flex gap-3 items-start">
@@ -246,6 +249,7 @@ const Comment = ({ comment, currentUserId, onEdit, onReplySubmit }) => {
             </div>
           )}
 
+{/* fetch the reply */}
           {commentReplies.length > 0 && (
             <div className="mt-4 pl-4 border-l-2 border-gray-200 space-y-4">
               {commentReplies.map((reply) => {

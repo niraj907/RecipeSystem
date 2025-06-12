@@ -65,7 +65,8 @@ const Sidebar = ({ isMobileOpen, onClose }) => {
               <span className="text-[1rem]">Home</span>
             </li>
 
-            <div
+{/* Recipes */}
+            {/* <div
               className="p-2 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
@@ -91,9 +92,10 @@ const Sidebar = ({ isMobileOpen, onClose }) => {
                   Add
                 </li>
               </div>
-            )}
+            )} */}
 
             {[
+               { icon: Book, text: "Add", path: "/recipes/add" },
               { icon: Settings, text: "Dishes", path: "/dashboard/dishes" },
               { icon: Star, text: "Favorites", path: "/dashboard/favorites" },
               { icon: MessageCircle, text: "Feedback", path: "/dashboard/feedback" },

@@ -116,7 +116,7 @@ const RecipePrinter = () => {
 
           {/* Print Footer - only visible when printing */}
           <div className="hidden print:block text-center mt-12 text-sm text-gray-500">
-            <p>Happy Cooking! 🍳</p>
+            {/* <p>Happy Cooking! 🍳</p> */}
           </div>
         </div>
       </div>

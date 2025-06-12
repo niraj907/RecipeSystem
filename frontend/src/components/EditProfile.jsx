@@ -36,6 +36,8 @@ const EditProfile = ({ user, onClose }) => {
     }
   }, [user]);
 
+  console.log("user",user)
+
   const handleImageClick = () => {
     inputRef.current.click();
   };

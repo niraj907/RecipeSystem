@@ -29,7 +29,7 @@ const LoginForm  = () => {
   };
 
   return (
-    <div className="py-[3rem] px-[3rem] mt-[75px]">
+    <div className="py-[6rem] px-[3rem]">
       <div className="flex items-center justify-center">
         <form 
           className="w-[30rem] shadow-lg p-8 flex flex-col gap-4" 
@@ -38,6 +38,8 @@ const LoginForm  = () => {
           <h1 className="text-center font-bold text-3xl font-serif text-[#F67A24]">
             Login
           </h1>
+
+{/* email */}
 
           <div>
             <span className="font-medium">Email</span>
@@ -56,7 +58,10 @@ const LoginForm  = () => {
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
           
+
+          {/* Password */}
           <div className="relative">
+            
   <label className="font-medium">Password</label>
   <div className="relative">
     <Input

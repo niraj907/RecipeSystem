@@ -12,6 +12,9 @@ const KitchenGuide = ({ recipe }) => {
     }));
   };
 
+  console.log("Ingredients",recipe.ingredients)
+  console.log("Instructions",recipe.instructions)
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6">
       {/* Ingredients Section */}

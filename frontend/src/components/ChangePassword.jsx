@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { useAuthStore } from './store/authStore';
 import { toast } from 'sonner';
 import { IoClose, IoEyeOff, IoEye } from 'react-icons/io5';
-import { Loader } from "lucide-react";
 
 const ChangePassword = ({ user, onClose }) => {
-  const { updatePassword } = useAuthStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const { updatePassword } = useAuthStore(); 
+
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
@@ -27,9 +26,8 @@ const ChangePassword = ({ user, onClose }) => {
   };
 
   const handleSubmit = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
-
+    
     // Client-side validation
     if (passwords.newPassword !== passwords.confirmPassword) {
       toast.error("New passwords don't match!");
@@ -38,19 +36,16 @@ const ChangePassword = ({ user, onClose }) => {
 
     try {
       // Call updatePassword with all required fields
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       await updatePassword(
         passwords.currentPassword,
         passwords.newPassword,
         passwords.confirmPassword
       );
-
+      
       toast.success("Password changed successfully!");
       onClose();
     } catch (error) {
       toast.error(error.error || "Failed to change password");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -60,6 +55,8 @@ const ChangePassword = ({ user, onClose }) => {
       [e.target.name]: e.target.value
     });
   };
+
+ 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
@@ -141,18 +138,14 @@ const ChangePassword = ({ user, onClose }) => {
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="submit"
-              className="flex items-center font-medium border rounded-[8px] border-orange-500 bg-orange-100 text-lg text-orange-500 px-4 py-2 transition-colors disabled:opacity-50"
-              disabled={isLoading}
-              aria-busy={isLoading}
-              aria-disabled={isLoading}
+              className="font-medium border rounded-[8px] border-orange-500 bg-orange-100 text-lg text-orange-500   px-4 py-2  transition"
             >
-              {isLoading && <Loader className="animate-spin w-4 h-4 mr-2" aria-hidden="true" />}
               Change Password
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="font-medium bg-white border border-gray-200 hover:bg-gray-100 px-4 py-2 rounded-lg transition"
+              className="font-medium bg-white border border-gray-200 hover:bg-gray-100  px-4 py-2 rounded-lg transition"
             >
               Cancel
             </button>
@@ -164,3 +157,5 @@ const ChangePassword = ({ user, onClose }) => {
 };
 
 export default ChangePassword;
+
+

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect } from 'react';
 import { BarChart, Bar, CartesianGrid, XAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useCountStore } from "@/components/store/countStore";

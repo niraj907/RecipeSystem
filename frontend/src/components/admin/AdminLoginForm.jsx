@@ -29,7 +29,7 @@ const AdminLoginForm = () => {
   };
 
   return (
-    <div className="py-[3rem] px-[3rem] mt-[75px]">
+    <div className="py-[7rem] px-[3rem]">
       <div className="flex items-center justify-center">
         <form 
           className="w-[30rem] shadow-lg p-8 flex flex-col gap-4" 

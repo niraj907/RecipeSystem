@@ -2,10 +2,16 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  // Initialize the current date, ensuring it reflects the correct date in UTC+5:45
+  const [currentDate, setCurrentDate] = useState(() => {
+    const now = new Date();
+    // Adjust for UTC+5:45 (Nepal Time, 5 hours 45 minutes ahead of UTC)
+    const offsetMinutes = 5 * 60 + 45; // 345 minutes ahead of UTC
+    const utcDate = new Date(now.getTime() + (now.getTimezoneOffset() * 60000)); // Convert to UTC
+    return new Date(utcDate.getTime() + (offsetMinutes * 60000)); // Adjust to UTC+5:45
+  });
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
 
-  // Current month/year calculations
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
   const monthNames = [
@@ -14,16 +20,15 @@ export default function Calendar() {
   ];
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  // Disable previous month button if current month is current real month
   useEffect(() => {
-    const current = new Date();
+    const now = new Date();
+    const adjustedNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (5 * 60 + 45) * 60000);
     setIsPrevDisabled(
-      currentDate.getMonth() === current.getMonth() &&
-      currentDate.getFullYear() === current.getFullYear()
+      currentDate.getMonth() === adjustedNow.getMonth() &&
+      currentDate.getFullYear() === adjustedNow.getFullYear()
     );
   }, [currentDate]);
 
-  // Navigation handlers
   const goToPrevMonth = () => {
     if (!isPrevDisabled) {
       setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
@@ -36,30 +41,27 @@ export default function Calendar() {
 
   const goToToday = () => {
     const now = new Date();
-    setCurrentDate(now);
+    const adjustedNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (5 * 60 + 45) * 60000);
+    setCurrentDate(adjustedNow);
   };
 
-  // Generate calendar grid
   const generateDays = () => {
     const days = [];
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
-    
-    // Previous month days
+
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
       const day = prevMonthDays - i;
       const date = new Date(currentYear, currentMonth - 1, day);
       days.push(createDayElement(date, true));
     }
 
-    // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentYear, currentMonth, day);
       days.push(createDayElement(date));
     }
 
-    // Next month days
     let nextMonthDay = 1;
     while (days.length < 42) {
       const date = new Date(currentYear, currentMonth + 1, nextMonthDay);
@@ -70,13 +72,12 @@ export default function Calendar() {
     return days;
   };
 
-  // Create individual day element
   const createDayElement = (date, isPrevMonth = false, isNextMonth = false) => {
     const day = date.getDate();
-    const today = new Date();
+    const now = new Date();
+    const today = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (5 * 60 + 45) * 60000);
     const isToday = date.toDateString() === today.toDateString();
-    // const isToday = date.toDateString() === 'Wed May 07 2025';
-    const isDisabled = !isToday; // Only enable today's date
+    const isDisabled = !isToday;
 
     const handleClick = () => {
       if (isDisabled) return;
@@ -86,20 +87,20 @@ export default function Calendar() {
 
     return (
       <div
-      key={date.toISOString()}
-      onClick={handleClick}
-      className={`h-10 border border-gray-100 flex items-center justify-center
-        transition-all duration-300 ease-in-out 
-        ${isPrevMonth || isNextMonth ? 'text-gray-500' : ''}
-        ${isToday ? 'bg-orange-50' : ''}
-        ${isDisabled ? 
-          'cursor-not-allowed opacity-50' : 
-          'cursor-pointer hover:bg-gray-50 hover:ring-2 hover:ring-orange-400 hover:ring-inset'}`}
-    >
-      <span className={`${isToday ? 'font-bold text-[#FBBC05]' : ''}`}>
-        {day}
-      </span>
-    </div>
+        key={date.toISOString()}
+        onClick={handleClick}
+        className={`h-10 border border-gray-100 flex items-center justify-center
+          transition-all duration-300 ease-in-out 
+          ${isPrevMonth || isNextMonth ? 'text-gray-500' : ''}
+          ${isToday ? 'bg-orange-50' : ''}
+          ${isDisabled ? 
+            'cursor-not-allowed opacity-50' : 
+            'cursor-pointer hover:bg-gray-50 hover:ring-2 hover:ring-orange-400 hover:ring-inset'}`}
+      >
+        <span className={`${isToday ? 'font-bold text-[#FBBC05]' : ''}`}>
+          {day}
+        </span>
+      </div>
     );
   };
 

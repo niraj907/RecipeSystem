@@ -45,7 +45,7 @@ const AdminChangePassword = ({ admin, onClose }) => {
       toast.success("Password changed successfully!");
       onClose();
     } catch (error) {
-      toast.error(error.error || "Failed to change password");
+      toast.error(error.error || "Current password is incorrect");
     }
   };
 
@@ -55,6 +55,8 @@ const AdminChangePassword = ({ admin, onClose }) => {
       [e.target.name]: e.target.value
     });
   };
+
+console.log("Admin: ",admin)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
