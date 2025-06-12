@@ -2,6 +2,7 @@ import { FeedbackMessage } from "../models/feedback.model.js";
 import { User } from "../models/user.model.js";
 import { recipeModel } from "../models/recipe.model.js";
 
+// create feedback
 export const createFeedback = async (req, res) => {
     const { userId, recipeId, rating, comment } = req.body;
   
@@ -49,6 +50,7 @@ export const createFeedback = async (req, res) => {
   };
 
 
+  // admin to show the get all feedback
   export const getAllFeedback = async (req, res) => { 
     try {
       const feedbacks = await FeedbackMessage.find().sort({ createdAt: -1 });
@@ -66,7 +68,8 @@ export const createFeedback = async (req, res) => {
     }
   };
 
-// Get all feedback for a specific recipe
+
+// user Get all feedback for a specific recipe
 export const getRecipeFeedback = async (req, res) => {
   const { recipeId } = req.params;
 
@@ -78,7 +81,7 @@ export const getRecipeFeedback = async (req, res) => {
     }
 
     // Find all feedback messages for the recipe
-    const feedbackMessages = await FeedbackMessage.find({ recipeId });
+    const feedbackMessages = await FeedbackMessage.find({ recipeId }).sort({createdAt: -1})
 
     // Return the feedback messages
     res.status(200).json({ recipeId, feedbackMessages });
@@ -89,8 +92,7 @@ export const getRecipeFeedback = async (req, res) => {
 };
 
 
-
-
+// edit feedback
 export const editFeedback = async (req, res) => {
   try {
     const { id } = req.params;
@@ -131,9 +133,6 @@ export const editFeedback = async (req, res) => {
     });
   }
 };
-
-
-
 
 
 export const deleteFeedback = async (req, res) => {
@@ -199,6 +198,7 @@ export const likeFeedback = async (req, res) => {
     res.status(500).json({ success: false, msg: "Error liking feedback", error: error.message });
   }
 };
+
 
 // Unlike a feedback comment
 export const unlikeFeedback = async (req, res) => {

@@ -42,6 +42,7 @@ const createAdmin = async () => {
 createAdmin();
 
 
+// admin login
 export const adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -96,6 +97,7 @@ res.cookie("adminToken", admin_Token, {
 };
 
 
+// update admin password
 export const adminUpdatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -154,9 +156,10 @@ export const adminUpdatePassword = async (req, res) => {
 };
 
 
+// fetch admin detail
 export const getAdmin = async (req, res) => {
   try {
-   // console.log("Fetching admin details");
+   console.log("Fetching admin details");
     const adminUser = await admin.findOne(); // Fetch the first admin user
 
     if (!adminUser) {
@@ -244,11 +247,15 @@ export const updateAdmin = async (req, res) => {
   }
 };
 
+
 //logout
 export const adminLogout = async (req, res) => { 
   res.clearCookie("adminToken");
   res.status(200).json({success: true, message: "Logged out successfully"});
   }
+
+
+
 
 // forgot Password
   export const adminforgotPassword = async (req, res) => { 
@@ -300,6 +307,7 @@ export const adminLogout = async (req, res) => {
     }
 };
 
+
 // Reset Password
 export const adminResetPassword = async (req,res) =>{
   try {
@@ -334,23 +342,7 @@ export const adminResetPassword = async (req,res) =>{
 }
 
 
-// export const adminforgotPassword = async (req, res) => { 
-//   console.log('Received raw request body:', req.body);  
-//   console.log('Received headers:', req.headers);
 
-//   if (!req.is('application/json')) {
-//       return res.status(400).json({ success: false, message: "Invalid Content-Type. Use application/json." });
-//   }
-
-//   const { email } = req.body;
-//   console.log("Extracted email:", email);
-
-//   if (!email) {
-//       return res.status(400).json({ success: false, message: "Email is required" });
-//   }
-
-//   res.status(200).json({ success: true, message: "Received request successfully" });
-// };
 
  
 

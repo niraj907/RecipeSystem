@@ -284,23 +284,6 @@ export const getAllRecipes = async (req, res) => {
 
 
 // get search recipe
-// export const getSearchedRecipe = async (req, res) => {
-//   try {
-//     const query = req.query.q;
-//     if (!query) {
-//         return res.status(400).json({ message: "Query parameter is required" });
-//     }
-//     const recipes = await recipeModel.find({ name: { $regex: query, $options: "i" } });
-
-//     if (recipes.length === 0) {
-//         return res.status(404).json({ message: "No recipes found" });
-//     }
-
-//     res.status(200).json(recipes);
-// } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-// }
-// };
 
 export const getSearchedRecipe = async (req, res) => {
   try {

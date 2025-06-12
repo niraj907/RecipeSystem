@@ -5,11 +5,11 @@ import cookieParser from 'cookie-parser';
 import { connectDB } from './config/db.js';
 import fileUpload from 'express-fileupload';
 
-import recipeRoutes from './routes/recipe.route.js'
 import authRoutes from './routes/auth.route.js';
+import adminRoutes from "./routes/admin.routes.js";
+import recipeRoutes from './routes/recipe.route.js'
 import countRoutes from './routes/count.route.js';
 import userRoutes from "./routes/user.routes.js";
-import adminRoutes from "./routes/admin.routes.js";
 import userFeedback from "./routes/feedback.routes.js";
 import replyRoutes from "./routes/reply.router.js";
 
@@ -26,8 +26,6 @@ if (!process.env.CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.C
 }
 
 // Middleware
-// app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
-
 app.use(express.json({ limit: '50mb' })); // Support larger payloads
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -58,9 +56,9 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.static('public'));
-app.use('/api/recipe', recipeRoutes); // recipe route
 app.use('/api/a1/auth',authRoutes); // user route
 app.use('/api/a2/auth',adminRoutes); //admin route
+app.use('/api/recipe', recipeRoutes); // recipe route
 app.use("/api/count",countRoutes);
 app.use("/api/users", userRoutes); // favourite router
 app.use("/api/users/message",userFeedback);

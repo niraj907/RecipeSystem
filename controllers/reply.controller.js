@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { FeedbackMessage } from "../models/feedback.model.js";
 import mongoose from "mongoose"; 
 
+// create reply
 export const createReply = async (req, res) => {
   const { userId, recipeId, feedbackId, comment } = req.body;
 
@@ -45,6 +46,7 @@ export const createReply = async (req, res) => {
     }
 };
 
+
 // Get all replies for a specific feedback
 export const getFeedbackReplies = async (req, res) => {
     const { feedbackId } = req.params;
@@ -69,7 +71,7 @@ export const getFeedbackReplies = async (req, res) => {
 
 
 
-
+// like reply
 export const likeReply = async (req, res) => {
     try {
       const { userId } = req.body;
@@ -118,6 +120,7 @@ export const likeReply = async (req, res) => {
 };
 
  
+// unlike reply
   export const unlikeReply = async (req, res) => {
       try {
         const { userId } = req.body;
@@ -172,37 +175,40 @@ export const likeReply = async (req, res) => {
   };
 
 
-  export const editReply = async (req, res) => {
-    const { replyId } = req.params; // Get replyId from the URL
-    const { comment } = req.body; // Get updated comment from the request body
+  //edit reply
+//   export const editReply = async (req, res) => {
+//     const { replyId } = req.params; // Get replyId from the URL
+//     const { comment } = req.body; // Get updated comment from the request body
 
-    try {
-        // Validate required fields
-        if (!comment) {
-            return res.status(400).json({ success: false, msg: "Comment is required" });
-        }
+//     try {
+//         // Validate required fields
+//         if (!comment) {
+//             return res.status(400).json({ success: false, msg: "Comment is required" });
+//         }
 
-        // Find the reply and update the comment
-        const updatedReply = await ReplyMessage.findByIdAndUpdate(
-            replyId,
-            { comment },
-            { new: true } // Return the updated document
-        );
+//         // Find the reply and update the comment
+//         const updatedReply = await ReplyMessage.findByIdAndUpdate(
+//             replyId,
+//             { comment },
+//             { new: true } // Return the updated document
+//         );
 
-        // Check if the reply exists
-        if (!updatedReply) {
-            return res.status(404).json({ success: false, msg: "Reply not found" });
-        }
+//         // Check if the reply exists
+//         if (!updatedReply) {
+//             return res.status(404).json({ success: false, msg: "Reply not found" });
+//         }
 
-        // Return success response with the updated reply
-        res.status(200).json({ success: true, msg: "Reply updated successfully", data: updatedReply });
-    } catch (error) {
-        console.error("Error updating reply:", error);
-        res.status(500).json({ success: false, msg: "Error updating reply", error: error.message });
-    }
-};
+//         // Return success response with the updated reply
+//         res.status(200).json({ success: true, msg: "Reply updated successfully", data: updatedReply });
+//     } catch (error) {
+//         console.error("Error updating reply:", error);
+//         res.status(500).json({ success: false, msg: "Error updating reply", error: error.message });
+//     }
+// };
 
   
+
+// delte reply
 export const deleteReply = async (req, res) => {
   const { replyId } = req.params; // Get replyId from the URL
 

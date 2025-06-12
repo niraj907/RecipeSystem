@@ -1,5 +1,5 @@
 import express from "express";
-import { createReply, getFeedbackReplies, likeReply , unlikeReply,editReply, deleteReply} from "../controllers/reply.controller.js";
+import { createReply, getFeedbackReplies, likeReply , unlikeReply, deleteReply} from "../controllers/reply.controller.js";
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post("/like/:replyId", likeReply); // Like a reply
 router.post("/unlike/:replyId", unlikeReply); // Unlike a reply
 
 // Route to edit a reply
-router.put("/:replyId", editReply);
+// router.put("/:replyId", editReply);
 
 // Route to delete a reply
 router.delete("/:replyId", deleteReply);

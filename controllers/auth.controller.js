@@ -23,6 +23,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// signup
 export const signup = async (req, res) => {
   const { name, email, password, username, country, gender } = req.body;
   try {
@@ -136,6 +137,7 @@ console.log("Notification created:", notification);
 };
 
 
+// login
 export const login = async (req, res) => {
   const { email, password } = req.body;
   console.log("📥 Raw Request Body:", req.body);
@@ -195,6 +197,7 @@ export const login = async (req, res) => {
 
 
 
+//filter gender user
 export const genderUser = async (req, res) => {
   try {
     let genders = req.query.gender;
@@ -246,6 +249,7 @@ export const genderUser = async (req, res) => {
 };
 
 
+// updatepassword 
 export const updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -310,7 +314,7 @@ export const updatePassword = async (req, res) => {
 };
 
 
-
+// getAllNotifications
 export const getAllNotifications = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -332,6 +336,7 @@ export const getAllNotifications = async (req, res) => {
   }
 };
 
+// markNotificationAsRead
 export const markNotificationAsRead = async (req, res) => {
   const { notificationId } = req.params;
   try {
@@ -362,7 +367,7 @@ export const markNotificationAsRead = async (req, res) => {
 
 
 
-
+// getNotifications
 export const getNotifications = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -403,7 +408,7 @@ export const deleteNotification = async (req, res) => {
 };
 
 
-
+// verify Email code
 export const verifyEmail = async (req, res) => {
   // 1 2 3 4 5 6
   const { code } = req.body;
@@ -427,7 +432,6 @@ export const verifyEmail = async (req, res) => {
     user.verificationTokenExpiresAt = undefined;
     await user.save();
 
-    // await sendWelcomeEmail(user.email, user.username);
 
     res.status(200).json({
       success: true,
@@ -445,12 +449,13 @@ export const verifyEmail = async (req, res) => {
 
 
 
-
+// logout
 export const logout = async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ success: true, message: "Logged out successfully" });
 };
 
+// forgot password
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -490,6 +495,7 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
+// reset password
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
@@ -529,6 +535,8 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+
+// checkAuth
 export const checkAuth = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
